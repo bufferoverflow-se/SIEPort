@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
-public abstract class AbstractFieldParser<T extends FileItem> {
+abstract class AbstractFieldParser<T extends FileItem> {
 
     private static final Pattern FIELD_PATTERN = Pattern.compile("\"((?:[^\"\\\\]|\\\\.)*)\"|(?:\\{([^{}]*)})|(\\S+)");
 

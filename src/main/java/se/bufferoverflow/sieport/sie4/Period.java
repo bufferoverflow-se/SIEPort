@@ -1,5 +1,6 @@
 package se.bufferoverflow.sieport.sie4;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
@@ -23,5 +24,10 @@ public record Period(int year, int month) {
         }
         TemporalAccessor accessor = SIE4_PERIOD_FORMATTER.parse(periodString);
         return Period.of(accessor.get(ChronoField.YEAR), accessor.get(ChronoField.MONTH_OF_YEAR));
+    }
+
+    @Override
+    public String toString() {
+        return SIE4_PERIOD_FORMATTER.format(LocalDate.of(year, month, 1));
     }
 }

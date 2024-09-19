@@ -47,6 +47,14 @@ public sealed interface FileItem {
     record Ver(LocalDate date, Optional<String> series, Optional<String> verificationNo, Optional<String> text, Optional<LocalDate> regDate, Optional<String> sign, List<Transaction> transactions) implements FileItem {}
 
     sealed interface Transaction extends FileItem {
+        int accountNo();
+        BigDecimal amount();
+        List<ObjectReference> objectReferences();
+        Optional<LocalDate> transactionDate();
+        Optional<String> text();
+        Optional<BigDecimal> quantity();
+        Optional<String> sign();
+
         record Trans(int accountNo, BigDecimal amount, List<ObjectReference> objectReferences, Optional<LocalDate> transactionDate, Optional<String> text, Optional<BigDecimal> quantity, Optional<String> sign) implements Transaction {}
         record Rtrans(int accountNo, BigDecimal amount, List<ObjectReference> objectReferences, Optional<LocalDate> transactionDate, Optional<String> text, Optional<BigDecimal> quantity, Optional<String> sign) implements Transaction {}
         record Btrans(int accountNo, BigDecimal amount, List<ObjectReference> objectReferences, Optional<LocalDate> transactionDate, Optional<String> text, Optional<BigDecimal> quantity, Optional<String> sign) implements Transaction {}

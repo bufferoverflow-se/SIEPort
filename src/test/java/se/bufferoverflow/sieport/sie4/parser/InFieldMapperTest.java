@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class FieldMapperTest {
+class InFieldMapperTest {
 
     @Test
     void toModel_address() {
@@ -28,7 +28,7 @@ class FieldMapperTest {
                 "Box 21",
                 "211 20 MALMÖ",
                 "040-123 45");
-        FileItem model = FieldMapper.toModel(addressLine);
+        FileItem model = InFieldMapper.toModel(addressLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -36,7 +36,7 @@ class FieldMapperTest {
     void toModel_bkod() {
         String bkodLine = "#BKOD 82300";
         FileItem.Bkod expectedModel = new FileItem.Bkod(82300);
-        FileItem model = FieldMapper.toModel(bkodLine);
+        FileItem model = InFieldMapper.toModel(bkodLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -44,7 +44,7 @@ class FieldMapperTest {
     void toModel_dim() {
         String dimLine = "#DIM 2 Project";
         FileItem.Dim expectedModel = new FileItem.Dim(2, "Project");
-        FileItem model = FieldMapper.toModel(dimLine);
+        FileItem model = InFieldMapper.toModel(dimLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -52,7 +52,7 @@ class FieldMapperTest {
     void toModel_enhet() {
         String enhetLine = "#ENHET 4010 litre";
         FileItem.Enhet expectedModel = new FileItem.Enhet(4010, "litre");
-        FileItem model = FieldMapper.toModel(enhetLine);
+        FileItem model = InFieldMapper.toModel(enhetLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -60,7 +60,7 @@ class FieldMapperTest {
     void toModel_flagga() {
         String flaggaLine = "#FLAGGA 0";
         FileItem.Flagga expectedModel = new FileItem.Flagga(0);
-        FileItem model = FieldMapper.toModel(flaggaLine);
+        FileItem model = InFieldMapper.toModel(flaggaLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -68,7 +68,7 @@ class FieldMapperTest {
     void toModel_fnamn() {
         String fnamnLine = "#FNAMN \"ACME Corporation\"";
         FileItem.Fnamn expectedModel = new FileItem.Fnamn("ACME Corporation");
-        FileItem model = FieldMapper.toModel(fnamnLine);
+        FileItem model = InFieldMapper.toModel(fnamnLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -76,7 +76,7 @@ class FieldMapperTest {
     void toModel_fnr() {
         String fnrLine = "#FNR Kalles";
         FileItem.Fnr expectedModel = new FileItem.Fnr("Kalles");
-        FileItem model = FieldMapper.toModel(fnrLine);
+        FileItem model = InFieldMapper.toModel(fnrLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -84,7 +84,7 @@ class FieldMapperTest {
     void toModel_format() {
         String formatLine = "#FORMAT PC8";
         FileItem.Format expectedModel = new FileItem.Format("PC8");
-        FileItem model = FieldMapper.toModel(formatLine);
+        FileItem model = InFieldMapper.toModel(formatLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -92,7 +92,7 @@ class FieldMapperTest {
     void toModel_ftyp() {
         String ftypLine = "#FTYP AB";
         FileItem.Ftyp expectedModel = new FileItem.Ftyp(CompanyType.AB);
-        FileItem model = FieldMapper.toModel(ftypLine);
+        FileItem model = InFieldMapper.toModel(ftypLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -102,7 +102,7 @@ class FieldMapperTest {
         FileItem.Gen expectedModel = new FileItem.Gen(
                 LocalDate.of(2024, 5, 8),
                 Optional.of("AN"));
-        FileItem model = FieldMapper.toModel(genLine);
+        FileItem model = InFieldMapper.toModel(genLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -113,7 +113,7 @@ class FieldMapperTest {
                 4010,
                 new BigDecimal("23780.78"),
                 Optional.empty());
-        FileItem model = FieldMapper.toModel(ibLine);
+        FileItem model = InFieldMapper.toModel(ibLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -121,7 +121,7 @@ class FieldMapperTest {
     void toModel_konto() {
         String kontoLine = "#KONTO 1510 \"Accounts receivable\"";
         FileItem.Konto expectedModel = new FileItem.Konto(1510, "Accounts receivable");
-        FileItem model = FieldMapper.toModel(kontoLine);
+        FileItem model = InFieldMapper.toModel(kontoLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -129,7 +129,7 @@ class FieldMapperTest {
     void toModel_kptyp() {
         String kptypLine = "#KPTYP EUBAS97";
         FileItem.Kptyp expectedModel = new FileItem.Kptyp("EUBAS97");
-        FileItem model = FieldMapper.toModel(kptypLine);
+        FileItem model = InFieldMapper.toModel(kptypLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -137,7 +137,7 @@ class FieldMapperTest {
     void toModel_ktyp() {
         String ktypLine = "#KTYP 1510 T";
         FileItem.Ktyp expectedModel = new FileItem.Ktyp(1510, FileItem.Ktyp.AccountType.T);
-        FileItem model = FieldMapper.toModel(ktypLine);
+        FileItem model = InFieldMapper.toModel(ktypLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -145,7 +145,7 @@ class FieldMapperTest {
     void toModel_objekt() {
         String objektLine = "#OBJEKT 1 \"0123\" \"Service department\"";
         FileItem.Objekt expectedModel = new FileItem.Objekt(1, "0123", "Service department");
-        FileItem model = FieldMapper.toModel(objektLine);
+        FileItem model = InFieldMapper.toModel(objektLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -158,7 +158,7 @@ class FieldMapperTest {
                 ObjectReference.of(8, "12345"),
                 new BigDecimal("12345.00"),
                 Optional.empty());
-        FileItem model = FieldMapper.toModel(oibLine);
+        FileItem model = InFieldMapper.toModel(oibLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -166,7 +166,7 @@ class FieldMapperTest {
     void toModel_omfattn() {
         String omfattnLine = "#OMFATTN 20080630";
         FileItem.Omfattn expectedModel = new FileItem.Omfattn(LocalDate.of(2008, 6, 30));
-        FileItem model = FieldMapper.toModel(omfattnLine);
+        FileItem model = InFieldMapper.toModel(omfattnLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -174,7 +174,7 @@ class FieldMapperTest {
     void toModel_orgnr() {
         String orgnrLine = "#ORGNR 212000-0340 1";
         FileItem.OrgNr expectedModel = new FileItem.OrgNr("212000-0340", Optional.of(1), Optional.empty());
-        FileItem model = FieldMapper.toModel(orgnrLine);
+        FileItem model = InFieldMapper.toModel(orgnrLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -187,14 +187,14 @@ class FieldMapperTest {
                 ObjectReference.of(8, "12345"),
                 new BigDecimal("12345.67"),
                 Optional.empty());
-        FileItem model = FieldMapper.toModel(oubLine);
+        FileItem model = InFieldMapper.toModel(oubLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @ParameterizedTest
     @MethodSource("pbudgetTestData")
     void toModel_pbudget(String pbudgetLine, FileItem.Pbudget expectedModel) {
-        FileItem model = FieldMapper.toModel(pbudgetLine);
+        FileItem model = InFieldMapper.toModel(pbudgetLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -222,7 +222,7 @@ class FieldMapperTest {
     void toModel_program() {
         String programLine = "#PROGRAM \"Visma Compact\" 5.1";
         FileItem.Program expectedModel = new FileItem.Program("Visma Compact", "5.1");
-        FileItem model = FieldMapper.toModel(programLine);
+        FileItem model = InFieldMapper.toModel(programLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -230,14 +230,14 @@ class FieldMapperTest {
     void toModel_prosa() {
         String prosaLine = "#PROSA \"Exported using Visma Compact 080512\"";
         FileItem.Prosa expectedModel = new FileItem.Prosa("Exported using Visma Compact 080512");
-        FileItem model = FieldMapper.toModel(prosaLine);
+        FileItem model = InFieldMapper.toModel(prosaLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @ParameterizedTest
     @MethodSource("psaldoTestData")
     void toModel_psaldo(String psaldoLine, FileItem.Psaldo expectedModel) {
-        FileItem model = FieldMapper.toModel(psaldoLine);
+        FileItem model = InFieldMapper.toModel(psaldoLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -273,7 +273,7 @@ class FieldMapperTest {
                 YearNumber.of(-1),
                 LocalDate.of(2011, 1, 1),
                 LocalDate.of(2011, 12, 31));
-        FileItem model = FieldMapper.toModel(rarLine);
+        FileItem model = InFieldMapper.toModel(rarLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -281,7 +281,7 @@ class FieldMapperTest {
     void toModel_res() {
         String resLine = "#RES 0 3011 -23780.78";
         FileItem.Res expectedModel = new FileItem.Res(YearNumber.of(0), 3011, new BigDecimal("-23780.78"), Optional.empty());
-        FileItem model = FieldMapper.toModel(resLine);
+        FileItem model = InFieldMapper.toModel(resLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -289,7 +289,7 @@ class FieldMapperTest {
     void toModel_sietyp() {
         String sietypLine = "#SIETYP 4";
         FileItem.Sietyp expectedModel = new FileItem.Sietyp(4);
-        FileItem model = FieldMapper.toModel(sietypLine);
+        FileItem model = InFieldMapper.toModel(sietypLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -297,7 +297,7 @@ class FieldMapperTest {
     void toModel_sru() {
         String sruLine = "#SRU 1520 9420";
         FileItem.Sru expectedModel = new FileItem.Sru(1520, 9420);
-        FileItem model = FieldMapper.toModel(sruLine);
+        FileItem model = InFieldMapper.toModel(sruLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -305,14 +305,14 @@ class FieldMapperTest {
     void toModel_taxar() {
         String taxarLine = "#TAXAR 2000";
         FileItem.Taxar expectedModel = new FileItem.Taxar(2000);
-        FileItem model = FieldMapper.toModel(taxarLine);
+        FileItem model = InFieldMapper.toModel(taxarLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @ParameterizedTest
     @MethodSource("transTestData")
     void toModel_trans(String transLine, FileItem.Transaction.Trans expectedModel) {
-        FileItem model = FieldMapper.toModel(transLine);
+        FileItem model = InFieldMapper.toModel(transLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -369,7 +369,7 @@ class FieldMapperTest {
                 Optional.empty(),
                 Optional.empty()
         );
-        FileItem model = FieldMapper.toModel(rtransLine);
+        FileItem model = InFieldMapper.toModel(rtransLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -385,7 +385,7 @@ class FieldMapperTest {
                 Optional.empty(),
                 Optional.empty()
         );
-        FileItem model = FieldMapper.toModel(btransLine);
+        FileItem model = InFieldMapper.toModel(btransLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -393,7 +393,7 @@ class FieldMapperTest {
     void toModel_ub() {
         String ubLine = "#UB 0 2440 -2380.39";
         FileItem.Ub expectedModel = new FileItem.Ub(YearNumber.of(0), 2440, new BigDecimal("-2380.39"), Optional.empty());
-        FileItem model = FieldMapper.toModel(ubLine);
+        FileItem model = InFieldMapper.toModel(ubLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -401,7 +401,7 @@ class FieldMapperTest {
     void toModel_underdim() {
         String underdimLine = "#UNDERDIM 21 \"Sub-department\" 1";
         FileItem.Underdim expectedModel = new FileItem.Underdim(21, "Sub-department", 1);
-        FileItem model = FieldMapper.toModel(underdimLine);
+        FileItem model = InFieldMapper.toModel(underdimLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -409,14 +409,14 @@ class FieldMapperTest {
     void toModel_valuta() {
         String valutaLine = "#VALUTA SEK";
         FileItem.Valuta expectedModel = new FileItem.Valuta("SEK");
-        FileItem model = FieldMapper.toModel(valutaLine);
+        FileItem model = InFieldMapper.toModel(valutaLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @ParameterizedTest
     @MethodSource("verTestData")
     void toModel_ver(List<String> verLine, FileItem.Ver expectedModel) {
-        FileItem model = FieldMapper.toModel(verLine);
+        FileItem model = InFieldMapper.toModel(verLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 

@@ -3,6 +3,7 @@ package se.bufferoverflow.sieport.sie4.parser;
 import se.bufferoverflow.sieport.sie4.CompanyType;
 import se.bufferoverflow.sieport.sie4.Constants;
 import se.bufferoverflow.sieport.sie4.FileItem;
+import se.bufferoverflow.sieport.sie4.Label;
 import se.bufferoverflow.sieport.sie4.ObjectReference;
 import se.bufferoverflow.sieport.sie4.Period;
 import se.bufferoverflow.sieport.sie4.YearNumber;
@@ -13,44 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class FieldMapper {
-    enum Label {
-        ADRESS,
-        BKOD,
-        DIM,
-        ENHET,
-        FLAGGA,
-        FNAMN,
-        FNR,
-        FORMAT,
-        FTYP,
-        GEN,
-        IB,
-        KONTO,
-        KPTYP,
-        KTYP,
-        OBJEKT,
-        OIB,
-        OMFATTN,
-        ORGNR,
-        OUB,
-        PBUDGET,
-        PROGRAM,
-        PROSA,
-        PSALDO,
-        RAR,
-        RES,
-        SIETYP,
-        SRU,
-        TAXAR,
-        TRANS,
-        RTRANS,
-        BTRANS,
-        UB,
-        UNDERDIM,
-        VALUTA,
-        VER
-    }
+public class InFieldMapper {
 
     private static final Map<Label, AbstractFieldParser<?>> PARSER_REGISTRY = Map.ofEntries(
             Map.entry(Label.ADRESS, new AbstractFieldParser<FileItem.Adress>() {
@@ -623,7 +587,7 @@ public class FieldMapper {
 
         List<FileItem> transactions = itemLines.stream()
                 .skip(1)
-                .map(FieldMapper::toModel)
+                .map(InFieldMapper::toModel)
                 .toList();
 
         return (FileItem.Ver) PARSER_REGISTRY.get(Label.VER).parseFields(labelWithFields.fields(), transactions);

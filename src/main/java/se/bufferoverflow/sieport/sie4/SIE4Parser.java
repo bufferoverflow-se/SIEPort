@@ -1,6 +1,6 @@
 package se.bufferoverflow.sieport.sie4;
 
-import se.bufferoverflow.sieport.sie4.parser.FieldMapper;
+import se.bufferoverflow.sieport.sie4.parser.InFieldMapper;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -41,13 +41,13 @@ public class SIE4Parser {
                 if (trimmedLine.startsWith("#VER")) {
                     verBuffer.add(trimmedLine);
                 } else if (trimmedLine.startsWith("}")) {
-                    result.add(FieldMapper.toModel(verBuffer));
+                    result.add(InFieldMapper.toModel(verBuffer));
                     verBuffer.clear();
                 } else if (!trimmedLine.startsWith("{")) {
                     if (!verBuffer.isEmpty()) {
                         verBuffer.add(trimmedLine);
                     } else {
-                        result.add(FieldMapper.toModel(trimmedLine));
+                        result.add(InFieldMapper.toModel(trimmedLine));
                     }
                 }
             }
