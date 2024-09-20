@@ -1,6 +1,6 @@
 package se.bufferoverflow.sieport.sie4.writer;
 
-import se.bufferoverflow.sieport.sie4.FileItem;
+import se.bufferoverflow.sieport.sie4.SIE4Item;
 import se.bufferoverflow.sieport.sie4.Label;
 
 import java.util.Map;
@@ -12,73 +12,73 @@ public class OutFieldMapper {
     private OutFieldMapper() {}
 
     private static final Map<Label, AbstractFieldWriter<?>> WRITER_REGISTRY = Map.ofEntries(
-            Map.entry(Label.ADRESS, new AbstractFieldWriter<FileItem.Adress>() {
+            Map.entry(Label.ADRESS, new AbstractFieldWriter<SIE4Item.Adress>() {
                 @Override
-                String writeFields(FileItem.Adress item) {
+                String writeFields(SIE4Item.Adress item) {
                     return "%s %s %s %s".formatted(quoted(item.contact()), quoted(item.distributionAddress()),
                             quoted(item.postalAddress()), quoted(item.tel()));
                 }
             }),
-            Map.entry(Label.BKOD, new AbstractFieldWriter<FileItem.Bkod>() {
+            Map.entry(Label.BKOD, new AbstractFieldWriter<SIE4Item.Bkod>() {
                 @Override
-                String writeFields(FileItem.Bkod item) {
+                String writeFields(SIE4Item.Bkod item) {
                     return "%d".formatted(item.sniCode());
                 }
             }),
-            Map.entry(Label.DIM, new AbstractFieldWriter<FileItem.Dim>() {
+            Map.entry(Label.DIM, new AbstractFieldWriter<SIE4Item.Dim>() {
                 @Override
-                String writeFields(FileItem.Dim item) {
+                String writeFields(SIE4Item.Dim item) {
                     return "%d %s".formatted(item.dimensionNo(), quoted(item.name()));
                 }
             }),
-            Map.entry(Label.ENHET, new AbstractFieldWriter<FileItem.Enhet>() {
+            Map.entry(Label.ENHET, new AbstractFieldWriter<SIE4Item.Enhet>() {
                 @Override
-                String writeFields(FileItem.Enhet item) {
+                String writeFields(SIE4Item.Enhet item) {
                     return "%d %s".formatted(item.accountNo(), quoted(item.unit()));
                 }
             }),
-            Map.entry(Label.FLAGGA, new AbstractFieldWriter<FileItem.Flagga>() {
+            Map.entry(Label.FLAGGA, new AbstractFieldWriter<SIE4Item.Flagga>() {
                 @Override
-                String writeFields(FileItem.Flagga item) {
+                String writeFields(SIE4Item.Flagga item) {
                     return "%d".formatted(item.flag());
                 }
             }),
-            Map.entry(Label.FNAMN, new AbstractFieldWriter<FileItem.Fnamn>() {
+            Map.entry(Label.FNAMN, new AbstractFieldWriter<SIE4Item.Fnamn>() {
                 @Override
-                String writeFields(FileItem.Fnamn item) {
+                String writeFields(SIE4Item.Fnamn item) {
                     return quoted(item.companyName());
                 }
             }),
-            Map.entry(Label.FNR, new AbstractFieldWriter<FileItem.Fnr>() {
+            Map.entry(Label.FNR, new AbstractFieldWriter<SIE4Item.Fnr>() {
                 @Override
-                String writeFields(FileItem.Fnr item) {
+                String writeFields(SIE4Item.Fnr item) {
                     return quoted(item.companyId());
                 }
             }),
-            Map.entry(Label.FORMAT, new AbstractFieldWriter<FileItem.Format>() {
+            Map.entry(Label.FORMAT, new AbstractFieldWriter<SIE4Item.Format>() {
                 @Override
-                String writeFields(FileItem.Format item) {
+                String writeFields(SIE4Item.Format item) {
                     return quoted(item.format());
                 }
             }),
-            Map.entry(Label.FTYP, new AbstractFieldWriter<FileItem.Ftyp>() {
+            Map.entry(Label.FTYP, new AbstractFieldWriter<SIE4Item.Ftyp>() {
                 @Override
-                String writeFields(FileItem.Ftyp item) {
+                String writeFields(SIE4Item.Ftyp item) {
                     return item.companyType().name();
                 }
             }),
-            Map.entry(Label.GEN, new AbstractFieldWriter<FileItem.Gen>() {
+            Map.entry(Label.GEN, new AbstractFieldWriter<SIE4Item.Gen>() {
                 @Override
-                String writeFields(FileItem.Gen item) {
+                String writeFields(SIE4Item.Gen item) {
                     return "%s %s".formatted(
                             SIE4_DATE_FORMATTER.format(item.date()),
                             item.signature().map(AbstractFieldWriter::quoted).orElse("")
                     ).trim();
                 }
             }),
-            Map.entry(Label.IB, new AbstractFieldWriter<FileItem.Ib>() {
+            Map.entry(Label.IB, new AbstractFieldWriter<SIE4Item.Ib>() {
                 @Override
-                String writeFields(FileItem.Ib item) {
+                String writeFields(SIE4Item.Ib item) {
                     return "%d %d %s %s".formatted(
                             item.yearNumber().yearNo(),
                             item.accountNo(),
@@ -87,33 +87,33 @@ public class OutFieldMapper {
                     ).trim();
                 }
             }),
-            Map.entry(Label.KONTO, new AbstractFieldWriter<FileItem.Konto>() {
+            Map.entry(Label.KONTO, new AbstractFieldWriter<SIE4Item.Konto>() {
                 @Override
-                String writeFields(FileItem.Konto item) {
+                String writeFields(SIE4Item.Konto item) {
                     return "%d %s".formatted(item.accountNo(), quoted(item.accountName()));
                 }
             }),
-            Map.entry(Label.KPTYP, new AbstractFieldWriter<FileItem.Kptyp>() {
+            Map.entry(Label.KPTYP, new AbstractFieldWriter<SIE4Item.Kptyp>() {
                 @Override
-                String writeFields(FileItem.Kptyp item) {
+                String writeFields(SIE4Item.Kptyp item) {
                     return quoted(item.type());
                 }
             }),
-            Map.entry(Label.KTYP, new AbstractFieldWriter<FileItem.Ktyp>() {
+            Map.entry(Label.KTYP, new AbstractFieldWriter<SIE4Item.Ktyp>() {
                 @Override
-                String writeFields(FileItem.Ktyp item) {
+                String writeFields(SIE4Item.Ktyp item) {
                     return "%d %s".formatted(item.accountNo(), item.type().name());
                 }
             }),
-            Map.entry(Label.OBJEKT, new AbstractFieldWriter<FileItem.Objekt>() {
+            Map.entry(Label.OBJEKT, new AbstractFieldWriter<SIE4Item.Objekt>() {
                 @Override
-                String writeFields(FileItem.Objekt item) {
+                String writeFields(SIE4Item.Objekt item) {
                     return "%d %s %s".formatted(item.dimensionNo(), quoted(item.objectNo()), quoted(item.objectName()));
                 }
             }),
-            Map.entry(Label.OIB, new AbstractFieldWriter<FileItem.Oib>() {
+            Map.entry(Label.OIB, new AbstractFieldWriter<SIE4Item.Oib>() {
                 @Override
-                String writeFields(FileItem.Oib item) {
+                String writeFields(SIE4Item.Oib item) {
                     return "%d %d %s %s %s".formatted(
                             item.yearNumber().yearNo(),
                             item.accountNo(),
@@ -123,15 +123,15 @@ public class OutFieldMapper {
                     ).trim();
                 }
             }),
-            Map.entry(Label.OMFATTN, new AbstractFieldWriter<FileItem.Omfattn>() {
+            Map.entry(Label.OMFATTN, new AbstractFieldWriter<SIE4Item.Omfattn>() {
                 @Override
-                String writeFields(FileItem.Omfattn item) {
+                String writeFields(SIE4Item.Omfattn item) {
                     return SIE4_DATE_FORMATTER.format(item.date());
                 }
             }),
-            Map.entry(Label.ORGNR, new AbstractFieldWriter<FileItem.OrgNr>() {
+            Map.entry(Label.ORGNR, new AbstractFieldWriter<SIE4Item.OrgNr>() {
                 @Override
-                String writeFields(FileItem.OrgNr item) {
+                String writeFields(SIE4Item.OrgNr item) {
                     return "%s %s %s".formatted(
                             quoted(item.orgNr()),
                             item.acqNo().map(Object::toString).orElse(""),
@@ -139,9 +139,9 @@ public class OutFieldMapper {
                     ).trim();
                 }
             }),
-            Map.entry(Label.OUB, new AbstractFieldWriter<FileItem.Oub>() {
+            Map.entry(Label.OUB, new AbstractFieldWriter<SIE4Item.Oub>() {
                 @Override
-                String writeFields(FileItem.Oub item) {
+                String writeFields(SIE4Item.Oub item) {
                     return "%d %d %s %s %s".formatted(
                             item.yearNumber().yearNo(),
                             item.accountNo(),
@@ -151,9 +151,9 @@ public class OutFieldMapper {
                     ).trim();
                 }
             }),
-            Map.entry(Label.PBUDGET, new AbstractFieldWriter<FileItem.Pbudget>() {
+            Map.entry(Label.PBUDGET, new AbstractFieldWriter<SIE4Item.Pbudget>() {
                 @Override
-                String writeFields(FileItem.Pbudget item) {
+                String writeFields(SIE4Item.Pbudget item) {
                     return "%d %s %d %s %s %s".formatted(
                             item.yearNumber().yearNo(),
                             item.period(),
@@ -164,24 +164,24 @@ public class OutFieldMapper {
                     ).trim();
                 }
             }),
-            Map.entry(Label.PROGRAM, new AbstractFieldWriter<FileItem.Program>() {
+            Map.entry(Label.PROGRAM, new AbstractFieldWriter<SIE4Item.Program>() {
                 @Override
-                String writeFields(FileItem.Program item) {
+                String writeFields(SIE4Item.Program item) {
                     return "%s %s".formatted(
                             quoted(item.programName()),
                             quoted(item.version())
                     );
                 }
             }),
-            Map.entry(Label.PROSA, new AbstractFieldWriter<FileItem.Prosa>() {
+            Map.entry(Label.PROSA, new AbstractFieldWriter<SIE4Item.Prosa>() {
                 @Override
-                String writeFields(FileItem.Prosa item) {
+                String writeFields(SIE4Item.Prosa item) {
                     return quoted(item.comment());
                 }
             }),
-            Map.entry(Label.PSALDO, new AbstractFieldWriter<FileItem.Psaldo>() {
+            Map.entry(Label.PSALDO, new AbstractFieldWriter<SIE4Item.Psaldo>() {
                 @Override
-                String writeFields(FileItem.Psaldo item) {
+                String writeFields(SIE4Item.Psaldo item) {
                     return "%d %s %d %s %s %s".formatted(
                             item.yearNumber().yearNo(),
                             item.period(),
@@ -192,9 +192,9 @@ public class OutFieldMapper {
                     ).trim();
                 }
             }),
-            Map.entry(Label.RAR, new AbstractFieldWriter<FileItem.Rar>() {
+            Map.entry(Label.RAR, new AbstractFieldWriter<SIE4Item.Rar>() {
                 @Override
-                String writeFields(FileItem.Rar item) {
+                String writeFields(SIE4Item.Rar item) {
                     return "%d %s %s".formatted(
                             item.yearNumber().yearNo(),
                             SIE4_DATE_FORMATTER.format(item.start()),
@@ -202,9 +202,9 @@ public class OutFieldMapper {
                     );
                 }
             }),
-            Map.entry(Label.RES, new AbstractFieldWriter<FileItem.Res>() {
+            Map.entry(Label.RES, new AbstractFieldWriter<SIE4Item.Res>() {
                 @Override
-                String writeFields(FileItem.Res item) {
+                String writeFields(SIE4Item.Res item) {
                     return "%d %d %s %s".formatted(
                             item.yearNumber().yearNo(),
                             item.accountNo(),
@@ -213,27 +213,27 @@ public class OutFieldMapper {
                     ).trim();
                 }
             }),
-            Map.entry(Label.SIETYP, new AbstractFieldWriter<FileItem.Sietyp>() {
+            Map.entry(Label.SIETYP, new AbstractFieldWriter<SIE4Item.Sietyp>() {
                 @Override
-                String writeFields(FileItem.Sietyp item) {
+                String writeFields(SIE4Item.Sietyp item) {
                     return "%d".formatted(item.typeNo());
                 }
             }),
-            Map.entry(Label.SRU, new AbstractFieldWriter<FileItem.Sru>() {
+            Map.entry(Label.SRU, new AbstractFieldWriter<SIE4Item.Sru>() {
                 @Override
-                String writeFields(FileItem.Sru item) {
+                String writeFields(SIE4Item.Sru item) {
                     return "%d %d".formatted(item.accountNo(), item.sruCode());
                 }
             }),
-            Map.entry(Label.TAXAR, new AbstractFieldWriter<FileItem.Taxar>() {
+            Map.entry(Label.TAXAR, new AbstractFieldWriter<SIE4Item.Taxar>() {
                 @Override
-                String writeFields(FileItem.Taxar item) {
+                String writeFields(SIE4Item.Taxar item) {
                     return "%d".formatted(item.year());
                 }
             }),
-            Map.entry(Label.UB, new AbstractFieldWriter<FileItem.Ub>() {
+            Map.entry(Label.UB, new AbstractFieldWriter<SIE4Item.Ub>() {
                 @Override
-                String writeFields(FileItem.Ub item) {
+                String writeFields(SIE4Item.Ub item) {
                     return "%d %d %s %s".formatted(
                             item.yearNumber().yearNo(),
                             item.account(),
@@ -242,9 +242,9 @@ public class OutFieldMapper {
                     ).trim();
                 }
             }),
-            Map.entry(Label.UNDERDIM, new AbstractFieldWriter<FileItem.Underdim>() {
+            Map.entry(Label.UNDERDIM, new AbstractFieldWriter<SIE4Item.Underdim>() {
                 @Override
-                String writeFields(FileItem.Underdim item) {
+                String writeFields(SIE4Item.Underdim item) {
                     return "%d %s %d".formatted(
                             item.dimensionNo(),
                             quoted(item.name()),
@@ -252,15 +252,15 @@ public class OutFieldMapper {
                     );
                 }
             }),
-            Map.entry(Label.VALUTA, new AbstractFieldWriter<FileItem.Valuta>() {
+            Map.entry(Label.VALUTA, new AbstractFieldWriter<SIE4Item.Valuta>() {
                 @Override
-                String writeFields(FileItem.Valuta item) {
+                String writeFields(SIE4Item.Valuta item) {
                     return quoted(item.currencyCode());
                 }
             }),
-            Map.entry(Label.VER, new AbstractFieldWriter<FileItem.Ver>() {
+            Map.entry(Label.VER, new AbstractFieldWriter<SIE4Item.Ver>() {
                 @Override
-                String writeFields(FileItem.Ver item) {
+                String writeFields(SIE4Item.Ver item) {
                     StringBuilder sb = new StringBuilder();
                     item.series().ifPresent(s -> sb.append(quoted(s)));
                     item.verificationNo().ifPresent(vn -> sb.append(' ').append(quoted(vn)));
@@ -274,36 +274,36 @@ public class OutFieldMapper {
                     return sb.toString();
                 }
 
-                private String writeFields(FileItem.Transaction tx) {
+                private String writeFields(SIE4Item.Transaction tx) {
                     String fields = switch (tx) {
-                        case FileItem.Transaction.Trans ignored -> WRITER_REGISTRY.get(Label.TRANS).writeItem(Label.TRANS, tx);
-                        case FileItem.Transaction.Btrans ignored -> WRITER_REGISTRY.get(Label.BTRANS).writeItem(Label.BTRANS, tx);
-                        case FileItem.Transaction.Rtrans ignored -> WRITER_REGISTRY.get(Label.RTRANS).writeItem(Label.RTRANS, tx);
+                        case SIE4Item.Transaction.Trans ignored -> WRITER_REGISTRY.get(Label.TRANS).writeItem(Label.TRANS, tx);
+                        case SIE4Item.Transaction.Btrans ignored -> WRITER_REGISTRY.get(Label.BTRANS).writeItem(Label.BTRANS, tx);
+                        case SIE4Item.Transaction.Rtrans ignored -> WRITER_REGISTRY.get(Label.RTRANS).writeItem(Label.RTRANS, tx);
                     };
                     return "   ".concat(fields);
                 }
             }),
-            Map.entry(Label.TRANS, new AbstractFieldWriter<FileItem.Transaction.Trans>() {
+            Map.entry(Label.TRANS, new AbstractFieldWriter<SIE4Item.Transaction.Trans>() {
                 @Override
-                String writeFields(FileItem.Transaction.Trans field) {
+                String writeFields(SIE4Item.Transaction.Trans field) {
                     return writeTransactionFields(field);
                 }
             }),
-            Map.entry(Label.BTRANS, new AbstractFieldWriter<FileItem.Transaction.Btrans>() {
+            Map.entry(Label.BTRANS, new AbstractFieldWriter<SIE4Item.Transaction.Btrans>() {
                 @Override
-                String writeFields(FileItem.Transaction.Btrans field) {
+                String writeFields(SIE4Item.Transaction.Btrans field) {
                     return writeTransactionFields(field);
                 }
             }),
-            Map.entry(Label.RTRANS, new AbstractFieldWriter<FileItem.Transaction.Rtrans>() {
+            Map.entry(Label.RTRANS, new AbstractFieldWriter<SIE4Item.Transaction.Rtrans>() {
                 @Override
-                String writeFields(FileItem.Transaction.Rtrans field) {
+                String writeFields(SIE4Item.Transaction.Rtrans field) {
                     return writeTransactionFields(field);
                 }
             })
     );
 
-    private static String writeTransactionFields(FileItem.Transaction tx) {
+    private static String writeTransactionFields(SIE4Item.Transaction tx) {
         String objectRefs = "{" + tx.objectReferences().stream()
                 .map(r -> "%d %s".formatted(r.dimensionNo(), r.objectNo()))
                 .collect(Collectors.joining(" ")) + "}";
@@ -323,9 +323,8 @@ public class OutFieldMapper {
         ).stripTrailing();
     }
 
-    public static String toFileString(FileItem field) {
+    public static String toFileString(SIE4Item field) {
         Label label = Label.valueOf(field.getClass().getSimpleName().toUpperCase());
         return WRITER_REGISTRY.get(label).writeItem(label, field);
     }
-
 }

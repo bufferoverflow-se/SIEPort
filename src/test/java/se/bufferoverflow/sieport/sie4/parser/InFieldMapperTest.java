@@ -5,7 +5,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import se.bufferoverflow.sieport.sie4.CompanyType;
-import se.bufferoverflow.sieport.sie4.FileItem;
+import se.bufferoverflow.sieport.sie4.SIE4Item;
 import se.bufferoverflow.sieport.sie4.ObjectReference;
 import se.bufferoverflow.sieport.sie4.Period;
 import se.bufferoverflow.sieport.sie4.YearNumber;
@@ -23,184 +23,184 @@ class InFieldMapperTest {
     @Test
     void toModel_address() {
         String addressLine = "#ADRESS \"Sven Svensson\" \"Box 21\" \"211 20 MALMÖ\" \"040-123 45\"";
-        FileItem.Adress expectedModel = new FileItem.Adress(
+        SIE4Item.Adress expectedModel = new SIE4Item.Adress(
                 "Sven Svensson",
                 "Box 21",
                 "211 20 MALMÖ",
                 "040-123 45");
-        FileItem model = InFieldMapper.toModel(addressLine);
+        SIE4Item model = InFieldMapper.toModel(addressLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_bkod() {
         String bkodLine = "#BKOD 82300";
-        FileItem.Bkod expectedModel = new FileItem.Bkod(82300);
-        FileItem model = InFieldMapper.toModel(bkodLine);
+        SIE4Item.Bkod expectedModel = new SIE4Item.Bkod(82300);
+        SIE4Item model = InFieldMapper.toModel(bkodLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_dim() {
         String dimLine = "#DIM 2 Project";
-        FileItem.Dim expectedModel = new FileItem.Dim(2, "Project");
-        FileItem model = InFieldMapper.toModel(dimLine);
+        SIE4Item.Dim expectedModel = new SIE4Item.Dim(2, "Project");
+        SIE4Item model = InFieldMapper.toModel(dimLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_enhet() {
         String enhetLine = "#ENHET 4010 litre";
-        FileItem.Enhet expectedModel = new FileItem.Enhet(4010, "litre");
-        FileItem model = InFieldMapper.toModel(enhetLine);
+        SIE4Item.Enhet expectedModel = new SIE4Item.Enhet(4010, "litre");
+        SIE4Item model = InFieldMapper.toModel(enhetLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_flagga() {
         String flaggaLine = "#FLAGGA 0";
-        FileItem.Flagga expectedModel = new FileItem.Flagga(0);
-        FileItem model = InFieldMapper.toModel(flaggaLine);
+        SIE4Item.Flagga expectedModel = new SIE4Item.Flagga(0);
+        SIE4Item model = InFieldMapper.toModel(flaggaLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_fnamn() {
         String fnamnLine = "#FNAMN \"ACME Corporation\"";
-        FileItem.Fnamn expectedModel = new FileItem.Fnamn("ACME Corporation");
-        FileItem model = InFieldMapper.toModel(fnamnLine);
+        SIE4Item.Fnamn expectedModel = new SIE4Item.Fnamn("ACME Corporation");
+        SIE4Item model = InFieldMapper.toModel(fnamnLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_fnr() {
         String fnrLine = "#FNR Kalles";
-        FileItem.Fnr expectedModel = new FileItem.Fnr("Kalles");
-        FileItem model = InFieldMapper.toModel(fnrLine);
+        SIE4Item.Fnr expectedModel = new SIE4Item.Fnr("Kalles");
+        SIE4Item model = InFieldMapper.toModel(fnrLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_format() {
         String formatLine = "#FORMAT PC8";
-        FileItem.Format expectedModel = new FileItem.Format("PC8");
-        FileItem model = InFieldMapper.toModel(formatLine);
+        SIE4Item.Format expectedModel = new SIE4Item.Format("PC8");
+        SIE4Item model = InFieldMapper.toModel(formatLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_ftyp() {
         String ftypLine = "#FTYP AB";
-        FileItem.Ftyp expectedModel = new FileItem.Ftyp(CompanyType.AB);
-        FileItem model = InFieldMapper.toModel(ftypLine);
+        SIE4Item.Ftyp expectedModel = new SIE4Item.Ftyp(CompanyType.AB);
+        SIE4Item model = InFieldMapper.toModel(ftypLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_gen() {
         String genLine = "#GEN 20240508 AN";
-        FileItem.Gen expectedModel = new FileItem.Gen(
+        SIE4Item.Gen expectedModel = new SIE4Item.Gen(
                 LocalDate.of(2024, 5, 8),
                 Optional.of("AN"));
-        FileItem model = InFieldMapper.toModel(genLine);
+        SIE4Item model = InFieldMapper.toModel(genLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_ib() {
         String ibLine = "#IB 0 4010 23780.78";
-        FileItem.Ib expectedModel = new FileItem.Ib(YearNumber.of(0),
+        SIE4Item.Ib expectedModel = new SIE4Item.Ib(YearNumber.of(0),
                 4010,
                 new BigDecimal("23780.78"),
                 Optional.empty());
-        FileItem model = InFieldMapper.toModel(ibLine);
+        SIE4Item model = InFieldMapper.toModel(ibLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_konto() {
         String kontoLine = "#KONTO 1510 \"Accounts receivable\"";
-        FileItem.Konto expectedModel = new FileItem.Konto(1510, "Accounts receivable");
-        FileItem model = InFieldMapper.toModel(kontoLine);
+        SIE4Item.Konto expectedModel = new SIE4Item.Konto(1510, "Accounts receivable");
+        SIE4Item model = InFieldMapper.toModel(kontoLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_kptyp() {
         String kptypLine = "#KPTYP EUBAS97";
-        FileItem.Kptyp expectedModel = new FileItem.Kptyp("EUBAS97");
-        FileItem model = InFieldMapper.toModel(kptypLine);
+        SIE4Item.Kptyp expectedModel = new SIE4Item.Kptyp("EUBAS97");
+        SIE4Item model = InFieldMapper.toModel(kptypLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_ktyp() {
         String ktypLine = "#KTYP 1510 T";
-        FileItem.Ktyp expectedModel = new FileItem.Ktyp(1510, FileItem.Ktyp.AccountType.T);
-        FileItem model = InFieldMapper.toModel(ktypLine);
+        SIE4Item.Ktyp expectedModel = new SIE4Item.Ktyp(1510, SIE4Item.Ktyp.AccountType.T);
+        SIE4Item model = InFieldMapper.toModel(ktypLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_objekt() {
         String objektLine = "#OBJEKT 1 \"0123\" \"Service department\"";
-        FileItem.Objekt expectedModel = new FileItem.Objekt(1, "0123", "Service department");
-        FileItem model = InFieldMapper.toModel(objektLine);
+        SIE4Item.Objekt expectedModel = new SIE4Item.Objekt(1, "0123", "Service department");
+        SIE4Item model = InFieldMapper.toModel(objektLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_oib() {
         String oibLine = "#OIB 0 1520 {8 \"12345\"} 12345.00";
-        FileItem.Oib expectedModel = new FileItem.Oib(
+        SIE4Item.Oib expectedModel = new SIE4Item.Oib(
                 YearNumber.of(0),
                 1520,
                 ObjectReference.of(8, "12345"),
                 new BigDecimal("12345.00"),
                 Optional.empty());
-        FileItem model = InFieldMapper.toModel(oibLine);
+        SIE4Item model = InFieldMapper.toModel(oibLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_omfattn() {
         String omfattnLine = "#OMFATTN 20080630";
-        FileItem.Omfattn expectedModel = new FileItem.Omfattn(LocalDate.of(2008, 6, 30));
-        FileItem model = InFieldMapper.toModel(omfattnLine);
+        SIE4Item.Omfattn expectedModel = new SIE4Item.Omfattn(LocalDate.of(2008, 6, 30));
+        SIE4Item model = InFieldMapper.toModel(omfattnLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_orgnr() {
         String orgnrLine = "#ORGNR 212000-0340 1";
-        FileItem.OrgNr expectedModel = new FileItem.OrgNr("212000-0340", Optional.of(1), Optional.empty());
-        FileItem model = InFieldMapper.toModel(orgnrLine);
+        SIE4Item.OrgNr expectedModel = new SIE4Item.OrgNr("212000-0340", Optional.of(1), Optional.empty());
+        SIE4Item model = InFieldMapper.toModel(orgnrLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_oub() {
         String oubLine = "#OUB 0 1520 {8 \"12345\"} 12345.67";
-        FileItem.Oub expectedModel = new FileItem.Oub(
+        SIE4Item.Oub expectedModel = new SIE4Item.Oub(
                 YearNumber.of(0),
                 1520,
                 ObjectReference.of(8, "12345"),
                 new BigDecimal("12345.67"),
                 Optional.empty());
-        FileItem model = InFieldMapper.toModel(oubLine);
+        SIE4Item model = InFieldMapper.toModel(oubLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @ParameterizedTest
     @MethodSource("pbudgetTestData")
-    void toModel_pbudget(String pbudgetLine, FileItem.Pbudget expectedModel) {
-        FileItem model = InFieldMapper.toModel(pbudgetLine);
+    void toModel_pbudget(String pbudgetLine, SIE4Item.Pbudget expectedModel) {
+        SIE4Item model = InFieldMapper.toModel(pbudgetLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     private static Stream<Arguments> pbudgetTestData() {
         return Stream.of(
-                Arguments.of("#PBUDGET 0 200801 3011 {} -1243.50 -415", new FileItem.Pbudget(
+                Arguments.of("#PBUDGET 0 200801 3011 {} -1243.50 -415", new SIE4Item.Pbudget(
                         YearNumber.of(0),
                         Period.of(2008, 1),
                         3011,
@@ -208,7 +208,7 @@ class InFieldMapperTest {
                         new BigDecimal("-1243.50"),
                         Optional.of(new BigDecimal(-415)))),
 
-                Arguments.of("#PBUDGET -1 200701 5010 {1 \"0123\"} 3411.80", new FileItem.Pbudget(
+                Arguments.of("#PBUDGET -1 200701 5010 {1 \"0123\"} 3411.80", new SIE4Item.Pbudget(
                         YearNumber.of(-1),
                         Period.of(2007, 1),
                         5010,
@@ -221,23 +221,23 @@ class InFieldMapperTest {
     @Test
     void toModel_program() {
         String programLine = "#PROGRAM \"Visma Compact\" 5.1";
-        FileItem.Program expectedModel = new FileItem.Program("Visma Compact", "5.1");
-        FileItem model = InFieldMapper.toModel(programLine);
+        SIE4Item.Program expectedModel = new SIE4Item.Program("Visma Compact", "5.1");
+        SIE4Item model = InFieldMapper.toModel(programLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_prosa() {
         String prosaLine = "#PROSA \"Exported using Visma Compact 080512\"";
-        FileItem.Prosa expectedModel = new FileItem.Prosa("Exported using Visma Compact 080512");
-        FileItem model = InFieldMapper.toModel(prosaLine);
+        SIE4Item.Prosa expectedModel = new SIE4Item.Prosa("Exported using Visma Compact 080512");
+        SIE4Item model = InFieldMapper.toModel(prosaLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @ParameterizedTest
     @MethodSource("psaldoTestData")
-    void toModel_psaldo(String psaldoLine, FileItem.Psaldo expectedModel) {
-        FileItem model = InFieldMapper.toModel(psaldoLine);
+    void toModel_psaldo(String psaldoLine, SIE4Item.Psaldo expectedModel) {
+        SIE4Item model = InFieldMapper.toModel(psaldoLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -245,7 +245,7 @@ class InFieldMapperTest {
         return Stream.of(
                 Arguments.of(
                         "#PSALDO 0 200808 1910 {} 1243.50 123",
-                        new FileItem.Psaldo(
+                        new SIE4Item.Psaldo(
                                 YearNumber.of(0),
                                 Period.of(2008, 8),
                                 1910,
@@ -255,7 +255,7 @@ class InFieldMapperTest {
                 ),
                 Arguments.of(
                         "#PSALDO 0 200809 5010 {1 \"0123\"} 3411.80",
-                        new FileItem.Psaldo(
+                        new SIE4Item.Psaldo(
                                 YearNumber.of(0),
                                 Period.of(2008, 9),
                                 5010,
@@ -269,50 +269,50 @@ class InFieldMapperTest {
     @Test
     void toModel_rar() {
         String rarLine = "#RAR -1 20110101 20111231";
-        FileItem.Rar expectedModel = new FileItem.Rar(
+        SIE4Item.Rar expectedModel = new SIE4Item.Rar(
                 YearNumber.of(-1),
                 LocalDate.of(2011, 1, 1),
                 LocalDate.of(2011, 12, 31));
-        FileItem model = InFieldMapper.toModel(rarLine);
+        SIE4Item model = InFieldMapper.toModel(rarLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_res() {
         String resLine = "#RES 0 3011 -23780.78";
-        FileItem.Res expectedModel = new FileItem.Res(YearNumber.of(0), 3011, new BigDecimal("-23780.78"), Optional.empty());
-        FileItem model = InFieldMapper.toModel(resLine);
+        SIE4Item.Res expectedModel = new SIE4Item.Res(YearNumber.of(0), 3011, new BigDecimal("-23780.78"), Optional.empty());
+        SIE4Item model = InFieldMapper.toModel(resLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_sietyp() {
         String sietypLine = "#SIETYP 4";
-        FileItem.Sietyp expectedModel = new FileItem.Sietyp(4);
-        FileItem model = InFieldMapper.toModel(sietypLine);
+        SIE4Item.Sietyp expectedModel = new SIE4Item.Sietyp(4);
+        SIE4Item model = InFieldMapper.toModel(sietypLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_sru() {
         String sruLine = "#SRU 1520 9420";
-        FileItem.Sru expectedModel = new FileItem.Sru(1520, 9420);
-        FileItem model = InFieldMapper.toModel(sruLine);
+        SIE4Item.Sru expectedModel = new SIE4Item.Sru(1520, 9420);
+        SIE4Item model = InFieldMapper.toModel(sruLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_taxar() {
         String taxarLine = "#TAXAR 2000";
-        FileItem.Taxar expectedModel = new FileItem.Taxar(2000);
-        FileItem model = InFieldMapper.toModel(taxarLine);
+        SIE4Item.Taxar expectedModel = new SIE4Item.Taxar(2000);
+        SIE4Item model = InFieldMapper.toModel(taxarLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @ParameterizedTest
     @MethodSource("transTestData")
-    void toModel_trans(String transLine, FileItem.Transaction.Trans expectedModel) {
-        FileItem model = InFieldMapper.toModel(transLine);
+    void toModel_trans(String transLine, SIE4Item.Transaction.Trans expectedModel) {
+        SIE4Item model = InFieldMapper.toModel(transLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -320,7 +320,7 @@ class InFieldMapperTest {
         return Stream.of(
                 Arguments.of(
                         "#TRANS 1510 {} 150038.05",
-                        new FileItem.Transaction.Trans(
+                        new SIE4Item.Transaction.Trans(
                                 1510,
                                 new BigDecimal("150038.05"),
                                 List.of(),
@@ -332,7 +332,7 @@ class InFieldMapperTest {
                 ),
                 Arguments.of(
                         "#TRANS 1510 {1 Nord} -16875.00 20211002 \"Faktnr: 663, Namn: Billeverantören AB\"",
-                        new FileItem.Transaction.Trans(
+                        new SIE4Item.Transaction.Trans(
                                 1510,
                                 new BigDecimal("-16875.00"),
                                 List.of(ObjectReference.of(1, "Nord")),
@@ -344,7 +344,7 @@ class InFieldMapperTest {
                 ),
                 Arguments.of(
                         "#TRANS 7010 {1 Nord 2 \"0010\"} 27564.20 20210325 \"\" 216",
-                        new FileItem.Transaction.Trans(
+                        new SIE4Item.Transaction.Trans(
                                 7010,
                                 new BigDecimal("27564.20"),
                                 List.of(ObjectReference.of(1, "Nord"), ObjectReference.of(2, "0010")),
@@ -360,7 +360,7 @@ class InFieldMapperTest {
     @Test
     void toModel_rtrans() {
         String rtransLine = "#RTRANS 1520 {} 500.00";
-        FileItem.Transaction.Rtrans expectedModel = new FileItem.Transaction.Rtrans(
+        SIE4Item.Transaction.Rtrans expectedModel = new SIE4Item.Transaction.Rtrans(
                 1520,
                 new BigDecimal("500.00"),
                 List.of(),
@@ -369,14 +369,14 @@ class InFieldMapperTest {
                 Optional.empty(),
                 Optional.empty()
         );
-        FileItem model = InFieldMapper.toModel(rtransLine);
+        SIE4Item model = InFieldMapper.toModel(rtransLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_btrans() {
         String btransLine = "#BTRANS 1520 {} 500.00";
-        FileItem.Transaction.Btrans expectedModel = new FileItem.Transaction.Btrans(
+        SIE4Item.Transaction.Btrans expectedModel = new SIE4Item.Transaction.Btrans(
                 1520,
                 new BigDecimal("500.00"),
                 List.of(),
@@ -385,38 +385,38 @@ class InFieldMapperTest {
                 Optional.empty(),
                 Optional.empty()
         );
-        FileItem model = InFieldMapper.toModel(btransLine);
+        SIE4Item model = InFieldMapper.toModel(btransLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_ub() {
         String ubLine = "#UB 0 2440 -2380.39";
-        FileItem.Ub expectedModel = new FileItem.Ub(YearNumber.of(0), 2440, new BigDecimal("-2380.39"), Optional.empty());
-        FileItem model = InFieldMapper.toModel(ubLine);
+        SIE4Item.Ub expectedModel = new SIE4Item.Ub(YearNumber.of(0), 2440, new BigDecimal("-2380.39"), Optional.empty());
+        SIE4Item model = InFieldMapper.toModel(ubLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_underdim() {
         String underdimLine = "#UNDERDIM 21 \"Sub-department\" 1";
-        FileItem.Underdim expectedModel = new FileItem.Underdim(21, "Sub-department", 1);
-        FileItem model = InFieldMapper.toModel(underdimLine);
+        SIE4Item.Underdim expectedModel = new SIE4Item.Underdim(21, "Sub-department", 1);
+        SIE4Item model = InFieldMapper.toModel(underdimLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @Test
     void toModel_valuta() {
         String valutaLine = "#VALUTA SEK";
-        FileItem.Valuta expectedModel = new FileItem.Valuta("SEK");
-        FileItem model = InFieldMapper.toModel(valutaLine);
+        SIE4Item.Valuta expectedModel = new SIE4Item.Valuta("SEK");
+        SIE4Item model = InFieldMapper.toModel(valutaLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
     @ParameterizedTest
     @MethodSource("verTestData")
-    void toModel_ver(List<String> verLine, FileItem.Ver expectedModel) {
-        FileItem model = InFieldMapper.toModel(verLine);
+    void toModel_ver(List<String> verLine, SIE4Item.Ver expectedModel) {
+        SIE4Item model = InFieldMapper.toModel(verLine);
         assertThat(model).isEqualTo(expectedModel);
     }
 
@@ -424,7 +424,7 @@ class InFieldMapperTest {
         return Stream.of(
                 Arguments.of(
                         List.of("#VER F 12 20211223 \"Lönekörning: 2021-12-23 - Ordinarie lön\" 20211130"),
-                        new FileItem.Ver(
+                        new SIE4Item.Ver(
                                 LocalDate.of(2021, 12, 23),
                                 Optional.of("F"),
                                 Optional.of("12"),
@@ -434,7 +434,7 @@ class InFieldMapperTest {
                                 List.of())
                 ),
                 Arguments.of(List.of("#VER \"\" \"\" 20081216 \"Postage\""),
-                        new FileItem.Ver(
+                        new SIE4Item.Ver(
                                 LocalDate.of(2008, 12, 16),
                                 Optional.empty(),
                                 Optional.empty(),

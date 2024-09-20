@@ -19,9 +19,9 @@ class SIE4ParserTest {
 
     @Test
     void readSample() {
-        List<FileItem> fileItems = SIE4Parser.parse(sie4Sample);
+        List<SIE4Item> items = SIE4Parser.parse(sie4Sample);
 
-        assertThat(fileItems).hasSize(2160);
-        assertThat(fileItems.stream()).filteredOn(it -> it instanceof FileItem.Ver).hasSize(295);
+        assertThat(items).hasSize(2160);
+        assertThat(items.stream()).filteredOn(it -> it instanceof SIE4Item.Ver).hasSize(295);
     }
 }

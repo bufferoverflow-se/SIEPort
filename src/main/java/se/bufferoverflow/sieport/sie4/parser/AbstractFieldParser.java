@@ -1,6 +1,6 @@
 package se.bufferoverflow.sieport.sie4.parser;
 
-import se.bufferoverflow.sieport.sie4.FileItem;
+import se.bufferoverflow.sieport.sie4.SIE4Item;
 import se.bufferoverflow.sieport.sie4.ObjectReference;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
-abstract class AbstractFieldParser<T extends FileItem> {
+abstract class AbstractFieldParser<T extends SIE4Item> {
 
     private static final Pattern FIELD_PATTERN = Pattern.compile("\"((?:[^\"\\\\]|\\\\.)*)\"|(?:\\{([^{}]*)})|(\\S+)");
 
@@ -65,9 +65,9 @@ abstract class AbstractFieldParser<T extends FileItem> {
         }
     }
 
-    public T parseFields(String fields, List<FileItem> subItems) {
+    public T parseFields(String fields, List<SIE4Item> subItems) {
         return parseFields(tokenizeFields(fields), subItems);
     }
 
-    protected abstract T parseFields(List<String> fields, List<FileItem> subItems);
+    protected abstract T parseFields(List<String> fields, List<SIE4Item> subItems);
 }

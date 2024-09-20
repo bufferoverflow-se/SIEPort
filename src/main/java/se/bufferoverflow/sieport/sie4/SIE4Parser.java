@@ -27,12 +27,12 @@ public class SIE4Parser {
         return parse(new FileInputStream(file));
     }
 
-    public static List<FileItem> parse(InputStream inputStream) {
+    public static List<SIE4Item> parse(InputStream inputStream) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, Constants.SIE4_CHARSET));
 
         try {
             List<String> verBuffer = new ArrayList<>();
-            List<FileItem> result = new ArrayList<>();
+            List<SIE4Item> result = new ArrayList<>();
 
             String line;
             while ((line = reader.readLine()) != null) {
