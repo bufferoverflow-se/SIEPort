@@ -4,14 +4,14 @@ import se.bufferoverflow.sieport.sie4.SIE4Exception;
 import se.bufferoverflow.sieport.sie4.SIE4Item;
 
 abstract class AbstractFieldWriter<T extends SIE4Item> {
-    protected static String quoted(String s) {
+    static String quoted(String s) {
         if (s.indexOf(' ') > -1) {
             return "\"" + s + "\"";
         }
         return s;
     }
 
-    public String writeItem(SIE4Item item) {
+    String writeItem(SIE4Item item) {
         if (item == null) {
             throw new SIE4Exception("Item cannot be null");
         }

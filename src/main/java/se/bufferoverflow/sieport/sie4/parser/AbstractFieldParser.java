@@ -16,7 +16,7 @@ abstract class AbstractFieldParser<T extends SIE4Item> {
 
     private static final Pattern FIELD_PATTERN = Pattern.compile("\"((?:[^\"\\\\]|\\\\.)*)\"|(?:\\{([^{}]*)})|(\\S+)");
 
-    protected static List<String> tokenizeFields(String fields) {
+    static List<String> tokenizeFields(String fields) {
         List<String> tokens = new ArrayList<>();
         Matcher m = FIELD_PATTERN.matcher(fields);
 
@@ -34,7 +34,7 @@ abstract class AbstractFieldParser<T extends SIE4Item> {
         return tokens;
     }
 
-    protected static List<ObjectReference> parseObjectReferences(String objectReferences) {
+    static List<ObjectReference> parseObjectReferences(String objectReferences) {
         Objects.requireNonNull(objectReferences, "objectReferences string must not be null");
 
         List<String> tokens = tokenizeFields(objectReferences);
@@ -53,12 +53,12 @@ abstract class AbstractFieldParser<T extends SIE4Item> {
                 .toList();
     }
 
-    protected static Optional<String> parseOptionalField(String field) {
+    static Optional<String> parseOptionalField(String field) {
         Objects.requireNonNull(field, "field must not be null");
         return field.isEmpty() ? Optional.empty() : Optional.of(field);
     }
 
-    public T parseFields(String fields) {
+    T parseFields(String fields) {
         try {
             return parseFields(tokenizeFields(fields), List.of());
         } catch (Exception e) {
@@ -66,9 +66,9 @@ abstract class AbstractFieldParser<T extends SIE4Item> {
         }
     }
 
-    public T parseFields(String fields, List<SIE4Item> subItems) {
+    T parseFields(String fields, List<SIE4Item> subItems) {
         return parseFields(tokenizeFields(fields), subItems);
     }
 
-    protected abstract T parseFields(List<String> fields, List<SIE4Item> subItems);
+    abstract T parseFields(List<String> fields, List<SIE4Item> subItems);
 }
