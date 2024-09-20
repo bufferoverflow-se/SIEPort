@@ -4,7 +4,6 @@ import se.bufferoverflow.sieport.sie4.CompanyType;
 import se.bufferoverflow.sieport.sie4.Constants;
 import se.bufferoverflow.sieport.sie4.SIE4Exception;
 import se.bufferoverflow.sieport.sie4.SIE4Item;
-import se.bufferoverflow.sieport.sie4.Label;
 import se.bufferoverflow.sieport.sie4.ObjectReference;
 import se.bufferoverflow.sieport.sie4.Period;
 import se.bufferoverflow.sieport.sie4.YearNumber;
@@ -606,4 +605,42 @@ public class InFieldMapper {
     }
 
     private record LabelWithFields(Label label, String fields) {}
+
+    private enum Label {
+        ADRESS,
+        BKOD,
+        DIM,
+        ENHET,
+        FLAGGA,
+        FNAMN,
+        FNR,
+        FORMAT,
+        FTYP,
+        GEN,
+        IB,
+        KONTO,
+        KPTYP,
+        KTYP,
+        OBJEKT,
+        OIB,
+        OMFATTN,
+        ORGNR,
+        OUB,
+        PBUDGET,
+        PROGRAM,
+        PROSA,
+        PSALDO,
+        RAR,
+        RES,
+        SIETYP,
+        SRU,
+        TAXAR,
+        TRANS,
+        RTRANS,
+        BTRANS,
+        UB,
+        UNDERDIM,
+        VALUTA,
+        VER
+    }
 }

@@ -2,7 +2,6 @@ package se.bufferoverflow.sieport.sie4.writer;
 
 import se.bufferoverflow.sieport.sie4.SIE4Exception;
 import se.bufferoverflow.sieport.sie4.SIE4Item;
-import se.bufferoverflow.sieport.sie4.Label;
 
 abstract class AbstractFieldWriter<T extends SIE4Item> {
     protected static String quoted(String s) {
@@ -12,12 +11,13 @@ abstract class AbstractFieldWriter<T extends SIE4Item> {
         return s;
     }
 
-    public String writeItem(Label label, SIE4Item item) {
-        if (label == null || item == null) {
-            throw new SIE4Exception("label or fileItem cannot be null");
+    public String writeItem(SIE4Item item) {
+        if (item == null) {
+            throw new SIE4Exception("Item cannot be null");
         }
+        String label = item.getClass().getSimpleName().toUpperCase();
         return "#%s %s".formatted(label, writeFields((T) item));
     }
 
-    abstract String writeFields(T field);
+    abstract String writeFields(T item);
 }
