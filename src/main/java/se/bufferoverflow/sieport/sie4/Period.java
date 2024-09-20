@@ -20,7 +20,7 @@ public record Period(int year, int month) {
 
     public static Period of(String periodString) {
         if (periodString == null || periodString.isBlank()) {
-            throw new IllegalArgumentException("Period string cannot be null or blank");
+            throw new SIE4Exception("Period string cannot be null or blank");
         }
         TemporalAccessor accessor = SIE4_PERIOD_FORMATTER.parse(periodString);
         return Period.of(accessor.get(ChronoField.YEAR), accessor.get(ChronoField.MONTH_OF_YEAR));

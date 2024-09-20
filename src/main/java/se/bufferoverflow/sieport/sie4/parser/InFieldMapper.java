@@ -2,6 +2,7 @@ package se.bufferoverflow.sieport.sie4.parser;
 
 import se.bufferoverflow.sieport.sie4.CompanyType;
 import se.bufferoverflow.sieport.sie4.Constants;
+import se.bufferoverflow.sieport.sie4.SIE4Exception;
 import se.bufferoverflow.sieport.sie4.SIE4Item;
 import se.bufferoverflow.sieport.sie4.Label;
 import se.bufferoverflow.sieport.sie4.ObjectReference;
@@ -21,7 +22,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Adress parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 4) {
-                        throw new IllegalArgumentException("Label ADRESS requires 4 fields");
+                        throw new SIE4Exception("Label ADRESS requires 4 fields");
                     }
                     return new SIE4Item.Adress(fields.get(0), fields.get(1), fields.get(2), fields.get(3));
                 }
@@ -30,7 +31,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Bkod parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
-                        throw new IllegalArgumentException("Label BKOD requires 1 field");
+                        throw new SIE4Exception("Label BKOD requires 1 field");
                     }
                     return new SIE4Item.Bkod(Integer.parseInt(fields.getFirst()));
                 }
@@ -39,7 +40,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Dim parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 2) {
-                        throw new IllegalArgumentException("Label DIM requires 2 fields");
+                        throw new SIE4Exception("Label DIM requires 2 fields");
                     }
                     return new SIE4Item.Dim(Integer.parseInt(fields.get(0)), fields.get(1));
                 }
@@ -48,7 +49,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Enhet parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 2) {
-                        throw new IllegalArgumentException("Label ENHET requires 2 fields");
+                        throw new SIE4Exception("Label ENHET requires 2 fields");
                     }
                     return new SIE4Item.Enhet(Integer.parseInt(fields.get(0)), fields.get(1));
                 }
@@ -57,7 +58,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Flagga parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
-                        throw new IllegalArgumentException("Label FLAGGA requires 1 field");
+                        throw new SIE4Exception("Label FLAGGA requires 1 field");
                     }
                     return new SIE4Item.Flagga(Integer.parseInt(fields.getFirst()));
                 }
@@ -66,7 +67,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Fnamn parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
-                        throw new IllegalArgumentException("Label FNAMN requires 1 field");
+                        throw new SIE4Exception("Label FNAMN requires 1 field");
                     }
                     return new SIE4Item.Fnamn(fields.getFirst());
                 }
@@ -75,7 +76,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Fnr parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
-                        throw new IllegalArgumentException("Label FNR requires 1 field");
+                        throw new SIE4Exception("Label FNR requires 1 field");
                     }
                     return new SIE4Item.Fnr(fields.getFirst());
                 }
@@ -85,10 +86,10 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Format parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
-                        throw new IllegalArgumentException("Label FORMAT requires 1 field");
+                        throw new SIE4Exception("Label FORMAT requires 1 field");
                     }
                     if (!fields.getFirst().equalsIgnoreCase("PC8")) {
-                        throw new IllegalArgumentException("Standard only allows FORMAT to be PC8");
+                        throw new SIE4Exception("Standard only allows FORMAT to be PC8");
                     }
                     return new SIE4Item.Format(fields.getFirst());
                 }
@@ -97,7 +98,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Ftyp parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
-                        throw new IllegalArgumentException("Label FTYP requires 1 field");
+                        throw new SIE4Exception("Label FTYP requires 1 field");
                     }
                     return new SIE4Item.Ftyp(CompanyType.valueOf(fields.getFirst().toUpperCase()));
                 }
@@ -106,7 +107,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Gen parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.isEmpty() || fields.size() > 2) {
-                        throw new IllegalArgumentException("Label GEN requires at least 1 field, but max 2");
+                        throw new SIE4Exception("Label GEN requires at least 1 field, but max 2");
                     }
                     LocalDate date = LocalDate.parse(fields.get(0), Constants.SIE4_DATE_FORMATTER);
 
@@ -122,7 +123,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Ib parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() < 3 || fields.size() > 4) {
-                        throw new IllegalArgumentException("Label IB requires 3 or 4 fields");
+                        throw new SIE4Exception("Label IB requires 3 or 4 fields");
                     }
 
                     Optional<BigDecimal> quantity = Optional.empty();
@@ -141,7 +142,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Konto parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 2) {
-                        throw new IllegalArgumentException("Label KONTO requires 2 fields");
+                        throw new SIE4Exception("Label KONTO requires 2 fields");
                     }
                     return new SIE4Item.Konto(Integer.parseInt(fields.get(0)), fields.get(1));
                 }
@@ -150,7 +151,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Kptyp parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
-                        throw new IllegalArgumentException("Label KPTYP requires 1 field");
+                        throw new SIE4Exception("Label KPTYP requires 1 field");
                     }
                     return new SIE4Item.Kptyp(fields.getFirst());
                 }
@@ -159,7 +160,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Ktyp parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 2) {
-                        throw new IllegalArgumentException("Label KTYP requires 2 fields");
+                        throw new SIE4Exception("Label KTYP requires 2 fields");
                     }
                     return new SIE4Item.Ktyp(
                             Integer.parseInt(fields.get(0)),
@@ -170,7 +171,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Objekt parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 3) {
-                        throw new IllegalArgumentException("Label OBJEKT requires 3 fields");
+                        throw new SIE4Exception("Label OBJEKT requires 3 fields");
                     }
                     return new SIE4Item.Objekt(Integer.parseInt(fields.get(0)), fields.get(1), fields.get(2));
                 }
@@ -179,14 +180,14 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Oib parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() < 4 || fields.size() > 5) {
-                        throw new IllegalArgumentException("Label OIB requires 4 or 5 fields");
+                        throw new SIE4Exception("Label OIB requires 4 or 5 fields");
                     }
 
                     YearNumber yearNumber = YearNumber.of(Integer.parseInt(fields.get(0)));
                     int accountNo = Integer.parseInt(fields.get(1));
                     List<ObjectReference> objectReferences = parseObjectReferences(fields.get(2));
                     if (objectReferences.size() != 1) {
-                        throw new IllegalArgumentException("Label OIB requires 1 object reference");
+                        throw new SIE4Exception("Label OIB requires 1 object reference");
                     }
                     ObjectReference objectReference = objectReferences.getFirst();
 
@@ -204,7 +205,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Omfattn parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
-                        throw new IllegalArgumentException("Label OMFATTN requires 1 field");
+                        throw new SIE4Exception("Label OMFATTN requires 1 field");
                     }
                     LocalDate date = LocalDate.parse(fields.getFirst(), Constants.SIE4_DATE_FORMATTER);
                     return new SIE4Item.Omfattn(date);
@@ -214,7 +215,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.OrgNr parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.isEmpty() || fields.size() > 3) {
-                        throw new IllegalArgumentException("Label ORGNR requires 1 to 3 fields");
+                        throw new SIE4Exception("Label ORGNR requires 1 to 3 fields");
                     }
                     String orgNr = fields.get(0);
                     Optional<Integer> acqNo = Optional.empty();
@@ -232,7 +233,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Oub parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() < 4 || fields.size() > 5) {
-                        throw new IllegalArgumentException("Label OUB requires 4 or 5 fields");
+                        throw new SIE4Exception("Label OUB requires 4 or 5 fields");
                     }
 
                     YearNumber yearNumber = YearNumber.of(Integer.parseInt(fields.get(0)));
@@ -240,7 +241,7 @@ public class InFieldMapper {
 
                     List<ObjectReference> objectReferences = parseObjectReferences(fields.get(2));
                     if (objectReferences.size() != 1) {
-                        throw new IllegalArgumentException("Label OUB requires 1 object reference");
+                        throw new SIE4Exception("Label OUB requires 1 object reference");
                     }
                     ObjectReference objectReference = objectReferences.getFirst();
 
@@ -258,7 +259,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Pbudget parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() < 5 || fields.size() > 6) {
-                        throw new IllegalArgumentException("Label PBUDGET requires 5 or 6 fields");
+                        throw new SIE4Exception("Label PBUDGET requires 5 or 6 fields");
                     }
 
                     YearNumber yearNumber = YearNumber.of(Integer.parseInt(fields.get(0)));
@@ -267,7 +268,7 @@ public class InFieldMapper {
 
                     List<ObjectReference> objectReferences = parseObjectReferences(fields.get(3));
                     if (objectReferences.size() > 1) {
-                        throw new IllegalArgumentException("Label PBUDGET can have at most 1 object reference");
+                        throw new SIE4Exception("Label PBUDGET can have at most 1 object reference");
                     }
                     Optional<ObjectReference> objectReference = objectReferences.stream().findFirst();
 
@@ -285,7 +286,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Program parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 2) {
-                        throw new IllegalArgumentException("Label PROGRAM requires 2 fields");
+                        throw new SIE4Exception("Label PROGRAM requires 2 fields");
                     }
                     return new SIE4Item.Program(fields.get(0), fields.get(1));
                 }
@@ -294,7 +295,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Prosa parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
-                        throw new IllegalArgumentException("Label PROSA requires 1 field");
+                        throw new SIE4Exception("Label PROSA requires 1 field");
                     }
                     return new SIE4Item.Prosa(fields.getFirst());
                 }
@@ -303,7 +304,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Psaldo parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() < 5 || fields.size() > 6) {
-                        throw new IllegalArgumentException("Label PSALDO requires 5 or 6 fields");
+                        throw new SIE4Exception("Label PSALDO requires 5 or 6 fields");
                     }
 
                     YearNumber yearNumber = YearNumber.of(Integer.parseInt(fields.get(0)));
@@ -311,7 +312,7 @@ public class InFieldMapper {
                     int accountNo = Integer.parseInt(fields.get(2));
                     List<ObjectReference> objectReferences = parseObjectReferences(fields.get(3));
                     if (objectReferences.size() > 1) {
-                        throw new IllegalArgumentException("Label PSALDO can have at most 1 object reference");
+                        throw new SIE4Exception("Label PSALDO can have at most 1 object reference");
                     }
                     Optional<ObjectReference> objectReference = objectReferences.stream().findFirst();
 
@@ -329,7 +330,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Rar parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 3) {
-                        throw new IllegalArgumentException("Label RAR requires 3 fields");
+                        throw new SIE4Exception("Label RAR requires 3 fields");
                     }
 
                     YearNumber yearNumber = YearNumber.of(Integer.parseInt(fields.get(0)));
@@ -343,7 +344,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Res parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() < 3 || fields.size() > 4) {
-                        throw new IllegalArgumentException("Label RES requires 3 or 4 fields");
+                        throw new SIE4Exception("Label RES requires 3 or 4 fields");
                     }
 
                     YearNumber yearNumber = YearNumber.of(Integer.parseInt(fields.get(0)));
@@ -362,7 +363,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Sietyp parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
-                        throw new IllegalArgumentException("Label SIETYP requires 1 field");
+                        throw new SIE4Exception("Label SIETYP requires 1 field");
                     }
                     return new SIE4Item.Sietyp(Integer.parseInt(fields.getFirst()));
                 }
@@ -371,7 +372,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Sru parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 2) {
-                        throw new IllegalArgumentException("Label SRU requires 2 fields");
+                        throw new SIE4Exception("Label SRU requires 2 fields");
                     }
                     return new SIE4Item.Sru(Integer.parseInt(fields.get(0)), Integer.parseInt(fields.get(1)));
                 }
@@ -380,7 +381,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Taxar parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
-                        throw new IllegalArgumentException("Label TAXAR requires 1 field");
+                        throw new SIE4Exception("Label TAXAR requires 1 field");
                     }
                     return new SIE4Item.Taxar(Integer.parseInt(fields.getFirst()));
                 }
@@ -389,7 +390,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Transaction.Trans parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() < 2 || fields.size() > 7) {
-                        throw new IllegalArgumentException("Label TRANS requires between 2 and 7 fields");
+                        throw new SIE4Exception("Label TRANS requires between 2 and 7 fields");
                     }
 
                     int accountNo = Integer.parseInt(fields.get(0));
@@ -424,7 +425,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Transaction.Rtrans parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() < 2 || fields.size() > 7) {
-                        throw new IllegalArgumentException("Label RTRANS requires between 2 and 7 fields");
+                        throw new SIE4Exception("Label RTRANS requires between 2 and 7 fields");
                     }
 
                     int accountNo = Integer.parseInt(fields.get(0));
@@ -459,7 +460,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Transaction.Btrans parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() < 2 || fields.size() > 7) {
-                        throw new IllegalArgumentException("Label BTRANS requires between 2 and 7 fields");
+                        throw new SIE4Exception("Label BTRANS requires between 2 and 7 fields");
                     }
 
                     int accountNo = Integer.parseInt(fields.get(0));
@@ -494,7 +495,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Ub parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() < 3 || fields.size() > 4) {
-                        throw new IllegalArgumentException("Label UB requires 3 or 4 fields");
+                        throw new SIE4Exception("Label UB requires 3 or 4 fields");
                     }
                     YearNumber yearNumber = YearNumber.of(Integer.parseInt(fields.get(0)));
                     int accountNo = Integer.parseInt(fields.get(1));
@@ -512,7 +513,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Underdim parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 3) {
-                        throw new IllegalArgumentException("Label UNDERDIM requires 3 fields");
+                        throw new SIE4Exception("Label UNDERDIM requires 3 fields");
                     }
                     return new SIE4Item.Underdim(
                             Integer.parseInt(fields.get(0)),
@@ -525,7 +526,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Valuta parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
-                        throw new IllegalArgumentException("Label VALUTA requires 1 field");
+                        throw new SIE4Exception("Label VALUTA requires 1 field");
                     }
                     return new SIE4Item.Valuta(fields.getFirst());
                 }
@@ -534,7 +535,7 @@ public class InFieldMapper {
                 @Override
                 protected SIE4Item.Ver parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.isEmpty() || fields.size() > 6) {
-                        throw new IllegalArgumentException("Label VER requires between 1 and 6 fields");
+                        throw new SIE4Exception("Label VER requires between 1 and 6 fields");
                     }
 
                     Optional<String> series = parseOptionalField(fields.get(0));
@@ -558,7 +559,7 @@ public class InFieldMapper {
                     }
 
                     if (subItems.stream().anyMatch(t -> !(t instanceof SIE4Item.Transaction))) {
-                        throw new IllegalArgumentException("All subItems must be transactions");
+                        throw new SIE4Exception("All subItems must be transactions");
                     }
                     List<SIE4Item.Transaction> transactions = subItems.stream().map(t -> (SIE4Item.Transaction) t).toList();
 
@@ -571,7 +572,7 @@ public class InFieldMapper {
         LabelWithFields labelWithFields = splitLine(itemLine);
 
         if (labelWithFields.label() == Label.VER) {
-            throw new IllegalArgumentException("#VER items cannot be parsed by this function");
+            throw new SIE4Exception("#VER items cannot be parsed by this function");
         }
 
         return PARSER_REGISTRY.get(labelWithFields.label()).parseFields(labelWithFields.fields());
@@ -582,7 +583,7 @@ public class InFieldMapper {
         LabelWithFields labelWithFields = splitLine(verLine);
 
         if (labelWithFields.label() != Label.VER) {
-            throw new IllegalArgumentException("Only #VER items can be parsed by this function");
+            throw new SIE4Exception("Only #VER items can be parsed by this function");
         }
 
         List<SIE4Item> transactions = itemLines.stream()
@@ -595,7 +596,7 @@ public class InFieldMapper {
 
     private static LabelWithFields splitLine(String itemLine) {
         if (itemLine == null || itemLine.isBlank()) {
-            throw new IllegalArgumentException("ItemLine cannot be null or blank");
+            throw new SIE4Exception("ItemLine cannot be null or blank");
         }
 
         String[] split = itemLine.split("\\s+", 2);

@@ -35,9 +35,9 @@ class PeriodTest {
 
     @Test
     void testOfString_illegalStrings_shouldThrowException() {
-        assertThrows(IllegalArgumentException.class, () -> Period.of(""));
-        assertThrows(IllegalArgumentException.class, () -> Period.of(" "));
-        assertThrows(IllegalArgumentException.class, () -> Period.of(null));
+        assertThrows(SIE4Exception.class, () -> Period.of(""));
+        assertThrows(SIE4Exception.class, () -> Period.of(" "));
+        assertThrows(SIE4Exception.class, () -> Period.of(null));
     }
 
     @Test

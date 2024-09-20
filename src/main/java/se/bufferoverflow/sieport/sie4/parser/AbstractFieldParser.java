@@ -1,5 +1,6 @@
 package se.bufferoverflow.sieport.sie4.parser;
 
+import se.bufferoverflow.sieport.sie4.SIE4Exception;
 import se.bufferoverflow.sieport.sie4.SIE4Item;
 import se.bufferoverflow.sieport.sie4.ObjectReference;
 
@@ -43,7 +44,7 @@ abstract class AbstractFieldParser<T extends SIE4Item> {
         }
 
         if (tokens.size() % 2 != 0) {
-            throw new IllegalArgumentException("Invalid object reference list: " + objectReferences);
+            throw new SIE4Exception("Invalid object reference list: " + objectReferences);
         }
 
         return IntStream.range(0, tokens.size())
@@ -61,7 +62,7 @@ abstract class AbstractFieldParser<T extends SIE4Item> {
         try {
             return parseFields(tokenizeFields(fields), List.of());
         } catch (Exception e) {
-            throw new IllegalArgumentException("Could not parse fields " + fields, e);
+            throw new SIE4Exception("Could not parse fields " + fields, e);
         }
     }
 

@@ -2,6 +2,7 @@ package se.bufferoverflow.sieport.sie4.parser;
 
 import org.junit.jupiter.api.Test;
 import se.bufferoverflow.sieport.sie4.ObjectReference;
+import se.bufferoverflow.sieport.sie4.SIE4Exception;
 
 import java.util.List;
 import java.util.Optional;
@@ -98,10 +99,10 @@ class AbstractFieldParserTest {
    @Test
    void shouldThrowExceptionForInvalidObjectReference() {
        String objectReference = "5";
-       assertThrows(IllegalArgumentException.class, () -> AbstractFieldParser.parseObjectReferences(objectReference));
+       assertThrows(SIE4Exception.class, () -> AbstractFieldParser.parseObjectReferences(objectReference));
 
        String objectReferenceList = "5 Nord 6";
-       assertThrows(IllegalArgumentException.class, () -> AbstractFieldParser.parseObjectReferences(objectReferenceList));
+       assertThrows(SIE4Exception.class, () -> AbstractFieldParser.parseObjectReferences(objectReferenceList));
 
        String nullReference = null;
        assertThrows(NullPointerException.class, () -> AbstractFieldParser.parseObjectReferences(nullReference));
