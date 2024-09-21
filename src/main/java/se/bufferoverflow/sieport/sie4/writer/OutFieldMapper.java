@@ -318,7 +318,7 @@ public class OutFieldMapper {
         ).stripTrailing();
     }
 
-    public static String toFileString(SIE4Item field) {
-        return WRITER_REGISTRY.get(field.getClass()).writeItem(field);
+    public static String toFileString(SIE4Item item) {
+        return WRITER_REGISTRY.get(item.getClass()).writeItem(item);
     }
 }

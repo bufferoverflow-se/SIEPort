@@ -5,7 +5,6 @@ import se.bufferoverflow.sieport.sie4.parser.InFieldMapper;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -19,12 +18,16 @@ public class SIE4Parser {
     private SIE4Parser() {
     }
 
-    public static Object parse(Path path) throws FileNotFoundException {
+    public static List<SIE4Item> parse(Path path) {
         return parse(path.toFile());
     }
 
-    public static Object parse(File file) throws FileNotFoundException {
-        return parse(new FileInputStream(file));
+    public static List<SIE4Item> parse(File file) {
+        try (var is = new FileInputStream(file)) {
+            return parse(is);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     public static List<SIE4Item> parse(InputStream inputStream) {
