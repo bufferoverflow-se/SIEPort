@@ -5,7 +5,7 @@ import se.bufferoverflow.sieport.sie4.SIE4Item;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static se.bufferoverflow.sieport.sie4.Constants.SIE4_DATE_FORMATTER;
+import static se.bufferoverflow.sieport.sie4.SIE4Item.SIE4_DATE_FORMATTER;
 
 public class OutFieldMapper {
     private OutFieldMapper() {}

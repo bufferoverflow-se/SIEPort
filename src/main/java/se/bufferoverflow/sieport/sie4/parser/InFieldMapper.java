@@ -1,7 +1,6 @@
 package se.bufferoverflow.sieport.sie4.parser;
 
 import se.bufferoverflow.sieport.sie4.CompanyType;
-import se.bufferoverflow.sieport.sie4.Constants;
 import se.bufferoverflow.sieport.sie4.SIE4Exception;
 import se.bufferoverflow.sieport.sie4.SIE4Item;
 import se.bufferoverflow.sieport.sie4.ObjectReference;
@@ -108,7 +107,7 @@ public class InFieldMapper {
                     if (fields.isEmpty() || fields.size() > 2) {
                         throw new SIE4Exception("Label GEN requires at least 1 field, but max 2");
                     }
-                    LocalDate date = LocalDate.parse(fields.get(0), Constants.SIE4_DATE_FORMATTER);
+                    LocalDate date = LocalDate.parse(fields.get(0), SIE4Item.SIE4_DATE_FORMATTER);
 
                     Optional<String> signature = Optional.empty();
                     if (fields.size() > 1) {
@@ -206,7 +205,7 @@ public class InFieldMapper {
                     if (fields.size() != 1) {
                         throw new SIE4Exception("Label OMFATTN requires 1 field");
                     }
-                    LocalDate date = LocalDate.parse(fields.getFirst(), Constants.SIE4_DATE_FORMATTER);
+                    LocalDate date = LocalDate.parse(fields.getFirst(), SIE4Item.SIE4_DATE_FORMATTER);
                     return new SIE4Item.Omfattn(date);
                 }
             }),
@@ -333,8 +332,8 @@ public class InFieldMapper {
                     }
 
                     YearNumber yearNumber = YearNumber.of(Integer.parseInt(fields.get(0)));
-                    LocalDate start = LocalDate.parse(fields.get(1), Constants.SIE4_DATE_FORMATTER);
-                    LocalDate end = LocalDate.parse(fields.get(2), Constants.SIE4_DATE_FORMATTER);
+                    LocalDate start = LocalDate.parse(fields.get(1), SIE4Item.SIE4_DATE_FORMATTER);
+                    LocalDate end = LocalDate.parse(fields.get(2), SIE4Item.SIE4_DATE_FORMATTER);
 
                     return new SIE4Item.Rar(yearNumber, start, end);
                 }
@@ -399,7 +398,7 @@ public class InFieldMapper {
                     Optional<LocalDate> transactionDate = Optional.empty();
                     if (fields.size() > 3) {
                         transactionDate = parseOptionalField(fields.get(3))
-                                .map(value -> LocalDate.parse(value, Constants.SIE4_DATE_FORMATTER));
+                                .map(value -> LocalDate.parse(value, SIE4Item.SIE4_DATE_FORMATTER));
                     }
 
                     Optional<String> text = Optional.empty();
@@ -434,7 +433,7 @@ public class InFieldMapper {
                     Optional<LocalDate> transactionDate = Optional.empty();
                     if (fields.size() > 3) {
                         transactionDate = parseOptionalField(fields.get(3))
-                                .map(value -> LocalDate.parse(value, Constants.SIE4_DATE_FORMATTER));
+                                .map(value -> LocalDate.parse(value, SIE4Item.SIE4_DATE_FORMATTER));
                     }
 
                     Optional<String> text = Optional.empty();
@@ -469,7 +468,7 @@ public class InFieldMapper {
                     Optional<LocalDate> transactionDate = Optional.empty();
                     if (fields.size() > 3) {
                         transactionDate = parseOptionalField(fields.get(3))
-                                .map(value -> LocalDate.parse(value, Constants.SIE4_DATE_FORMATTER));
+                                .map(value -> LocalDate.parse(value, SIE4Item.SIE4_DATE_FORMATTER));
                     }
 
                     Optional<String> text = Optional.empty();
@@ -539,7 +538,7 @@ public class InFieldMapper {
 
                     Optional<String> series = parseOptionalField(fields.get(0));
                     Optional<String> verificationNo = parseOptionalField(fields.get(1));
-                    LocalDate date = LocalDate.parse(fields.get(2), Constants.SIE4_DATE_FORMATTER);
+                    LocalDate date = LocalDate.parse(fields.get(2), SIE4Item.SIE4_DATE_FORMATTER);
 
                     Optional<String> text = Optional.empty();
                     if (fields.size() > 3 && !fields.get(3).isEmpty()) {
@@ -549,7 +548,7 @@ public class InFieldMapper {
                     Optional<LocalDate> regDate = Optional.empty();
                     if (fields.size() > 4 && !fields.get(4).isEmpty()) {
                         regDate = parseOptionalField(fields.get(4))
-                                .map(value -> LocalDate.parse(value, Constants.SIE4_DATE_FORMATTER));
+                                .map(value -> LocalDate.parse(value, SIE4Item.SIE4_DATE_FORMATTER));
                     }
 
                     Optional<String> sign = Optional.empty();

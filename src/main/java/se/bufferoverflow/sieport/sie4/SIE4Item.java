@@ -2,10 +2,13 @@ package se.bufferoverflow.sieport.sie4;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
 public sealed interface SIE4Item {
+    DateTimeFormatter SIE4_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
+
     record Adress(String contact, String distributionAddress, String postalAddress, String tel) implements SIE4Item {}
     record Bkod(int sniCode) implements SIE4Item {}
     record Dim(int dimensionNo, String name) implements SIE4Item {}
