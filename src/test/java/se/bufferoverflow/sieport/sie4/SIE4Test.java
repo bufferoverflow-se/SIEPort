@@ -31,7 +31,7 @@ class SIE4Test {
 
     @Test
     void readSample() {
-        List<SIE4Item> items = SIE4.parse(sie4Sample);
+        List<SIE4Item> items = SIE4.parse(sie4Sample).items();
 
         assertThat(items).hasSize(2160);
         assertThat(items.stream()).filteredOn(it -> it instanceof SIE4Item.Ver).hasSize(295);
@@ -39,7 +39,7 @@ class SIE4Test {
 
     @Test
     void writeFile() {
-        List<SIE4Item> items = SIE4.parse(sie4SampleFile);
+        List<SIE4Item> items = SIE4.parse(sie4SampleFile).items();
         Path outputFile = tempDir.resolve(UUID.randomUUID() + ".se");
         SIE4.write(outputFile, items);
 
@@ -52,7 +52,7 @@ class SIE4Test {
     @Test
     void readAndWriteSample() throws IOException {
         String expectedOutput = Files.readString(sie4SampleFile, SIE4.SIE4_CHARSET);
-        List<SIE4Item> parsedItems = SIE4.parse(sie4SampleFile);
+        List<SIE4Item> parsedItems = SIE4.parse(sie4SampleFile).items();
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         SIE4.write(baos, parsedItems);

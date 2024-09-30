@@ -31,7 +31,11 @@ public sealed interface SIE4Item {
 
     record Oib(YearNumber yearNumber, int accountNo, ObjectReference objectReference, BigDecimal balance, Optional<BigDecimal> quantity) implements SIE4Item {}
     record Omfattn(LocalDate date) implements SIE4Item {}
-    record OrgNr(String orgNr, Optional<Integer> acqNo, Optional<Integer> actNo) implements SIE4Item {}
+    record OrgNr(String orgNr, Optional<Integer> acqNo, Optional<Integer> actNo) implements SIE4Item {
+        public static OrgNr of(String orgNr) {
+            return new OrgNr(orgNr, Optional.empty(), Optional.empty());
+        }
+    }
     record Oub(YearNumber yearNumber, int accountNo, ObjectReference objectReference, BigDecimal balance, Optional<BigDecimal> quantity) implements SIE4Item {}
     record Pbudget(YearNumber yearNumber, Period period, int accountNo, Optional<ObjectReference> objectReference, BigDecimal balance, Optional<BigDecimal> quantity) implements SIE4Item {}
 
