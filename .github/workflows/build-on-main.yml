@@ -1,4 +1,4 @@
-name: SIEPort main build and deploy
+name: SIEPort main build
 on:
   push:
     branches:
