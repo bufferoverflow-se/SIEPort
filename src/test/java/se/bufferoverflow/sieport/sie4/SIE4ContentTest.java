@@ -63,11 +63,13 @@ class SIE4ContentTest {
         SIE4Content.OrgInfo orgInfo = content.getOrgInfo();
 
         assertThat(orgInfo).isEqualTo(new SIE4Content.OrgInfo(
-            new SIE4Item.Adress("Siw Eriksson", "Box 1", "123 45 STORSTAD", "012-34 56 78"),
-            null,
-            new SIE4Item.Fnamn("Övningsbolaget AB"),
-            null,
-            SIE4Item.OrgNr.of("555555-5555")
+                "Siw Eriksson",
+                "Box 1 123 45 STORSTAD",
+                "012-34 56 78",
+                null,
+                "Övningsbolaget AB",
+                null,
+                "555555-5555"
         ));
     }
 }
