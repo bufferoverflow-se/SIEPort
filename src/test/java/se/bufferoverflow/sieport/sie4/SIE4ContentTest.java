@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.net.URISyntaxException;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,6 +71,24 @@ class SIE4ContentTest {
                 "Övningsbolaget AB",
                 null,
                 "555555-5555"
+        ));
+    }
+
+    @Test
+    void shouldGetFileInfoFromContent() {
+        SIE4Content content = SIE4.parse(sie4SampleFile);
+        SIE4Content.FileInfo fileInfo = content.getFileInfo();
+
+        assertThat(fileInfo).isEqualTo(new SIE4Content.FileInfo(
+            new SIE4Item.Flagga(1),
+            new SIE4Item.Program("Visma Administration 2000 med Visma Integration", "2022.2"),
+            new SIE4Item.Gen(LocalDate.of(2023, 8, 22), Optional.empty()),
+            new SIE4Item.Kptyp("EUBAS97"),
+            new SIE4Item.Valuta("SEK"),
+            List.of(
+                new SIE4Item.Rar(YearNumber.CURRENT_YEAR, LocalDate.of(2021,1,1), LocalDate.of(2021, 12, 31)),
+                new SIE4Item.Rar(YearNumber.PREV_YEAR, LocalDate.of(2020,1,1), LocalDate.of(2020, 12, 31))
+            )
         ));
     }
 }

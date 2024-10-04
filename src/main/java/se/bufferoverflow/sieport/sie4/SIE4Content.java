@@ -66,6 +66,22 @@ public record SIE4Content(List<SIE4Item> items) {
         );
     }
 
+    /**
+     * Retrieves information about the file content
+     * This is considered to be the items:
+     * FLAGGA, PROGRAM, GEN, KPTYP, VALUTA and RAR
+     */
+    public FileInfo getFileInfo() {
+        return new FileInfo(
+            getItem(SIE4Item.Flagga.class).orElse(null),
+            getItem(SIE4Item.Program.class).orElse(null),
+            getItem(SIE4Item.Gen.class).orElse(null),
+            getItem(SIE4Item.Kptyp.class).orElse(null),
+            getItem(SIE4Item.Valuta.class).orElse(null),
+            getItems(SIE4Item.Rar.class)
+        );
+    }
+
     public record OrgInfo(
         String contactPerson,
         String address,
@@ -74,6 +90,16 @@ public record SIE4Content(List<SIE4Item> items) {
         String companyName,
         CompanyType companyType,
         String organizationNumber
+    ) {
+    }
+
+    public record FileInfo(
+        SIE4Item.Flagga flag,
+        SIE4Item.Program program,
+        SIE4Item.Gen gen,
+        SIE4Item.Kptyp kptyp,
+        SIE4Item.Valuta valuta,
+        List<SIE4Item.Rar> rars
     ) {
     }
 }
