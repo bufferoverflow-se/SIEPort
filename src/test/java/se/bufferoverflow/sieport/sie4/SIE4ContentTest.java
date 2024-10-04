@@ -80,14 +80,14 @@ class SIE4ContentTest {
         SIE4Content.FileInfo fileInfo = content.getFileInfo();
 
         assertThat(fileInfo).isEqualTo(new SIE4Content.FileInfo(
-            new SIE4Item.Flagga(1),
-            new SIE4Item.Program("Visma Administration 2000 med Visma Integration", "2022.2"),
-            new SIE4Item.Gen(LocalDate.of(2023, 8, 22), Optional.empty()),
-            new SIE4Item.Kptyp("EUBAS97"),
-            new SIE4Item.Valuta("SEK"),
+            1,
+            "Visma Administration 2000 med Visma Integration, 2022.2",
+            LocalDate.of(2023, 8, 22),
+            "EUBAS97",
+            "SEK",
             List.of(
-                new SIE4Item.Rar(YearNumber.CURRENT_YEAR, LocalDate.of(2021,1,1), LocalDate.of(2021, 12, 31)),
-                new SIE4Item.Rar(YearNumber.PREV_YEAR, LocalDate.of(2020,1,1), LocalDate.of(2020, 12, 31))
+                new SIE4Content.FinancialYear(LocalDate.of(2021,1,1), LocalDate.of(2021, 12, 31)),
+                new SIE4Content.FinancialYear(LocalDate.of(2020,1,1), LocalDate.of(2020, 12, 31))
             )
         ));
     }

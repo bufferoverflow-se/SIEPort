@@ -1,5 +1,6 @@
 package se.bufferoverflow.sieport.sie4;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,12 +74,12 @@ public record SIE4Content(List<SIE4Item> items) {
      */
     public FileInfo getFileInfo() {
         return new FileInfo(
-            getItem(SIE4Item.Flagga.class).orElse(null),
-            getItem(SIE4Item.Program.class).orElse(null),
-            getItem(SIE4Item.Gen.class).orElse(null),
-            getItem(SIE4Item.Kptyp.class).orElse(null),
-            getItem(SIE4Item.Valuta.class).orElse(null),
-            getItems(SIE4Item.Rar.class)
+            getItem(SIE4Item.Flagga.class).map(SIE4Item.Flagga::flag).orElse(null),
+            getItem(SIE4Item.Program.class).map(p -> "%s, %s".formatted(p.programName(), p.version())).orElse(null),
+            getItem(SIE4Item.Gen.class).map(SIE4Item.Gen::date).orElse(null),
+            getItem(SIE4Item.Kptyp.class).map(SIE4Item.Kptyp::type).orElse(null),
+            getItem(SIE4Item.Valuta.class).map(SIE4Item.Valuta::currencyCode).orElse(null),
+            getItems(SIE4Item.Rar.class).stream().map(rar -> new FinancialYear(rar.start(), rar.end())).toList()
         );
     }
 
@@ -94,12 +95,15 @@ public record SIE4Content(List<SIE4Item> items) {
     }
 
     public record FileInfo(
-        SIE4Item.Flagga flag,
-        SIE4Item.Program program,
-        SIE4Item.Gen gen,
-        SIE4Item.Kptyp kptyp,
-        SIE4Item.Valuta valuta,
-        List<SIE4Item.Rar> rars
+        Integer flag,
+        String programWithVersion,
+        LocalDate generatedAt,
+        String kptyp,
+        String currencyCode,
+        List<FinancialYear> periods
     ) {
+    }
+
+    public record FinancialYear(LocalDate from, LocalDate to) {
     }
 }
