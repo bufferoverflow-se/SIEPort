@@ -5,6 +5,7 @@ import se.bufferoverflow.sieport.sie4.SIE4Exception;
 import se.bufferoverflow.sieport.sie4.SIE4Item;
 import se.bufferoverflow.sieport.sie4.ObjectReference;
 import se.bufferoverflow.sieport.sie4.Period;
+import se.bufferoverflow.sieport.sie4.SIE4ItemType;
 import se.bufferoverflow.sieport.sie4.YearNumber;
 
 import java.math.BigDecimal;
@@ -15,8 +16,8 @@ import java.util.Optional;
 
 public class InFieldMapper {
 
-    private static final Map<Label, AbstractFieldParser<?>> PARSER_REGISTRY = Map.ofEntries(
-            Map.entry(Label.ADRESS, new AbstractFieldParser<SIE4Item.Adress>() {
+    private static final Map<SIE4ItemType, AbstractFieldParser<?>> PARSER_REGISTRY = Map.ofEntries(
+            Map.entry(SIE4ItemType.ADRESS, new AbstractFieldParser<SIE4Item.Adress>() {
                 @Override
                 protected SIE4Item.Adress parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 4) {
@@ -25,7 +26,7 @@ public class InFieldMapper {
                     return new SIE4Item.Adress(fields.get(0), fields.get(1), fields.get(2), fields.get(3));
                 }
             }),
-            Map.entry(Label.BKOD, new AbstractFieldParser<SIE4Item.Bkod>() {
+            Map.entry(SIE4ItemType.BKOD, new AbstractFieldParser<SIE4Item.Bkod>() {
                 @Override
                 protected SIE4Item.Bkod parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
@@ -34,7 +35,7 @@ public class InFieldMapper {
                     return new SIE4Item.Bkod(Integer.parseInt(fields.getFirst()));
                 }
             }),
-            Map.entry(Label.DIM, new AbstractFieldParser<SIE4Item.Dim>() {
+            Map.entry(SIE4ItemType.DIM, new AbstractFieldParser<SIE4Item.Dim>() {
                 @Override
                 protected SIE4Item.Dim parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 2) {
@@ -43,7 +44,7 @@ public class InFieldMapper {
                     return new SIE4Item.Dim(Integer.parseInt(fields.get(0)), fields.get(1));
                 }
             }),
-            Map.entry(Label.ENHET, new AbstractFieldParser<SIE4Item.Enhet>() {
+            Map.entry(SIE4ItemType.ENHET, new AbstractFieldParser<SIE4Item.Enhet>() {
                 @Override
                 protected SIE4Item.Enhet parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 2) {
@@ -52,7 +53,7 @@ public class InFieldMapper {
                     return new SIE4Item.Enhet(Integer.parseInt(fields.get(0)), fields.get(1));
                 }
             }),
-            Map.entry(Label.FLAGGA, new AbstractFieldParser<SIE4Item.Flagga>() {
+            Map.entry(SIE4ItemType.FLAGGA, new AbstractFieldParser<SIE4Item.Flagga>() {
                 @Override
                 protected SIE4Item.Flagga parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
@@ -61,7 +62,7 @@ public class InFieldMapper {
                     return new SIE4Item.Flagga(Integer.parseInt(fields.getFirst()));
                 }
             }),
-            Map.entry(Label.FNAMN, new AbstractFieldParser<SIE4Item.Fnamn>() {
+            Map.entry(SIE4ItemType.FNAMN, new AbstractFieldParser<SIE4Item.Fnamn>() {
                 @Override
                 protected SIE4Item.Fnamn parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
@@ -70,7 +71,7 @@ public class InFieldMapper {
                     return new SIE4Item.Fnamn(fields.getFirst());
                 }
             }),
-            Map.entry(Label.FNR, new AbstractFieldParser<SIE4Item.Fnr>() {
+            Map.entry(SIE4ItemType.FNR, new AbstractFieldParser<SIE4Item.Fnr>() {
                 @Override
                 protected SIE4Item.Fnr parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
@@ -80,7 +81,7 @@ public class InFieldMapper {
                 }
             }),
 
-            Map.entry(Label.FORMAT, new AbstractFieldParser<SIE4Item.Format>() {
+            Map.entry(SIE4ItemType.FORMAT, new AbstractFieldParser<SIE4Item.Format>() {
                 @Override
                 protected SIE4Item.Format parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
@@ -92,7 +93,7 @@ public class InFieldMapper {
                     return new SIE4Item.Format(fields.getFirst());
                 }
             }),
-            Map.entry(Label.FTYP, new AbstractFieldParser<SIE4Item.Ftyp>() {
+            Map.entry(SIE4ItemType.FTYP, new AbstractFieldParser<SIE4Item.Ftyp>() {
                 @Override
                 protected SIE4Item.Ftyp parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
@@ -101,7 +102,7 @@ public class InFieldMapper {
                     return new SIE4Item.Ftyp(CompanyType.valueOf(fields.getFirst().toUpperCase()));
                 }
             }),
-            Map.entry(Label.GEN, new AbstractFieldParser<SIE4Item.Gen>() {
+            Map.entry(SIE4ItemType.GEN, new AbstractFieldParser<SIE4Item.Gen>() {
                 @Override
                 protected SIE4Item.Gen parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.isEmpty() || fields.size() > 2) {
@@ -117,7 +118,7 @@ public class InFieldMapper {
                     return new SIE4Item.Gen(date, signature);
                 }
             }),
-            Map.entry(Label.IB, new AbstractFieldParser<SIE4Item.Ib>() {
+            Map.entry(SIE4ItemType.IB, new AbstractFieldParser<SIE4Item.Ib>() {
                 @Override
                 protected SIE4Item.Ib parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() < 3 || fields.size() > 4) {
@@ -136,7 +137,7 @@ public class InFieldMapper {
                             quantity);
                 }
             }),
-            Map.entry(Label.KONTO, new AbstractFieldParser<SIE4Item.Konto>() {
+            Map.entry(SIE4ItemType.KONTO, new AbstractFieldParser<SIE4Item.Konto>() {
                 @Override
                 protected SIE4Item.Konto parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 2) {
@@ -145,7 +146,7 @@ public class InFieldMapper {
                     return new SIE4Item.Konto(Integer.parseInt(fields.get(0)), fields.get(1));
                 }
             }),
-            Map.entry(Label.KPTYP, new AbstractFieldParser<SIE4Item.Kptyp>() {
+            Map.entry(SIE4ItemType.KPTYP, new AbstractFieldParser<SIE4Item.Kptyp>() {
                 @Override
                 protected SIE4Item.Kptyp parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
@@ -154,7 +155,7 @@ public class InFieldMapper {
                     return new SIE4Item.Kptyp(fields.getFirst());
                 }
             }),
-            Map.entry(Label.KTYP, new AbstractFieldParser<SIE4Item.Ktyp>() {
+            Map.entry(SIE4ItemType.KTYP, new AbstractFieldParser<SIE4Item.Ktyp>() {
                 @Override
                 protected SIE4Item.Ktyp parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 2) {
@@ -165,7 +166,7 @@ public class InFieldMapper {
                             SIE4Item.Ktyp.AccountType.valueOf(fields.get(1).toUpperCase()));
                 }
             }),
-            Map.entry(Label.OBJEKT, new AbstractFieldParser<SIE4Item.Objekt>() {
+            Map.entry(SIE4ItemType.OBJEKT, new AbstractFieldParser<SIE4Item.Objekt>() {
                 @Override
                 protected SIE4Item.Objekt parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 3) {
@@ -174,7 +175,7 @@ public class InFieldMapper {
                     return new SIE4Item.Objekt(Integer.parseInt(fields.get(0)), fields.get(1), fields.get(2));
                 }
             }),
-            Map.entry(Label.OIB, new AbstractFieldParser<SIE4Item.Oib>() {
+            Map.entry(SIE4ItemType.OIB, new AbstractFieldParser<SIE4Item.Oib>() {
                 @Override
                 protected SIE4Item.Oib parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() < 4 || fields.size() > 5) {
@@ -199,7 +200,7 @@ public class InFieldMapper {
                     return new SIE4Item.Oib(yearNumber, accountNo, objectReference, balance, quantity);
                 }
             }),
-            Map.entry(Label.OMFATTN, new AbstractFieldParser<SIE4Item.Omfattn>() {
+            Map.entry(SIE4ItemType.OMFATTN, new AbstractFieldParser<SIE4Item.Omfattn>() {
                 @Override
                 protected SIE4Item.Omfattn parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
@@ -209,7 +210,7 @@ public class InFieldMapper {
                     return new SIE4Item.Omfattn(date);
                 }
             }),
-            Map.entry(Label.ORGNR, new AbstractFieldParser<SIE4Item.OrgNr>() {
+            Map.entry(SIE4ItemType.ORGNR, new AbstractFieldParser<SIE4Item.OrgNr>() {
                 @Override
                 protected SIE4Item.OrgNr parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.isEmpty() || fields.size() > 3) {
@@ -227,7 +228,7 @@ public class InFieldMapper {
                     return new SIE4Item.OrgNr(orgNr, acqNo, actNo);
                 }
             }),
-            Map.entry(Label.OUB, new AbstractFieldParser<SIE4Item.Oub>() {
+            Map.entry(SIE4ItemType.OUB, new AbstractFieldParser<SIE4Item.Oub>() {
                 @Override
                 protected SIE4Item.Oub parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() < 4 || fields.size() > 5) {
@@ -253,7 +254,7 @@ public class InFieldMapper {
                     return new SIE4Item.Oub(yearNumber, accountNo, objectReference, balance, quantity);
                 }
             }),
-            Map.entry(Label.PBUDGET, new AbstractFieldParser<SIE4Item.Pbudget>() {
+            Map.entry(SIE4ItemType.PBUDGET, new AbstractFieldParser<SIE4Item.Pbudget>() {
                 @Override
                 protected SIE4Item.Pbudget parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() < 5 || fields.size() > 6) {
@@ -280,7 +281,7 @@ public class InFieldMapper {
                     return new SIE4Item.Pbudget(yearNumber, period, accountNo, objectReference, balance, quantity);
                 }
             }),
-            Map.entry(Label.PROGRAM, new AbstractFieldParser<SIE4Item.Program>() {
+            Map.entry(SIE4ItemType.PROGRAM, new AbstractFieldParser<SIE4Item.Program>() {
                 @Override
                 protected SIE4Item.Program parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 2) {
@@ -289,7 +290,7 @@ public class InFieldMapper {
                     return new SIE4Item.Program(fields.get(0), fields.get(1));
                 }
             }),
-            Map.entry(Label.PROSA, new AbstractFieldParser<SIE4Item.Prosa>() {
+            Map.entry(SIE4ItemType.PROSA, new AbstractFieldParser<SIE4Item.Prosa>() {
                 @Override
                 protected SIE4Item.Prosa parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
@@ -298,7 +299,7 @@ public class InFieldMapper {
                     return new SIE4Item.Prosa(fields.getFirst());
                 }
             }),
-            Map.entry(Label.PSALDO, new AbstractFieldParser<SIE4Item.Psaldo>() {
+            Map.entry(SIE4ItemType.PSALDO, new AbstractFieldParser<SIE4Item.Psaldo>() {
                 @Override
                 protected SIE4Item.Psaldo parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() < 5 || fields.size() > 6) {
@@ -324,7 +325,7 @@ public class InFieldMapper {
                     return new SIE4Item.Psaldo(yearNumber, period, accountNo, objectReference, balance, quantity);
                 }
             }),
-            Map.entry(Label.RAR, new AbstractFieldParser<SIE4Item.Rar>() {
+            Map.entry(SIE4ItemType.RAR, new AbstractFieldParser<SIE4Item.Rar>() {
                 @Override
                 protected SIE4Item.Rar parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 3) {
@@ -338,7 +339,7 @@ public class InFieldMapper {
                     return new SIE4Item.Rar(yearNumber, start, end);
                 }
             }),
-            Map.entry(Label.RES, new AbstractFieldParser<SIE4Item.Res>() {
+            Map.entry(SIE4ItemType.RES, new AbstractFieldParser<SIE4Item.Res>() {
                 @Override
                 protected SIE4Item.Res parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() < 3 || fields.size() > 4) {
@@ -357,7 +358,7 @@ public class InFieldMapper {
                     return new SIE4Item.Res(yearNumber, accountNo, balance, quantity);
                 }
             }),
-            Map.entry(Label.SIETYP, new AbstractFieldParser<SIE4Item.Sietyp>() {
+            Map.entry(SIE4ItemType.SIETYP, new AbstractFieldParser<SIE4Item.Sietyp>() {
                 @Override
                 protected SIE4Item.Sietyp parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
@@ -366,7 +367,7 @@ public class InFieldMapper {
                     return new SIE4Item.Sietyp(Integer.parseInt(fields.getFirst()));
                 }
             }),
-            Map.entry(Label.SRU, new AbstractFieldParser<SIE4Item.Sru>() {
+            Map.entry(SIE4ItemType.SRU, new AbstractFieldParser<SIE4Item.Sru>() {
                 @Override
                 protected SIE4Item.Sru parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 2) {
@@ -375,7 +376,7 @@ public class InFieldMapper {
                     return new SIE4Item.Sru(Integer.parseInt(fields.get(0)), Integer.parseInt(fields.get(1)));
                 }
             }),
-            Map.entry(Label.TAXAR, new AbstractFieldParser<SIE4Item.Taxar>() {
+            Map.entry(SIE4ItemType.TAXAR, new AbstractFieldParser<SIE4Item.Taxar>() {
                 @Override
                 protected SIE4Item.Taxar parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
@@ -384,7 +385,7 @@ public class InFieldMapper {
                     return new SIE4Item.Taxar(Integer.parseInt(fields.getFirst()));
                 }
             }),
-            Map.entry(Label.TRANS, new AbstractFieldParser<SIE4Item.Transaction.Trans>() {
+            Map.entry(SIE4ItemType.TRANS, new AbstractFieldParser<SIE4Item.Transaction.Trans>() {
                 @Override
                 protected SIE4Item.Transaction.Trans parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() < 2 || fields.size() > 7) {
@@ -419,7 +420,7 @@ public class InFieldMapper {
                     return new SIE4Item.Transaction.Trans(accountNo, amount, objectReferences, transactionDate, text, quantity, sign);
                 }
             }),
-            Map.entry(Label.RTRANS, new AbstractFieldParser<SIE4Item.Transaction.Rtrans>() {
+            Map.entry(SIE4ItemType.RTRANS, new AbstractFieldParser<SIE4Item.Transaction.Rtrans>() {
                 @Override
                 protected SIE4Item.Transaction.Rtrans parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() < 2 || fields.size() > 7) {
@@ -454,7 +455,7 @@ public class InFieldMapper {
                     return new SIE4Item.Transaction.Rtrans(accountNo, amount, objectReferences, transactionDate, text, quantity, sign);
                 }
             }),
-            Map.entry(Label.BTRANS, new AbstractFieldParser<SIE4Item.Transaction.Btrans>() {
+            Map.entry(SIE4ItemType.BTRANS, new AbstractFieldParser<SIE4Item.Transaction.Btrans>() {
                 @Override
                 protected SIE4Item.Transaction.Btrans parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() < 2 || fields.size() > 7) {
@@ -489,7 +490,7 @@ public class InFieldMapper {
                     return new SIE4Item.Transaction.Btrans(accountNo, amount, objectReferences, transactionDate, text, quantity, sign);
                 }
             }),
-            Map.entry(Label.UB, new AbstractFieldParser<SIE4Item.Ub>() {
+            Map.entry(SIE4ItemType.UB, new AbstractFieldParser<SIE4Item.Ub>() {
                 @Override
                 protected SIE4Item.Ub parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() < 3 || fields.size() > 4) {
@@ -507,7 +508,7 @@ public class InFieldMapper {
                     return new SIE4Item.Ub(yearNumber, accountNo, balance, quantity);
                 }
             }),
-            Map.entry(Label.UNDERDIM, new AbstractFieldParser<SIE4Item.Underdim>() {
+            Map.entry(SIE4ItemType.UNDERDIM, new AbstractFieldParser<SIE4Item.Underdim>() {
                 @Override
                 protected SIE4Item.Underdim parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 3) {
@@ -520,7 +521,7 @@ public class InFieldMapper {
                     );
                 }
             }),
-            Map.entry(Label.VALUTA, new AbstractFieldParser<SIE4Item.Valuta>() {
+            Map.entry(SIE4ItemType.VALUTA, new AbstractFieldParser<SIE4Item.Valuta>() {
                 @Override
                 protected SIE4Item.Valuta parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.size() != 1) {
@@ -529,7 +530,7 @@ public class InFieldMapper {
                     return new SIE4Item.Valuta(fields.getFirst());
                 }
             }),
-            Map.entry(Label.VER, new AbstractFieldParser<SIE4Item.Ver>() {
+            Map.entry(SIE4ItemType.VER, new AbstractFieldParser<SIE4Item.Ver>() {
                 @Override
                 protected SIE4Item.Ver parseFields(List<String> fields, List<SIE4Item> subItems) {
                     if (fields.isEmpty() || fields.size() > 6) {
@@ -569,7 +570,7 @@ public class InFieldMapper {
     public static SIE4Item toModel(String itemLine) {
         LabelWithFields labelWithFields = splitLine(itemLine);
 
-        if (labelWithFields.label() == Label.VER) {
+        if (labelWithFields.label() == SIE4ItemType.VER) {
             throw new SIE4Exception("#VER items cannot be parsed by this function");
         }
 
@@ -580,7 +581,7 @@ public class InFieldMapper {
         String verLine = itemLines.getFirst();
         LabelWithFields labelWithFields = splitLine(verLine);
 
-        if (labelWithFields.label() != Label.VER) {
+        if (labelWithFields.label() != SIE4ItemType.VER) {
             throw new SIE4Exception("Only #VER items can be parsed by this function");
         }
 
@@ -589,7 +590,7 @@ public class InFieldMapper {
                 .map(InFieldMapper::toModel)
                 .toList();
 
-        return (SIE4Item.Ver) PARSER_REGISTRY.get(Label.VER).parseFields(labelWithFields.fields(), transactions);
+        return (SIE4Item.Ver) PARSER_REGISTRY.get(SIE4ItemType.VER).parseFields(labelWithFields.fields(), transactions);
     }
 
     private static LabelWithFields splitLine(String itemLine) {
@@ -598,48 +599,11 @@ public class InFieldMapper {
         }
 
         String[] split = itemLine.split("\\s+", 2);
-        Label label = Label.valueOf(split[0].strip().substring(1).toUpperCase());
+        SIE4ItemType label = SIE4ItemType.valueOf(split[0].strip().substring(1).toUpperCase());
         String fields = split[1].strip();
         return new LabelWithFields(label, fields);
     }
 
-    private record LabelWithFields(Label label, String fields) {}
+    private record LabelWithFields(SIE4ItemType label, String fields) {}
 
-    private enum Label {
-        ADRESS,
-        BKOD,
-        DIM,
-        ENHET,
-        FLAGGA,
-        FNAMN,
-        FNR,
-        FORMAT,
-        FTYP,
-        GEN,
-        IB,
-        KONTO,
-        KPTYP,
-        KTYP,
-        OBJEKT,
-        OIB,
-        OMFATTN,
-        ORGNR,
-        OUB,
-        PBUDGET,
-        PROGRAM,
-        PROSA,
-        PSALDO,
-        RAR,
-        RES,
-        SIETYP,
-        SRU,
-        TAXAR,
-        TRANS,
-        RTRANS,
-        BTRANS,
-        UB,
-        UNDERDIM,
-        VALUTA,
-        VER
-    }
 }
