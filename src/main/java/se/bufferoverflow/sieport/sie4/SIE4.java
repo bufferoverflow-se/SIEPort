@@ -1,6 +1,8 @@
 package se.bufferoverflow.sieport.sie4;
 
 import se.bufferoverflow.sieport.sie4.parser.InFieldMapper;
+import se.bufferoverflow.sieport.sie4.validator.ValidationError;
+import se.bufferoverflow.sieport.sie4.validator.Validator;
 import se.bufferoverflow.sieport.sie4.writer.OutFieldMapper;
 
 import java.io.BufferedReader;
@@ -16,7 +18,9 @@ import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SIE4 {
     public static final Charset SIE4_CHARSET = Charset.forName("IBM-437");
@@ -67,21 +71,44 @@ public class SIE4 {
         }
     }
 
-
-    public static void write(Path destination, List<SIE4Item> items) {
-        write(destination.toFile(), items);
+    public static void write(Path destination, List<SIE4Item> items, WriteOptions... options) {
+        write(destination.toFile(), items, options);
     }
 
-    public static void write(File file, List<SIE4Item> items) {
+    public static void write(File file, List<SIE4Item> items, WriteOptions... options) {
         try (var os = new FileOutputStream(file)) {
-            write(os, items);
+            write(os, items, options);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    public static void write(OutputStream outputStream, List<SIE4Item> items) {
+    public static void write(OutputStream outputStream, List<SIE4Item> items, WriteOptions... options) {
+        List<WriteOptions> opts = Arrays.asList(options);
+        if (!opts.contains(WriteOptions.SKIP_VALIDATION)) {
+            List<ValidationError> errors = opts.contains(WriteOptions.SIE4I)
+                    ? Validator.validateSie4i(items)
+                    : Validator.validateSie4e(items);
+            if (!errors.isEmpty()) {
+                String message = "Validation failed: " + errors.stream().map(Object::toString)
+                        .collect(Collectors.joining(", "));
+                throw new SIE4Exception(message);
+            }
+        }
+
         PrintWriter writer = new PrintWriter(outputStream, true, SIE4_CHARSET);
         items.forEach(item -> writer.println(OutFieldMapper.toFileString(item)));
+    }
+
+    public enum WriteOptions {
+        /**
+         * Write a SIE 4I transaction file (for importing transaction data to a reporting program),
+         * opposed to a 4E export file (for exporting data from a reporting program) which is the default.
+         */
+        SIE4I,
+        /**
+         * Skip checks performed to ensure the data to write follows the SIE standard.
+         */
+        SKIP_VALIDATION
     }
 }

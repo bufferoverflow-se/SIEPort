@@ -88,7 +88,7 @@ public sealed interface SIE4Item {
         }
     }
 
-    record Format(String format) implements SIE4Item {
+    record Format(String format) implements SIE4Item {  // TODO make arg into enum of supported formats (only PC8).
         @Override
         public SIE4ItemType itemType() {
             return SIE4ItemType.FORMAT;

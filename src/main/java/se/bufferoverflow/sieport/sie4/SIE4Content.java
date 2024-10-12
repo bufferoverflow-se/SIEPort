@@ -13,7 +13,7 @@ public record SIE4Content(List<SIE4Item> items) {
      * Retrieves all items of the specified type.
      *
      * @param clazz the type of SIE4Item to be retrieved
-     * @return the item requested, or {@link Optional#empty()} if not found
+     * @return items requested, or empty list if none found
      */
     public <T extends SIE4Item> List<T> getItems(Class<T> clazz) {
         return items.stream()

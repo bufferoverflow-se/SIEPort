@@ -3,6 +3,7 @@ package se.bufferoverflow.sieport.sie4;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import se.bufferoverflow.sieport.sie4.validator.ValidationError;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class SIE4Test {
 
@@ -60,5 +62,24 @@ class SIE4Test {
 
         // Both LF and CRLF are permitted according to SIE spec
         assertThat(output).isEqualToIgnoringNewLines(expectedOutput);
+    }
+
+    @Test
+    void writeIncorrectDataWithValidation() {
+        List<SIE4Item> items = List.of(new SIE4Item.Flagga(0));
+        assertThatThrownBy(() -> SIE4.write(tempDir.resolve(UUID.randomUUID() + ".se"), items))
+                .isInstanceOf(SIE4Exception.class)
+                .hasMessageContaining(ValidationError.MISSING_MANDATORY_ITEMS.toString());
+    }
+
+    @Test
+    void writeIncorrectDataWithoutValidation() {
+        List<SIE4Item> items = List.of(new SIE4Item.Flagga(0));
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        SIE4.write(baos, items, SIE4.WriteOptions.SKIP_VALIDATION);
+        String output = baos.toString(SIE4.SIE4_CHARSET);
+
+        assertThat(output).isEqualTo("#FLAGGA 0\n");
     }
 }
