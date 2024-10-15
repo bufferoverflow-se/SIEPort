@@ -40,13 +40,13 @@ public enum SIE4ItemType {
     RTRANS(SIE4Item.Transaction.Rtrans.class),
     BTRANS(SIE4Item.Transaction.Btrans.class);
 
-    private final Class<?> implementationClass;
+    private final Class<? extends SIE4Item> implementationClass;
 
-    SIE4ItemType(Class<?> implementationClass) {
+    SIE4ItemType(Class<? extends SIE4Item> implementationClass) {
         this.implementationClass = implementationClass;
     }
 
-    public Class<?> getImplementationClass() {
+    public Class<? extends SIE4Item> getImplementationClass() {
         return implementationClass;
     }
 }

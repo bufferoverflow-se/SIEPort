@@ -8,6 +8,10 @@ import java.util.Optional;
  * A wrapper around a {@link SIE4Item} list providing some convenience methods.
  */
 public record SIE4Content(List<SIE4Item> items) {
+    // TODO Skapa SIE4IContent och SIE4EContent som ser ut som {
+    //    private SIE4Item.Flagga flagga;
+    //    private SIE4Item.
+    // }
 
     /**
      * Retrieves all items of the specified type.
