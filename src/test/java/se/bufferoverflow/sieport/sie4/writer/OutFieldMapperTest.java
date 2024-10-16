@@ -69,7 +69,7 @@ class OutFieldMapperTest {
 
     @Test
     void testToFileString_Format() {
-        String fieldString = OutFieldMapper.toFileString(new SIE4Item.Format("PC8"));
+        String fieldString = OutFieldMapper.toFileString(SIE4Item.Format.pc8());
 
         assertEquals("#FORMAT PC8", fieldString);
     }

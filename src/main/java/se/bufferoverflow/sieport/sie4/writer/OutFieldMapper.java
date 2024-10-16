@@ -57,7 +57,7 @@ public class OutFieldMapper {
             Map.entry(SIE4Item.Format.class, new AbstractFieldWriter<SIE4Item.Format>() {
                 @Override
                 String writeFields(SIE4Item.Format item) {
-                    return quoted(item.format());
+                    return quoted(item.format().toString());
                 }
             }),
             Map.entry(SIE4Item.Ftyp.class, new AbstractFieldWriter<SIE4Item.Ftyp>() {

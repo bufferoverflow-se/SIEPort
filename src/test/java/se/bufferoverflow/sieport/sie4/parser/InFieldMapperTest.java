@@ -83,7 +83,7 @@ class InFieldMapperTest {
     @Test
     void toModel_format() {
         String formatLine = "#FORMAT PC8";
-        SIE4Item.Format expectedModel = new SIE4Item.Format("PC8");
+        SIE4Item.Format expectedModel = SIE4Item.Format.pc8();
         SIE4Item model = InFieldMapper.toModel(formatLine);
         assertThat(model).isEqualTo(expectedModel);
     }

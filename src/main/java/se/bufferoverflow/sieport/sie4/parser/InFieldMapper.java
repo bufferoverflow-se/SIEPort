@@ -90,7 +90,7 @@ public class InFieldMapper {
                     if (!fields.getFirst().equalsIgnoreCase("PC8")) {
                         throw new SIE4Exception("Standard only allows FORMAT to be PC8");
                     }
-                    return new SIE4Item.Format(fields.getFirst());
+                    return SIE4Item.Format.pc8();
                 }
             }),
             Map.entry(SIE4ItemType.FTYP, new AbstractFieldParser<SIE4Item.Ftyp>() {

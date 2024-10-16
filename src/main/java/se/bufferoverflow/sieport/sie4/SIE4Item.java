@@ -11,14 +11,6 @@ public sealed interface SIE4Item {
 
     SIE4ItemType itemType();
 
-    default boolean isMandatorySie4E() {
-        return false;
-    }
-
-    default boolean isMandatorySie4I() {
-        return false;
-    }
-
     record Adress(String contact, String distributionAddress, String postalAddress, String tel) implements SIE4Item {
         @Override
         public SIE4ItemType itemType() {
@@ -53,15 +45,6 @@ public sealed interface SIE4Item {
             return SIE4ItemType.FLAGGA;
         }
 
-        @Override
-        public boolean isMandatorySie4E() {
-            return true;
-        }
-
-        @Override
-        public boolean isMandatorySie4I() {
-            return true;
-        }
     }
 
     record Fnamn(String companyName) implements SIE4Item {
@@ -70,15 +53,6 @@ public sealed interface SIE4Item {
             return SIE4ItemType.FNAMN;
         }
 
-        @Override
-        public boolean isMandatorySie4E() {
-            return true;
-        }
-
-        @Override
-        public boolean isMandatorySie4I() {
-            return true;
-        }
     }
 
     record Fnr(String companyId) implements SIE4Item {
@@ -88,21 +62,17 @@ public sealed interface SIE4Item {
         }
     }
 
-    record Format(String format) implements SIE4Item {  // TODO make arg into enum of supported formats (only PC8).
+    record Format(FormatType format) implements SIE4Item {
         @Override
         public SIE4ItemType itemType() {
             return SIE4ItemType.FORMAT;
         }
 
-        @Override
-        public boolean isMandatorySie4E() {
-            return true;
+        public static Format pc8() {
+            return new Format(FormatType.PC8);
         }
 
-        @Override
-        public boolean isMandatorySie4I() {
-            return true;
-        }
+        public enum FormatType { PC8 }
     }
 
     record Ftyp(CompanyType companyType) implements SIE4Item {
@@ -118,15 +88,6 @@ public sealed interface SIE4Item {
             return SIE4ItemType.GEN;
         }
 
-        @Override
-        public boolean isMandatorySie4E() {
-            return true;
-        }
-
-        @Override
-        public boolean isMandatorySie4I() {
-            return true;
-        }
     }
 
     record Ib(YearNumber yearNumber, int accountNo, BigDecimal balance, Optional<BigDecimal> quantity) implements SIE4Item {
@@ -135,10 +96,6 @@ public sealed interface SIE4Item {
             return SIE4ItemType.IB;
         }
 
-        @Override
-        public boolean isMandatorySie4E() {
-            return true;
-        }
     }
 
     record Konto(int accountNo, String accountName) implements SIE4Item {
@@ -147,10 +104,6 @@ public sealed interface SIE4Item {
             return SIE4ItemType.KONTO;
         }
 
-        @Override
-        public boolean isMandatorySie4E() {
-            return true;
-        }
     }
 
     record Kptyp(String type) implements SIE4Item {
@@ -221,15 +174,6 @@ public sealed interface SIE4Item {
             return SIE4ItemType.PROGRAM;
         }
 
-        @Override
-        public boolean isMandatorySie4E() {
-            return true;
-        }
-
-        @Override
-        public boolean isMandatorySie4I() {
-            return true;
-        }
     }
 
     record Prosa(String comment) implements SIE4Item {
@@ -252,10 +196,6 @@ public sealed interface SIE4Item {
             return SIE4ItemType.RAR;
         }
 
-        @Override
-        public boolean isMandatorySie4E() {
-            return true;
-        }
     }
 
     record Res(YearNumber yearNumber, int accountNo, BigDecimal balance, Optional<BigDecimal> quantity) implements SIE4Item {
@@ -264,10 +204,6 @@ public sealed interface SIE4Item {
             return SIE4ItemType.RES;
         }
 
-        @Override
-        public boolean isMandatorySie4E() {
-            return true;
-        }
     }
 
     record Sietyp(int typeNo) implements SIE4Item {
@@ -276,15 +212,6 @@ public sealed interface SIE4Item {
             return SIE4ItemType.SIETYP;
         }
 
-        @Override
-        public boolean isMandatorySie4E() {
-            return true;
-        }
-
-        @Override
-        public boolean isMandatorySie4I() {
-            return true;
-        }
     }
 
     record Sru(int accountNo, int sruCode) implements SIE4Item {
@@ -307,10 +234,6 @@ public sealed interface SIE4Item {
             return SIE4ItemType.UB;
         }
 
-        @Override
-        public boolean isMandatorySie4E() {
-            return true;
-        }
     }
 
     record Underdim(int dimensionNo, String name, int superDimensionNo) implements SIE4Item {
