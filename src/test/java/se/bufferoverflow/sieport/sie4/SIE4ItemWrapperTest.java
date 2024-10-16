@@ -12,7 +12,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class SIE4ContentTest {
+class SIE4ItemWrapperTest {
     private Path sie4SampleFile;
 
     @BeforeEach
@@ -22,7 +22,7 @@ class SIE4ContentTest {
 
     @Test
     void getAllItems() {
-        SIE4Content content = SIE4.parse(sie4SampleFile);
+        SIE4ItemWrapper content = SIE4.parse(sie4SampleFile);
         List<SIE4Item.Rar> items = content.getItems(SIE4Item.Rar.class);
 
         assertThat(items).hasSize(2);
@@ -30,7 +30,7 @@ class SIE4ContentTest {
 
     @Test
     void getSingleItem() {
-        SIE4Content content = SIE4.parse(sie4SampleFile);
+        SIE4ItemWrapper content = SIE4.parse(sie4SampleFile);
         Optional<SIE4Item.OrgNr> item = content.getItem(SIE4Item.OrgNr.class);
 
         assertThat(item).isPresent();
@@ -38,7 +38,7 @@ class SIE4ContentTest {
 
     @Test
     void getSingleNonExistingItem() {
-        SIE4Content content = SIE4.parse(sie4SampleFile);
+        SIE4ItemWrapper content = SIE4.parse(sie4SampleFile);
         Optional<SIE4Item.Omfattn> item = content.getItem(SIE4Item.Omfattn.class);
 
         assertThat(item).isNotPresent();
@@ -46,13 +46,13 @@ class SIE4ContentTest {
 
     @Test
     void getSingleItemThrowsIfMany() {
-        SIE4Content content = SIE4.parse(sie4SampleFile);
+        SIE4ItemWrapper content = SIE4.parse(sie4SampleFile);
         assertThrows(SIE4Exception.class, () -> content.getItem(SIE4Item.Ver.class));
     }
 
     @Test
     void shouldGetAllVerificationsFromContent() {
-        SIE4Content content = SIE4.parse(sie4SampleFile);
+        SIE4ItemWrapper content = SIE4.parse(sie4SampleFile);
         List<SIE4Item.Ver> verifications = content.getVerifications();
 
         assertThat(verifications).hasSize(295);
@@ -60,10 +60,10 @@ class SIE4ContentTest {
 
     @Test
     void shouldGetOrgInfoFromContent() {
-        SIE4Content content = SIE4.parse(sie4SampleFile);
-        SIE4Content.OrgInfo orgInfo = content.getOrgInfo();
+        SIE4ItemWrapper content = SIE4.parse(sie4SampleFile);
+        SIE4ItemWrapper.OrgInfo orgInfo = content.getOrgInfo();
 
-        assertThat(orgInfo).isEqualTo(new SIE4Content.OrgInfo(
+        assertThat(orgInfo).isEqualTo(new SIE4ItemWrapper.OrgInfo(
                 "Siw Eriksson",
                 "Box 1 123 45 STORSTAD",
                 "012-34 56 78",
@@ -76,10 +76,10 @@ class SIE4ContentTest {
 
     @Test
     void shouldGetFileInfoFromContent() {
-        SIE4Content content = SIE4.parse(sie4SampleFile);
-        SIE4Content.FileInfo fileInfo = content.getFileInfo();
+        SIE4ItemWrapper content = SIE4.parse(sie4SampleFile);
+        SIE4ItemWrapper.FileInfo fileInfo = content.getFileInfo();
 
-        assertThat(fileInfo).isEqualTo(new SIE4Content.FileInfo(
+        assertThat(fileInfo).isEqualTo(new SIE4ItemWrapper.FileInfo(
             1,
             "Visma Administration 2000 med Visma Integration, 2022.2",
             LocalDate.of(2023, 8, 22),

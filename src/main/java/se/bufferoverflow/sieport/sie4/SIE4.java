@@ -28,11 +28,11 @@ public class SIE4 {
     private SIE4() {
     }
 
-    public static SIE4Content parse(Path path) {
+    public static SIE4ItemWrapper parse(Path path) {
         return parse(path.toFile());
     }
 
-    public static SIE4Content parse(File file) {
+    public static SIE4ItemWrapper parse(File file) {
         try (var is = new FileInputStream(file)) {
             return parse(is);
         } catch (IOException e) {
@@ -40,7 +40,7 @@ public class SIE4 {
         }
     }
 
-    public static SIE4Content parse(InputStream inputStream) {
+    public static SIE4ItemWrapper parse(InputStream inputStream) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, SIE4_CHARSET));
 
         try {
@@ -65,7 +65,7 @@ public class SIE4 {
                 }
             }
 
-            return new SIE4Content(result);
+            return new SIE4ItemWrapper(result);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
