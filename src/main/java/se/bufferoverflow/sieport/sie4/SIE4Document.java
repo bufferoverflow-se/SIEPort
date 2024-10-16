@@ -2,7 +2,13 @@ package se.bufferoverflow.sieport.sie4;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
+/**
+ * Class representing a SIE4 document which is used for transferring
+ * accounting data. This class encapsulates various elements of the
+ * document such as accounts, transactions, and other relevant metadata.
+ */
 public class SIE4Document {
 
     private SIE4Item.Flagga flagga;
@@ -39,39 +45,75 @@ public class SIE4Document {
     private List<SIE4Item.Ver> ver;
 
     public SIE4Document(List<SIE4Item> items) {
-        var wrapper = new SIE4ItemWrapper(items);
-        setFlagga(wrapper.getItem(SIE4Item.Flagga.class).orElse(null));
-        setProgram(wrapper.getItem(SIE4Item.Program.class).orElse(null));
-        setFormat(wrapper.getItem(SIE4Item.Format.class).orElse(null));
-        setGen(wrapper.getItem(SIE4Item.Gen.class).orElse(null));
-        setSietyp(wrapper.getItem(SIE4Item.Sietyp.class).orElse(null));
-        setProsa(wrapper.getItem(SIE4Item.Prosa.class).orElse(null));
-        setFtyp(wrapper.getItem(SIE4Item.Ftyp.class).orElse(null));
-        setFnr(wrapper.getItem(SIE4Item.Fnr.class).orElse(null));
-        setOrgnr(wrapper.getItem(SIE4Item.OrgNr.class).orElse(null));
-        setBkod(wrapper.getItem(SIE4Item.Bkod.class).orElse(null));
-        setAdress(wrapper.getItem(SIE4Item.Adress.class).orElse(null));
-        setFnamn(wrapper.getItem(SIE4Item.Fnamn.class).orElse(null));
-        setRar(wrapper.getItems(SIE4Item.Rar.class));
-        setTaxar(wrapper.getItem(SIE4Item.Taxar.class).orElse(null));
-        setOmfattn(wrapper.getItem(SIE4Item.Omfattn.class).orElse(null));
-        setKptyp(wrapper.getItem(SIE4Item.Kptyp.class).orElse(null));
-        setValuta(wrapper.getItem(SIE4Item.Valuta.class).orElse(null));
-        setKonto(wrapper.getItems(SIE4Item.Konto.class));
-        setKtyp(wrapper.getItems(SIE4Item.Ktyp.class));
-        setEnhet(wrapper.getItems(SIE4Item.Enhet.class));
-        setSru(wrapper.getItems(SIE4Item.Sru.class));
-        setDim(wrapper.getItems(SIE4Item.Dim.class));
-        setUnderdim(wrapper.getItems(SIE4Item.Underdim.class));
-        setObjekt(wrapper.getItems(SIE4Item.Objekt.class));
-        setIb(wrapper.getItems(SIE4Item.Ib.class));
-        setUb(wrapper.getItems(SIE4Item.Ub.class));
-        setOib(wrapper.getItems(SIE4Item.Oib.class));
-        setOub(wrapper.getItems(SIE4Item.Oub.class));
-        setRes(wrapper.getItems(SIE4Item.Res.class));
-        setPsaldo(wrapper.getItems(SIE4Item.Psaldo.class));
-        setPbudget(wrapper.getItems(SIE4Item.Pbudget.class));
-        setVer(wrapper.getItems(SIE4Item.Ver.class));
+        this(new SIE4Items(items));
+    }
+
+    public SIE4Document(SIE4Items items) {
+        this(
+            items.getItem(SIE4Item.Flagga.class).orElse(null),
+            items.getItem(SIE4Item.Program.class).orElse(null),
+            items.getItem(SIE4Item.Format.class).orElse(null),
+            items.getItem(SIE4Item.Gen.class).orElse(null),
+            items.getItem(SIE4Item.Sietyp.class).orElse(null),
+            items.getItem(SIE4Item.Prosa.class).orElse(null),
+            items.getItem(SIE4Item.Ftyp.class).orElse(null),
+            items.getItem(SIE4Item.Fnr.class).orElse(null),
+            items.getItem(SIE4Item.OrgNr.class).orElse(null),
+            items.getItem(SIE4Item.Bkod.class).orElse(null),
+            items.getItem(SIE4Item.Adress.class).orElse(null),
+            items.getItem(SIE4Item.Fnamn.class).orElse(null),
+            items.getItems(SIE4Item.Rar.class),
+            items.getItem(SIE4Item.Taxar.class).orElse(null),
+            items.getItem(SIE4Item.Omfattn.class).orElse(null),
+            items.getItem(SIE4Item.Kptyp.class).orElse(null),
+            items.getItem(SIE4Item.Valuta.class).orElse(null),
+            items.getItems(SIE4Item.Konto.class),
+            items.getItems(SIE4Item.Ktyp.class),
+            items.getItems(SIE4Item.Enhet.class),
+            items.getItems(SIE4Item.Sru.class),
+            items.getItems(SIE4Item.Dim.class),
+            items.getItems(SIE4Item.Underdim.class),
+            items.getItems(SIE4Item.Objekt.class),
+            items.getItems(SIE4Item.Ib.class),
+            items.getItems(SIE4Item.Ub.class),
+            items.getItems(SIE4Item.Oib.class),
+            items.getItems(SIE4Item.Oub.class),
+            items.getItems(SIE4Item.Res.class),
+            items.getItems(SIE4Item.Psaldo.class),
+            items.getItems(SIE4Item.Pbudget.class),
+            items.getItems(SIE4Item.Ver.class)
+        );
+    }
+
+    /**
+     * Retrieves the basic values from the items composing the "identification part" of the SIE4 document.
+     */
+    public IdentificationItems getIdentificationItems() {
+        return new IdentificationItems(
+            mapOrNull(getFlagga(), SIE4Item.Flagga::flag),
+            mapOrNull(getProgram(), p -> "%s, %s".formatted(p.programName(), p.version())),
+            mapOrNull(getGen(), SIE4Item.Gen::date),
+            mapOrNull(getSietyp(), SIE4Item.Sietyp::typeNo),
+            mapOrNull(getProsa(), SIE4Item.Prosa::comment),
+            mapOrNull(getKptyp(), SIE4Item.Kptyp::type),
+            mapOrNull(getValuta(), SIE4Item.Valuta::currencyCode),
+            mapOrNull(getTaxar(), SIE4Item.Taxar::year),
+            getRar().stream().map(r -> new FinancialYear(r.start(), r.end())).toList(),
+            mapOrNull(getAdress(), SIE4Item.Adress::contact),
+            mapOrNull(getAdress(), addr -> "%s %s".formatted(addr.distributionAddress(), addr.postalAddress())),
+            mapOrNull(getAdress(), SIE4Item.Adress::tel),
+            mapOrNull(getBkod(), SIE4Item.Bkod::sniCode),
+            mapOrNull(getFtyp(), SIE4Item.Ftyp::companyType),
+            mapOrNull(getFnamn(), SIE4Item.Fnamn::companyName),
+            mapOrNull(getOrgnr(), SIE4Item.OrgNr::orgNr)
+        );
+    }
+
+    private <I, O> O mapOrNull(I item, Function<I, O> mapper) {
+        if (item == null) {
+            return null;
+        }
+        return mapper.apply(item);
     }
 
     public SIE4Item.Flagga getFlagga() {
