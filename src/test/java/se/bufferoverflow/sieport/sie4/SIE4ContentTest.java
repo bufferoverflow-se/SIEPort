@@ -86,8 +86,8 @@ class SIE4ContentTest {
             "EUBAS97",
             "SEK",
             List.of(
-                new SIE4Content.FinancialYear(LocalDate.of(2021,1,1), LocalDate.of(2021, 12, 31)),
-                new SIE4Content.FinancialYear(LocalDate.of(2020,1,1), LocalDate.of(2020, 12, 31))
+                new FinancialYear(LocalDate.of(2021,1,1), LocalDate.of(2021, 12, 31)),
+                new FinancialYear(LocalDate.of(2020,1,1), LocalDate.of(2020, 12, 31))
             )
         ));
     }

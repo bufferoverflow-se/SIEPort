@@ -108,6 +108,4 @@ public record SIE4Content(List<SIE4Item> items) {
     ) {
     }
 
-    public record FinancialYear(LocalDate from, LocalDate to) {
-    }
 }
