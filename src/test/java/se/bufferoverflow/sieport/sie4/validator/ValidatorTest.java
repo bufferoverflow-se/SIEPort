@@ -36,7 +36,7 @@ class ValidatorTest {
     @Test
     void validateSie4i_testWithNoErrors() {
         List<SIE4Item> items = List.of(
-                new SIE4Item.Flagga(0),
+                SIE4Item.Flagga.UNSET,
                 SIE4Item.Format.pc8(),
                 new SIE4Item.Sietyp(4),
                 new SIE4Item.Program("TestProgram", "1.0"),
@@ -62,7 +62,7 @@ class ValidatorTest {
     @Test
     void validateSie4e_testWithNoErrors() {
         List<SIE4Item> items = List.of(
-                new SIE4Item.Flagga(0),
+                SIE4Item.Flagga.UNSET,
                 SIE4Item.Format.pc8(),
                 new SIE4Item.Sietyp(4),
                 new SIE4Item.Program("TestProgram", "1.0"),

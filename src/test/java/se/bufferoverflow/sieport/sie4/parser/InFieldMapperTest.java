@@ -59,9 +59,8 @@ class InFieldMapperTest {
     @Test
     void toModel_flagga() {
         String flaggaLine = "#FLAGGA 0";
-        SIE4Item.Flagga expectedModel = new SIE4Item.Flagga(0);
         SIE4Item model = InFieldMapper.toModel(flaggaLine);
-        assertThat(model).isEqualTo(expectedModel);
+        assertThat(model).isEqualTo(SIE4Item.Flagga.UNSET);
     }
 
     @Test

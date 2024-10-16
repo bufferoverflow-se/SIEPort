@@ -66,7 +66,7 @@ class SIE4Test {
 
     @Test
     void writeIncorrectDataWithValidation() {
-        List<SIE4Item> items = List.of(new SIE4Item.Flagga(0));
+        List<SIE4Item> items = List.of(SIE4Item.Flagga.SET);
         assertThatThrownBy(() -> SIE4.write(tempDir.resolve(UUID.randomUUID() + ".se"), items))
                 .isInstanceOf(SIE4Exception.class)
                 .hasMessageContaining(ValidationError.MISSING_MANDATORY_ITEMS.toString());
@@ -74,7 +74,7 @@ class SIE4Test {
 
     @Test
     void writeIncorrectDataWithoutValidation() {
-        List<SIE4Item> items = List.of(new SIE4Item.Flagga(0));
+        List<SIE4Item> items = List.of(SIE4Item.Flagga.UNSET);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         SIE4.write(baos, items, SIE4.WriteOptions.SKIP_VALIDATION);

@@ -40,11 +40,19 @@ public sealed interface SIE4Item {
     }
 
     record Flagga(int flag) implements SIE4Item {
+        public static final Flagga UNSET = new Flagga(0);
+        public static final Flagga SET = new Flagga(1);
+
+        public Flagga {
+            if (flag < 0 || flag > 1) {
+                throw new SIE4Exception("Flagga must be either 0 or 1");
+            }
+        }
+
         @Override
         public SIE4ItemType itemType() {
             return SIE4ItemType.FLAGGA;
         }
-
     }
 
     record Fnamn(String companyName) implements SIE4Item {
