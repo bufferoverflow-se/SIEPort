@@ -2,6 +2,7 @@ package se.bufferoverflow.sieport.sie4;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -107,6 +108,48 @@ public class SIE4Document {
             mapOrNull(getFnamn(), SIE4Item.Fnamn::companyName),
             mapOrNull(getOrgnr(), SIE4Item.OrgNr::orgNr)
         );
+    }
+
+    /**
+     * Get all items in this document in a list.
+     *
+     * @return An immutable list with all items
+     */
+    public List<SIE4Item> getItems() {
+        List<SIE4Item> result = new ArrayList<>();
+        result.add(flagga);
+        result.add(program);
+        result.add(format);
+        result.add(gen);
+        result.add(sietyp);
+        result.add(prosa);
+        result.add(ftyp);
+        result.add(fnr);
+        result.add(orgnr);
+        result.add(bkod);
+        result.add(adress);
+        result.add(fnamn);
+        result.addAll(rar);
+        result.add(taxar);
+        result.add(omfattn);
+        result.add(kptyp);
+        result.add(valuta);
+        result.addAll(konto);
+        result.addAll(ktyp);
+        result.addAll(enhet);
+        result.addAll(sru);
+        result.addAll(dim);
+        result.addAll(underdim);
+        result.addAll(objekt);
+        result.addAll(ib);
+        result.addAll(ub);
+        result.addAll(oib);
+        result.addAll(oub);
+        result.addAll(res);
+        result.addAll(psaldo);
+        result.addAll(pbudget);
+        result.addAll(ver);
+        return result.stream().filter(Objects::nonNull).toList();
     }
 
     private <I, O> O mapOrNull(I item, Function<I, O> mapper) {

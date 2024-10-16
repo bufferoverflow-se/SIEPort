@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -77,4 +78,12 @@ class SIE4DocumentTest {
         assertEquals("555555-5555", result.organizationNumber());
     }
 
+    @Test
+    void getItems() {
+        SIE4Items content = SIE4.parse(sie4SampleFile);
+
+        SIE4Document doc = new SIE4Document(content);
+
+        assertThat(doc.getItems()).containsExactlyInAnyOrderElementsOf(content.items());
+    }
 }
