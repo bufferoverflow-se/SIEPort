@@ -32,7 +32,7 @@ class SIE4DocumentTest {
         // Check result
         assertEquals(UNSET.flag(), result.flag());
         assertNull(result.programWithVersion());
-        assertNull(result.generatedAt());
+        assertThat(result.generatedAt()).isToday();
         assertNull(result.sieType());
         assertNull(result.comment());
         assertNull(result.kptyp());

@@ -3,6 +3,7 @@ package se.bufferoverflow.sieport.sie4;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -451,7 +452,7 @@ public class SIE4Document {
         this.flagga = flagga == null ? SIE4Item.Flagga.UNSET : flagga;
         this.program = program;
         this.format = format == null ? SIE4Item.Format.pc8() : format;
-        this.gen = gen;
+        this.gen = gen == null ? SIE4Item.Gen.now() : gen;
         this.sietyp = sietyp;
         this.prosa = prosa;
         this.ftyp = ftyp;
@@ -565,6 +566,11 @@ public class SIE4Document {
             return this;
         }
 
+        public Builder orgnr(String orgNr) {
+            this.orgnr = SIE4Item.OrgNr.of(orgNr);
+            return this;
+        }
+
         public Builder bkod(SIE4Item.Bkod bkod) {
             this.bkod = bkod;
             return this;
@@ -577,6 +583,11 @@ public class SIE4Document {
 
         public Builder fnamn(SIE4Item.Fnamn fnamn) {
             this.fnamn = fnamn;
+            return this;
+        }
+
+        public Builder fnamn(String companyName) {
+            this.fnamn = new SIE4Item.Fnamn(companyName);
             return this;
         }
 

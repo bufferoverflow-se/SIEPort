@@ -96,6 +96,9 @@ public sealed interface SIE4Item {
             return SIE4ItemType.GEN;
         }
 
+        public static Gen now() {
+            return new Gen(LocalDate.now(), Optional.empty());
+        }
     }
 
     record Ib(YearNumber yearNumber, int accountNo, BigDecimal balance, Optional<BigDecimal> quantity) implements SIE4Item {
