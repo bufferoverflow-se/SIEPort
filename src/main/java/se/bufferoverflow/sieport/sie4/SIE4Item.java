@@ -267,11 +267,11 @@ public sealed interface SIE4Item {
             return SIE4ItemType.VER;
         }
 
-        public static Ver forSie4e(LocalDate date, String text, String series, String verificationNumber, List<Transaction> transactions) {
+        public static Ver of(LocalDate date, String text, String series, String verificationNumber, List<Transaction> transactions) {
             return new Ver(date, Optional.of(series), Optional.of(verificationNumber), Optional.of(text), Optional.empty(), Optional.empty(), transactions);
         }
 
-        public static Ver forSie4i(LocalDate date, String text, List<Transaction> transactions) {
+        public static Ver of(LocalDate date, String text, List<Transaction> transactions) {
             return new Ver(date, Optional.empty(), Optional.empty(), Optional.of(text), Optional.empty(), Optional.empty(), transactions);
         }
     }
@@ -289,6 +289,10 @@ public sealed interface SIE4Item {
             @Override
             public SIE4ItemType itemType() {
                 return SIE4ItemType.TRANS;
+            }
+
+            public static Trans of(int accountNo, BigDecimal amount) {
+                return new Trans(accountNo, amount, List.of(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
             }
         }
 
