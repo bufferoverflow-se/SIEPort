@@ -266,6 +266,14 @@ public sealed interface SIE4Item {
         public SIE4ItemType itemType() {
             return SIE4ItemType.VER;
         }
+
+        public static Ver forSie4e(LocalDate date, String text, String series, String verificationNumber, List<Transaction> transactions) {
+            return new Ver(date, Optional.of(series), Optional.of(verificationNumber), Optional.of(text), Optional.empty(), Optional.empty(), transactions);
+        }
+
+        public static Ver forSie4i(LocalDate date, String text, List<Transaction> transactions) {
+            return new Ver(date, Optional.empty(), Optional.empty(), Optional.of(text), Optional.empty(), Optional.empty(), transactions);
+        }
     }
 
     sealed interface Transaction extends SIE4Item {
