@@ -261,8 +261,8 @@ public class OutFieldMapper {
                 @Override
                 String writeFields(SIE4Item.Ver item) {
                     StringBuilder sb = new StringBuilder();
-                    item.series().ifPresent(s -> sb.append(quoted(s)));
-                    item.verificationNo().ifPresent(vn -> sb.append(' ').append(quoted(vn)));
+                    item.series().ifPresentOrElse(s -> sb.append(quoted(s)), () -> sb.append("\"\""));
+                    sb.append(' ').append(item.verificationNo().map(AbstractFieldWriter::quoted).orElse("\"\""));
                     sb.append(' ').append(SIE4_DATE_FORMATTER.format(item.date()));
                     item.text().ifPresent(t -> sb.append(' ').append(quoted(t)));
                     item.regDate().ifPresent(rd -> sb.append(' ').append(SIE4_DATE_FORMATTER.format(rd)));

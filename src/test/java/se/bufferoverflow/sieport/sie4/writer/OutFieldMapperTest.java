@@ -329,4 +329,25 @@ class OutFieldMapperTest {
 
         assertThat(fieldString).isEqualTo(expectedResult);
     }
+
+    @Test
+    void testToFileString_Ver_withoutIdentifiers() {
+        String fieldString = OutFieldMapper.toFileString(SIE4Item.Ver.of(
+                LocalDate.of(2021, 11, 25),
+                "Verifikattitel",
+                List.of(
+                        SIE4Item.Transaction.Trans.of(1930, new BigDecimal(-82000)),
+                        SIE4Item.Transaction.Trans.of(7010, new BigDecimal(82000))
+                )
+        ));
+
+        String expectedResult = """
+                #VER "" "" 20211125 Verifikattitel
+                {
+                   #TRANS 1930 {} -82000
+                   #TRANS 7010 {} 82000
+                }""";
+
+        assertThat(fieldString).isEqualTo(expectedResult);
+    }
 }
