@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.bufferoverflow.sieport.sie4.SIE4Item.Flagga.SET;
 import static se.bufferoverflow.sieport.sie4.SIE4Item.Flagga.UNSET;
+import static se.bufferoverflow.sieport.sie4.SIE4Item.Sietyp.SIE_4;
 
 class SIE4DocumentTest {
     private Path sie4SampleFile;
@@ -33,7 +34,7 @@ class SIE4DocumentTest {
         assertEquals(UNSET.flag(), result.flag());
         assertNull(result.programWithVersion());
         assertThat(result.generatedAt()).isToday();
-        assertNull(result.sieType());
+        assertEquals(SIE_4.typeNo(), result.sieType());
         assertNull(result.comment());
         assertNull(result.kptyp());
         assertNull(result.currencyCode());

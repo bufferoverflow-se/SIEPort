@@ -453,7 +453,7 @@ public class SIE4Document {
         this.program = program;
         this.format = format == null ? SIE4Item.Format.pc8() : format;
         this.gen = gen == null ? SIE4Item.Gen.now() : gen;
-        this.sietyp = sietyp;
+        this.sietyp = sietyp == null ? SIE4Item.Sietyp.SIE_4 : sietyp;
         this.prosa = prosa;
         this.ftyp = ftyp;
         this.fnr = fnr;

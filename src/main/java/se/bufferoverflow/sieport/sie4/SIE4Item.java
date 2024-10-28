@@ -218,11 +218,16 @@ public sealed interface SIE4Item {
     }
 
     record Sietyp(int typeNo) implements SIE4Item {
+        public static final Sietyp SIE_4 = Sietyp.of(4);
+
         @Override
         public SIE4ItemType itemType() {
             return SIE4ItemType.SIETYP;
         }
 
+        public static Sietyp of(int typeNo) {
+            return new Sietyp(typeNo);
+        }
     }
 
     record Sru(int accountNo, int sruCode) implements SIE4Item {
