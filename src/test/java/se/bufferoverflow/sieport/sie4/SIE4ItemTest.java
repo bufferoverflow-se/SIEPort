@@ -44,6 +44,20 @@ class SIE4ItemTest {
     }
 
     @Test
+    void ver_incorrectTransactions_shouldThrowException() {
+        assertThatThrownBy(() -> SIE4Item.Ver.of(LocalDate.EPOCH, "Title", List.of()))
+                .isInstanceOf(SIE4Exception.class)
+                .hasMessageContaining("at least two transactions");
+
+        assertThatThrownBy(() -> SIE4Item.Ver.of(LocalDate.EPOCH, "Title", List.of(
+                SIE4Item.Transaction.Trans.of(1930, BigDecimal.TEN),
+                SIE4Item.Transaction.Trans.of(1920, BigDecimal.TEN)
+        )))
+                .isInstanceOf(SIE4Exception.class)
+                .hasMessageContaining("zero sum");
+    }
+
+    @Test
     void trans() {
         // Single argument static factory method
         BigDecimal amount = new BigDecimal(12345);
