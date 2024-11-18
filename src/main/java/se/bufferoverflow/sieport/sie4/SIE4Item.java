@@ -267,6 +267,16 @@ public sealed interface SIE4Item {
     }
 
     record Ver(LocalDate date, Optional<String> series, Optional<String> verificationNo, Optional<String> text, Optional<LocalDate> regDate, Optional<String> sign, List<Transaction> transactions) implements SIE4Item {
+        public Ver {
+            if (transactions == null || transactions.size() < 2) {
+                throw new SIE4Exception("VER items must have at least two transactions");
+            }
+            BigDecimal sum = transactions.stream().map(Transaction::amount).reduce(BigDecimal.ZERO, BigDecimal::add);
+            if (sum.longValue() != 0) {
+                throw new SIE4Exception("VER transaction items must have a zero sum, was: " + sum);
+            }
+        }
+
         @Override
         public SIE4ItemType itemType() {
             return SIE4ItemType.VER;

@@ -5,9 +5,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import se.bufferoverflow.sieport.sie4.CompanyType;
-import se.bufferoverflow.sieport.sie4.SIE4Item;
 import se.bufferoverflow.sieport.sie4.ObjectReference;
 import se.bufferoverflow.sieport.sie4.Period;
+import se.bufferoverflow.sieport.sie4.SIE4Item;
 import se.bufferoverflow.sieport.sie4.YearNumber;
 
 import java.math.BigDecimal;
@@ -422,7 +422,11 @@ class InFieldMapperTest {
     private static Stream<Arguments> verTestData() {
         return Stream.of(
                 Arguments.of(
-                        List.of("#VER F 12 20211223 \"Lönekörning: 2021-12-23 - Ordinarie lön\" 20211130"),
+                        """
+                        #VER F 12 20211223 "Lönekörning: 2021-12-23 - Ordinarie lön" 20211130
+                        #TRANS 1930 {} -10.00
+                        #TRANS 1920 {} 10.00
+                        """.lines().toList(),
                         new SIE4Item.Ver(
                                 LocalDate.of(2021, 12, 23),
                                 Optional.of("F"),
@@ -430,9 +434,16 @@ class InFieldMapperTest {
                                 Optional.of("Lönekörning: 2021-12-23 - Ordinarie lön"),
                                 Optional.of(LocalDate.of(2021, 11, 30)),
                                 Optional.empty(),
-                                List.of())
+                                List.of(
+                                        SIE4Item.Transaction.Trans.of(1930, new BigDecimal("-10.00")),
+                                        SIE4Item.Transaction.Trans.of(1920, new BigDecimal("10.00"))
+                                ))
                 ),
-                Arguments.of(List.of("#VER \"\" \"\" 20081216 \"Postage\""),
+                Arguments.of("""
+                        #VER "" "" 20081216 "Postage"
+                        #TRANS 1930 {} -10.00
+                        #TRANS 1920 {} 10.00
+                        """.lines().toList(),
                         new SIE4Item.Ver(
                                 LocalDate.of(2008, 12, 16),
                                 Optional.empty(),
@@ -440,7 +451,10 @@ class InFieldMapperTest {
                                 Optional.of("Postage"),
                                 Optional.empty(),
                                 Optional.empty(),
-                                List.of())
+                                List.of(
+                                        SIE4Item.Transaction.Trans.of(1930, new BigDecimal("-10.00")),
+                                        SIE4Item.Transaction.Trans.of(1920, new BigDecimal("10.00"))
+                                ))
                 )
         );
     }

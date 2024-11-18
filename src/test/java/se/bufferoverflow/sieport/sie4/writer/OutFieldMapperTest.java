@@ -2,9 +2,9 @@ package se.bufferoverflow.sieport.sie4.writer;
 
 import org.junit.jupiter.api.Test;
 import se.bufferoverflow.sieport.sie4.CompanyType;
-import se.bufferoverflow.sieport.sie4.SIE4Item;
 import se.bufferoverflow.sieport.sie4.ObjectReference;
 import se.bufferoverflow.sieport.sie4.Period;
+import se.bufferoverflow.sieport.sie4.SIE4Item;
 import se.bufferoverflow.sieport.sie4.YearNumber;
 
 import java.math.BigDecimal;
@@ -309,7 +309,7 @@ class OutFieldMapperTest {
                                 Optional.empty()),
                         new SIE4Item.Transaction.Trans(
                                 7090,
-                                new BigDecimal("-2334.87"),
+                                new BigDecimal("55752.16"),
                                 List.of(ObjectReference.of(1, "Syd"),
                                         ObjectReference.of(6, "0001")),
                                 Optional.empty(),
@@ -324,7 +324,7 @@ class OutFieldMapperTest {
                 {
                    #TRANS 1930 {} -82651.00
                    #TRANS 7010 {1 Nord} 26898.84 20211125 "" 200
-                   #TRANS 7090 {1 Syd 6 0001} -2334.87
+                   #TRANS 7090 {1 Syd 6 0001} 55752.16
                 }""";
 
         assertThat(fieldString).isEqualTo(expectedResult);
