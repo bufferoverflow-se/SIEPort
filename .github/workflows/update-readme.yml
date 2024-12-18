@@ -27,5 +27,5 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: Update README with latest release version
           title: Update README with latest release version
-          delete-branch: update-readme
+          delete-branch: true
           base: main
