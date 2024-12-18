@@ -19,7 +19,7 @@ jobs:
         uses: MathieuSoysal/file-updater-for-release@v1.0.3
         with:
           files: README.md
-          prefix: "implementation 'se.bufferoverflow:sieport:"
+          prefix: "se.bufferoverflow:sieport:"
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
