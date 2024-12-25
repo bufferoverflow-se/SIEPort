@@ -20,7 +20,7 @@ Add the following dependency to your `pom.xml`:
 <dependency>
     <groupId>se.bufferoverflow</groupId>
     <artifactId>sieport</artifactId>
-    <version>0.0.9</version>
+    <version>0.0.8</version>
 </dependency>
 ```
 
@@ -29,7 +29,7 @@ Add the following dependency to your `pom.xml`:
 Add the following to your `build.gradle`:
 
 ```gradle
-implementation 'se.bufferoverflow:sieport:0.0.9'
+implementation 'se.bufferoverflow:sieport:0.0.8'
 ```
 
 ## Usage
