@@ -2,13 +2,15 @@ name: Update documentation on release
 
 on:
   release:
-    types:
-      - published
+    types: [released]
 
 jobs:
-  publish:
+  updateReadme:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Update for Maven
         uses: MathieuSoysal/file-updater-for-release@v1.0.3
         with:
