@@ -5,8 +5,28 @@
   <artifactId>sieport</artifactId>
   <packaging>jar</packaging>
   <version>0.0.1-SNAPSHOT</version>
-  <name>sieport</name>
-  <url>http://maven.apache.org</url>
+  <name>${project.groupId}:${project.artifactId}</name>
+  <description>SIEPort is a Java library for working with SIE4 files used in Swedish financial accounting software</description>
+  <url>https://github.com/bufferoverflow-se/SIEPort</url>
+  <licenses>
+    <license>
+      <name>The Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <name>Jonas Heineson</name>
+      <email>heineson@gmail.com</email>
+      <organization>Buffer Overflow</organization>
+      <organizationUrl>https://github.com/bufferoverflow-se</organizationUrl>
+    </developer>
+  </developers>
+  <scm>
+    <connection>scm:git:git://github.com/bufferoverflow-se/SIEPort.git</connection>
+    <developerConnection>scm:git:git://github.com/bufferoverflow-se/SIEPort.git</developerConnection>
+    <url>https://github.com/bufferoverflow-se/SIEPort/tree/main/</url>
+  </scm>
   <properties>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
