@@ -1,8 +1,10 @@
 name: SIEPort main build
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+  pull_request:
+    types: [ opened, edited, reopened, review_requested ]
+    branches: [ main ]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,4 +17,4 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build
-        run: mvn -B package --file pom.xml
+        run: mvn -B verify --file pom.xml
