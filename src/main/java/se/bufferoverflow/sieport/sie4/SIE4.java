@@ -60,7 +60,10 @@ public class SIE4 {
                     if (!verBuffer.isEmpty()) {
                         verBuffer.add(trimmedLine);
                     } else {
-                        result.add(InFieldMapper.toModel(trimmedLine));
+                        SIE4Item item = InFieldMapper.toModel(trimmedLine);
+                        if (item != null) {
+                            result.add(item);
+                        }
                     }
                 }
             }

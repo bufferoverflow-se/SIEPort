@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import se.bufferoverflow.sieport.sie4.validator.ValidationError;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -70,6 +71,18 @@ class SIE4Test {
         assertThatThrownBy(() -> SIE4.write(tempDir.resolve(UUID.randomUUID() + ".se"), items))
                 .isInstanceOf(SIE4Exception.class)
                 .hasMessageContaining(ValidationError.MISSING_MANDATORY_ITEMS.toString());
+    }
+
+    @Test
+    void parse_unknownLabel_shouldBeIgnored() {
+        String input = "#FLAGGA 0\n#KSUMMA\n#FNAMN TestCompany\n#UNKNOWN some data\n";
+        InputStream stream = new ByteArrayInputStream(input.getBytes(SIE4.SIE4_CHARSET));
+
+        List<SIE4Item> items = SIE4.parse(stream).items();
+
+        assertThat(items).hasSize(2);
+        assertThat(items.get(0)).isEqualTo(SIE4Item.Flagga.UNSET);
+        assertThat(items.get(1)).isEqualTo(new SIE4Item.Fnamn("TestCompany"));
     }
 
     @Test

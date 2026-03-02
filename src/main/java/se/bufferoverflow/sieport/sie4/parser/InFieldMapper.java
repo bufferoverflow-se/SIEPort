@@ -13,8 +13,11 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 public class InFieldMapper {
+
+    private static final Logger LOG = Logger.getLogger(InFieldMapper.class.getName());
 
     private static final Map<SIE4ItemType, AbstractFieldParser<?>> PARSER_REGISTRY = Map.ofEntries(
             Map.entry(SIE4ItemType.ADRESS, new AbstractFieldParser<SIE4Item.Adress>() {
@@ -570,6 +573,10 @@ public class InFieldMapper {
     public static SIE4Item toModel(String itemLine) {
         LabelWithFields labelWithFields = splitLine(itemLine);
 
+        if (labelWithFields == null) {
+            return null;
+        }
+
         if (labelWithFields.label() == SIE4ItemType.VER) {
             throw new SIE4Exception("#VER items cannot be parsed by this function");
         }
@@ -599,7 +606,13 @@ public class InFieldMapper {
         }
 
         String[] split = itemLine.split("\\s+", 2);
-        SIE4ItemType label = SIE4ItemType.valueOf(split[0].strip().substring(1).toUpperCase());
+        SIE4ItemType label;
+        try {
+            label = SIE4ItemType.valueOf(split[0].strip().substring(1).toUpperCase());
+        } catch (IllegalArgumentException e) {
+            LOG.warning("Skipping unsupported SIE4 label: " + split[0]);
+            return null;
+        }
         String fields = split[1].strip();
         return new LabelWithFields(label, fields);
     }
