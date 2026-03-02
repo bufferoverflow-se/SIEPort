@@ -536,8 +536,8 @@ public class InFieldMapper {
             Map.entry(SIE4ItemType.VER, new AbstractFieldParser<SIE4Item.Ver>() {
                 @Override
                 protected SIE4Item.Ver parseFields(List<String> fields, List<SIE4Item> subItems) {
-                    if (fields.isEmpty() || fields.size() > 6) {
-                        throw new SIE4Exception("Label VER requires between 1 and 6 fields");
+                    if (fields.size() < 3 || fields.size() > 6) {
+                        throw new SIE4Exception("Label VER requires between 3 and 6 fields");
                     }
 
                     Optional<String> series = parseOptionalField(fields.get(0));

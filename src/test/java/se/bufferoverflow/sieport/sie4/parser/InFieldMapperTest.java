@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import se.bufferoverflow.sieport.sie4.SIE4Exception;
 import se.bufferoverflow.sieport.sie4.CompanyType;
 import se.bufferoverflow.sieport.sie4.ObjectReference;
 import se.bufferoverflow.sieport.sie4.Period;
@@ -17,6 +18,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class InFieldMapperTest {
 
@@ -410,6 +412,20 @@ class InFieldMapperTest {
         SIE4Item.Valuta expectedModel = new SIE4Item.Valuta("SEK");
         SIE4Item model = InFieldMapper.toModel(valutaLine);
         assertThat(model).isEqualTo(expectedModel);
+    }
+
+    @Test
+    void toModel_ver_tooFewFields_shouldThrowSIE4Exception() {
+        // Guard allows size >= 1, but then unconditionally accesses fields.get(1) and fields.get(2).
+        // A VER with fewer than 3 fields (series, verno, verdate are all required) should throw
+        // SIE4Exception, not IndexOutOfBoundsException.
+        List<String> oneField = List.of("#VER F", "#TRANS 1930 {} -10.00", "#TRANS 1920 {} 10.00");
+        assertThatThrownBy(() -> InFieldMapper.toModel(oneField))
+                .isInstanceOf(SIE4Exception.class);
+
+        List<String> twoFields = List.of("#VER F 12", "#TRANS 1930 {} -10.00", "#TRANS 1920 {} 10.00");
+        assertThatThrownBy(() -> InFieldMapper.toModel(twoFields))
+                .isInstanceOf(SIE4Exception.class);
     }
 
     @ParameterizedTest
