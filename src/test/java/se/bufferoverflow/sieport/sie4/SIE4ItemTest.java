@@ -58,6 +58,16 @@ class SIE4ItemTest {
     }
 
     @Test
+    void ver_fractionalNonZeroSum_shouldThrowException() {
+        assertThatThrownBy(() -> SIE4Item.Ver.of(LocalDate.EPOCH, "Title", List.of(
+                new SIE4Item.Transaction.Trans(1930, new BigDecimal("100.50"), List.of(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()),
+                new SIE4Item.Transaction.Trans(1920, new BigDecimal("-100.49"), List.of(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty())
+        )))
+                .isInstanceOf(SIE4Exception.class)
+                .hasMessageContaining("zero sum");
+    }
+
+    @Test
     void trans() {
         // Single argument static factory method
         BigDecimal amount = new BigDecimal(12345);
