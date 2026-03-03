@@ -83,6 +83,18 @@ class SIE4ItemTest {
         ));
     }
 
+    @Test
+    void ver_withBtransAndRtrans_shouldNotThrow() {
+        // Only care about #TRANS, #BTRANS and #RTRANS can safely be ignored
+        assertThat(SIE4Item.Ver.of(LocalDate.EPOCH, "Title", List.of(
+                SIE4Item.Transaction.Trans.of(1910, new BigDecimal("-1000.00")),
+                SIE4Item.Transaction.Trans.of(2640, new BigDecimal("200.00")),
+                new SIE4Item.Transaction.Btrans(6110, new BigDecimal("800.00"), List.of(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()),
+                new SIE4Item.Transaction.Rtrans(6250, new BigDecimal("800.00"), List.of(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()),
+                SIE4Item.Transaction.Trans.of(6250, new BigDecimal("800.00"))
+        ))).isNotNull();
+    }
+
     private static List<SIE4Item.Transaction> createValidTransactions() {
         return List.of(
                 SIE4Item.Transaction.Trans.of(1930, new BigDecimal(-10)),

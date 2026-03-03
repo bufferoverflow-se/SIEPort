@@ -271,7 +271,7 @@ public sealed interface SIE4Item {
             if (transactions == null || transactions.size() < 2) {
                 throw new SIE4Exception("VER items must have at least two transactions");
             }
-            BigDecimal sum = transactions.stream().map(Transaction::amount).reduce(BigDecimal.ZERO, BigDecimal::add);
+            BigDecimal sum = transactions.stream().filter(t -> t instanceof Transaction.Trans).map(Transaction::amount).reduce(BigDecimal.ZERO, BigDecimal::add);
             if (sum.compareTo(BigDecimal.ZERO) != 0) {
                 throw new SIE4Exception("VER transaction items must have a zero sum, was: " + sum);
             }
