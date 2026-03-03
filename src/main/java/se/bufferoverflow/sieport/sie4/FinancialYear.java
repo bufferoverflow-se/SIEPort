@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public record FinancialYear(LocalDate from, LocalDate to) {
     public FinancialYear {
-        if (to.isBefore(from)) {
+        if (!to.isAfter(from)) {
            throw new SIE4Exception("from date must be before to date");
         }
     }

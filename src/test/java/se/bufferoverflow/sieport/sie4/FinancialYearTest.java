@@ -25,4 +25,10 @@ class FinancialYearTest {
         LocalDate from = LocalDate.now();
         assertThrows(SIE4Exception.class, () -> new FinancialYear(from.plusDays(1), from));
     }
+
+    @Test
+    void shouldThrowSIE4ExceptionWhenToDateEqualsFromDate() {
+        LocalDate date = LocalDate.of(2024, 6, 1);
+        assertThrows(SIE4Exception.class, () -> new FinancialYear(date, date));
+    }
 }
