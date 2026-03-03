@@ -354,6 +354,22 @@ class OutFieldMapperTest {
     }
 
     @Test
+    void toFileString_objectReferenceWithSpaceInObjectNo_roundTrips() {
+        SIE4Item.Transaction.Trans trans = new SIE4Item.Transaction.Trans(
+                1930,
+                new BigDecimal("-1000.00"),
+                List.of(ObjectReference.of(1, "my object")),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty());
+
+        String result = OutFieldMapper.toFileString(trans);
+        assertThat(result).isEqualTo("#TRANS 1930 {1 \"my object\"} -1000.00");
+        assertThat(InFieldMapper.toModel(result)).isEqualTo(trans);
+    }
+
+    @Test
     void toFileString_embeddedQuote_isEscapedWithBackslash() {
         SIE4Item.Fnamn item = new SIE4Item.Fnamn("Svensson \"Bygg\" AB");
 

@@ -300,7 +300,7 @@ public class OutFieldMapper {
 
     private static String writeTransactionFields(SIE4Item.Transaction tx) {
         String objectRefs = "{" + tx.objectReferences().stream()
-                .map(r -> "%d %s".formatted(r.dimensionNo(), r.objectNo()))
+                .map(r -> "%d %s".formatted(r.dimensionNo(), AbstractFieldWriter.quoted(r.objectNo())))
                 .collect(Collectors.joining(" ")) + "}";
         return "%d %s %s %s %s %s %s".formatted(
                 tx.accountNo(),

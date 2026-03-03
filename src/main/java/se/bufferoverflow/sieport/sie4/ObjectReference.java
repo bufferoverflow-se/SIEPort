@@ -7,6 +7,10 @@ public record ObjectReference(int dimensionNo, String objectNo) {
 
     @Override
     public String toString() {
-        return "{%d %s}".formatted(dimensionNo, objectNo);
+        String escaped = objectNo.replace("\"", "\\\"");
+        String quoted = (objectNo.contains(" ") || objectNo.contains("\""))
+                ? "\"" + escaped + "\""
+                : escaped;
+        return "{%d %s}".formatted(dimensionNo, quoted);
     }
 }
