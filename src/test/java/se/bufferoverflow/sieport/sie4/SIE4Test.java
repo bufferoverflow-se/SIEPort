@@ -7,10 +7,8 @@ import se.bufferoverflow.sieport.sie4.validator.ValidationError;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
@@ -53,16 +51,15 @@ class SIE4Test {
     }
 
     @Test
-    void readAndWriteSample() throws IOException {
-        String expectedOutput = Files.readString(sie4SampleFile, SIE4.SIE4_CHARSET);
+    void readAndWriteSample() {
         List<SIE4Item> parsedItems = SIE4.parse(sie4SampleFile).items();
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         SIE4.write(baos, parsedItems);
-        String output = baos.toString(SIE4.SIE4_CHARSET);
 
-        // Both LF and CRLF are permitted according to SIE spec
-        assertThat(output).isEqualToIgnoringNewLines(expectedOutput);
+        // Write sorts items by SIE4ItemType ordinal; re-parse and compare item sets
+        List<SIE4Item> reparsedItems = SIE4.parse(new ByteArrayInputStream(baos.toByteArray())).items();
+        assertThat(reparsedItems).containsExactlyInAnyOrderElementsOf(parsedItems);
     }
 
     @Test
@@ -83,6 +80,21 @@ class SIE4Test {
         assertThat(items).hasSize(2);
         assertThat(items.get(0)).isEqualTo(SIE4Item.Flagga.UNSET);
         assertThat(items.get(1)).isEqualTo(new SIE4Item.Fnamn("TestCompany"));
+    }
+
+    @Test
+    void write_outOfOrderItems_areSortedByItemType() {
+        // Items passed in wrong order: FNAMN (ordinal 17) before FLAGGA (ordinal 0)
+        List<SIE4Item> items = List.of(
+                new SIE4Item.Fnamn("Acme"),
+                SIE4Item.Flagga.UNSET
+        );
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        SIE4.write(baos, items, SIE4.WriteOptions.SKIP_VALIDATION);
+        String output = baos.toString(SIE4.SIE4_CHARSET);
+
+        assertThat(output).startsWith("#FLAGGA");
     }
 
     @Test
