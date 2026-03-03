@@ -613,6 +613,9 @@ public class InFieldMapper {
             LOG.warning("Skipping unsupported SIE4 label: " + split[0]);
             return null;
         }
+        if (split.length < 2) {
+            throw new SIE4Exception("Label " + split[0] + " has no fields");
+        }
         String fields = split[1].strip();
         return new LabelWithFields(label, fields);
     }

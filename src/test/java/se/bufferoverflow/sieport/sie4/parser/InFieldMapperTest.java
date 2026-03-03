@@ -428,6 +428,12 @@ class InFieldMapperTest {
                 .isInstanceOf(SIE4Exception.class);
     }
 
+    @Test
+    void toModel_labelOnly_shouldThrowSIE4Exception() {
+        assertThatThrownBy(() -> InFieldMapper.toModel("#FLAGGA"))
+                .isInstanceOf(SIE4Exception.class);
+    }
+
     @ParameterizedTest
     @MethodSource("verTestData")
     void toModel_ver(List<String> verLine, SIE4Item.Ver expectedModel) {
