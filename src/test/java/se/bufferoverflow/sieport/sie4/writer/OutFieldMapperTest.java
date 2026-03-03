@@ -12,6 +12,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import se.bufferoverflow.sieport.sie4.parser.InFieldMapper;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -349,5 +351,16 @@ class OutFieldMapperTest {
                 }""";
 
         assertThat(fieldString).isEqualTo(expectedResult);
+    }
+
+    @Test
+    void toFileString_embeddedQuote_isEscapedWithBackslash() {
+        SIE4Item.Fnamn item = new SIE4Item.Fnamn("Svensson \"Bygg\" AB");
+
+        String result = OutFieldMapper.toFileString(item);
+
+        assertThat(result).isEqualTo("#FNAMN \"Svensson \\\"Bygg\\\" AB\"");
+        // Verify round-trip
+        assertThat(InFieldMapper.toModel(result)).isEqualTo(item);
     }
 }
