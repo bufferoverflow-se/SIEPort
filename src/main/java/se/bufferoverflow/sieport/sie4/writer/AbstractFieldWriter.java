@@ -16,7 +16,7 @@ abstract class AbstractFieldWriter<T extends SIE4Item> {
         if (item == null) {
             throw new SIE4Exception("Item cannot be null");
         }
-        String label = item.getClass().getSimpleName().toUpperCase();
+        String label = item.itemType().name();
         return "#%s %s".formatted(label, writeFields((T) item));
     }
 
