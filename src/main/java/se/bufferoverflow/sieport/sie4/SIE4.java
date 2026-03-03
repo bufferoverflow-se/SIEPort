@@ -21,10 +21,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class SIE4 {
     public static final Charset SIE4_CHARSET = Charset.forName("IBM-437");
+
+    private static final Logger LOG = Logger.getLogger(SIE4.class.getName());
 
     private SIE4() {
     }
@@ -62,7 +65,9 @@ public class SIE4 {
                         verBuffer.add(trimmedLine);
                     } else {
                         SIE4Item item = InFieldMapper.toModel(trimmedLine);
-                        if (item != null) {
+                        if (item instanceof SIE4Item.Transaction) {
+                            LOG.warning("Skipping transaction item outside VER block: " + trimmedLine);
+                        } else if (item != null) {
                             result.add(item);
                         }
                     }

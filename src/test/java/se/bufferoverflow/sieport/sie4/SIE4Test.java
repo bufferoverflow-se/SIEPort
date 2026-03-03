@@ -83,6 +83,17 @@ class SIE4Test {
     }
 
     @Test
+    void parse_transactionAtTopLevel_shouldBeIgnored() {
+        String input = "#FLAGGA 0\n#TRANS 1930 {} 100.00\n#RTRANS 1920 {} -100.00\n#FNAMN TestCompany\n";
+        InputStream stream = new ByteArrayInputStream(input.getBytes(SIE4.SIE4_CHARSET));
+
+        List<SIE4Item> items = SIE4.parse(stream).items();
+
+        assertThat(items).hasSize(2);
+        assertThat(items).noneMatch(item -> item instanceof SIE4Item.Transaction);
+    }
+
+    @Test
     void write_outOfOrderItems_areSortedByItemType() {
         // Items passed in wrong order: FNAMN (ordinal 17) before FLAGGA (ordinal 0)
         List<SIE4Item> items = List.of(
