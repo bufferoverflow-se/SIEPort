@@ -152,6 +152,19 @@ class OutFieldMapperTest {
     }
 
     @Test
+    void testToFileString_OrgNr_actNoWithoutAcqNo_isNotCorrupted() {
+        // actNo is a trailing optional that requires acqNo to be positionally meaningful.
+        // When acqNo is absent, actNo cannot be emitted — it must be dropped rather than
+        // written in the acqNo position (which would corrupt a re-parse).
+        SIE4Item.OrgNr item = new SIE4Item.OrgNr("556334-3689", Optional.empty(), Optional.of(2));
+
+        String result = OutFieldMapper.toFileString(item);
+        assertThat(result).isEqualTo("#ORGNR 556334-3689");
+        assertThat(InFieldMapper.toModel(result))
+                .isEqualTo(new SIE4Item.OrgNr("556334-3689", Optional.empty(), Optional.empty()));
+    }
+
+    @Test
     void testToFileString_Oub() {
         String fieldString = OutFieldMapper.toFileString(new SIE4Item.Oub(
                 YearNumber.of(0),

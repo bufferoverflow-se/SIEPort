@@ -131,11 +131,14 @@ public class OutFieldMapper {
             Map.entry(SIE4Item.OrgNr.class, new AbstractFieldWriter<SIE4Item.OrgNr>() {
                 @Override
                 String writeFields(SIE4Item.OrgNr item) {
-                    return "%s %s %s".formatted(
-                            quoted(item.orgNr()),
-                            item.acqNo().map(Object::toString).orElse(""),
-                            item.actNo().map(Object::toString).orElse("")
-                    ).trim();
+                    String result = quoted(item.orgNr());
+                    if (item.acqNo().isPresent()) {
+                        result += " " + item.acqNo().get();
+                        if (item.actNo().isPresent()) {
+                            result += " " + item.actNo().get();
+                        }
+                    }
+                    return result;
                 }
             }),
             Map.entry(SIE4Item.Oub.class, new AbstractFieldWriter<SIE4Item.Oub>() {
