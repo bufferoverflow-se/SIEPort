@@ -12,6 +12,7 @@ abstract class AbstractFieldWriter<T extends SIE4Item> {
         return escaped;
     }
 
+    @SuppressWarnings("unchecked")
     String writeItem(SIE4Item item) {
         if (item == null) {
             throw new SIE4Exception("Item cannot be null");
