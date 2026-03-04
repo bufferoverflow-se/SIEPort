@@ -5,6 +5,7 @@ import se.bufferoverflow.sieport.sie4.SIE4ItemType;
 import se.bufferoverflow.sieport.sie4.YearNumber;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -51,31 +52,42 @@ public class Validator {
 
     public static List<ValidationError> validateSie4i(List<SIE4Item> items) {
         List<ValidationError> errors = new ArrayList<>();
-        if (!checkMandatoryItems(items, MANDATORY_ITEMS_SIE4I).isEmpty()) {
-            errors.add(ValidationError.MISSING_MANDATORY_ITEMS);
+        List<SIE4ItemType> missing = checkMandatoryItems(items, MANDATORY_ITEMS_SIE4I);
+        if (!missing.isEmpty()) {
+            errors.add(new ValidationError.MissingMandatoryItems(Set.copyOf(missing)));
         }
-        if (!checkForbiddenItems(items, FORBIDDEN_ITEMS_SIE4I).isEmpty()) {
-            errors.add(ValidationError.FORBIDDEN_ITEMS_PRESENT);
+        List<SIE4ItemType> forbidden = checkForbiddenItems(items, FORBIDDEN_ITEMS_SIE4I);
+        if (!forbidden.isEmpty()) {
+            errors.add(new ValidationError.ForbiddenItemsPresent(Set.copyOf(forbidden)));
         }
         return errors;
     }
 
     public static List<ValidationError> validateSie4e(List<SIE4Item> items) {
         List<ValidationError> errors = new ArrayList<>();
-        if (!checkMandatoryItems(items, MANDATORY_ITEMS_SIE4E).isEmpty()) {
-            errors.add(ValidationError.MISSING_MANDATORY_ITEMS);
+        List<SIE4ItemType> missing = checkMandatoryItems(items, MANDATORY_ITEMS_SIE4E);
+        if (!missing.isEmpty()) {
+            errors.add(new ValidationError.MissingMandatoryItems(Set.copyOf(missing)));
         }
-        if (!checkCurrentYearBalanceItems(items)) {
-            errors.add(ValidationError.MISSING_CURRENT_YEAR_ITEMS);
+        Set<SIE4ItemType> missingCurrentYear = checkCurrentYearBalanceItems(items);
+        if (!missingCurrentYear.isEmpty()) {
+            errors.add(new ValidationError.MissingCurrentYearItems(missingCurrentYear));
         }
         return errors;
     }
 
-    private static boolean checkCurrentYearBalanceItems(List<SIE4Item> items) {
-        boolean hasIb = items.stream().anyMatch(i -> i instanceof SIE4Item.Ib ib && ib.yearNumber().equals(YearNumber.CURRENT_YEAR));
-        boolean hasUb = items.stream().anyMatch(i -> i instanceof SIE4Item.Ub ub && ub.yearNumber().equals(YearNumber.CURRENT_YEAR));
-        boolean hasRes = items.stream().anyMatch(i -> i instanceof SIE4Item.Res res && res.yearNumber().equals(YearNumber.CURRENT_YEAR));
-        return hasIb && hasUb && hasRes;
+    private static Set<SIE4ItemType> checkCurrentYearBalanceItems(List<SIE4Item> items) {
+        Set<SIE4ItemType> missing = new HashSet<>();
+        if (items.stream().noneMatch(i -> i instanceof SIE4Item.Ib ib && ib.yearNumber().equals(YearNumber.CURRENT_YEAR))) {
+            missing.add(SIE4ItemType.IB);
+        }
+        if (items.stream().noneMatch(i -> i instanceof SIE4Item.Ub ub && ub.yearNumber().equals(YearNumber.CURRENT_YEAR))) {
+            missing.add(SIE4ItemType.UB);
+        }
+        if (items.stream().noneMatch(i -> i instanceof SIE4Item.Res res && res.yearNumber().equals(YearNumber.CURRENT_YEAR))) {
+            missing.add(SIE4ItemType.RES);
+        }
+        return missing;
     }
 
     private static List<SIE4ItemType> checkMandatoryItems(List<SIE4Item> items, Set<SIE4ItemType> mandatory) {

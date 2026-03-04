@@ -2,6 +2,7 @@ package se.bufferoverflow.sieport.sie4.validator;
 
 import org.junit.jupiter.api.Test;
 import se.bufferoverflow.sieport.sie4.SIE4Item;
+import se.bufferoverflow.sieport.sie4.SIE4ItemType;
 import se.bufferoverflow.sieport.sie4.YearNumber;
 
 import java.math.BigDecimal;
@@ -14,23 +15,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ValidatorTest {
 
     @Test
-    void validateSie4i_testWithMissingMandatoryItems() {
+    void validateSie4i_missingMandatoryItems_containsOffendingTypes() {
         List<SIE4Item> items = List.of(new SIE4Item.Program("TestProgram", "1.0"));
 
         List<ValidationError> result = Validator.validateSie4i(items);
 
-        assertThat(result).contains(ValidationError.MISSING_MANDATORY_ITEMS);
+        assertThat(result)
+                .filteredOn(e -> e instanceof ValidationError.MissingMandatoryItems)
+                .first()
+                .satisfies(e -> assertThat(e.offendingItems())
+                        .contains(SIE4ItemType.FLAGGA, SIE4ItemType.FNAMN, SIE4ItemType.FORMAT));
     }
 
     @Test
-    void validateSie4i_testWithForbiddenItems() {
+    void validateSie4i_forbiddenItemsPresent_containsOffendingTypes() {
         List<SIE4Item> items = List.of(
                 new SIE4Item.Fnamn("TestCompany"),
                 new SIE4Item.Bkod(12345678));
 
         List<ValidationError> result = Validator.validateSie4i(items);
 
-        assertThat(result).contains(ValidationError.FORBIDDEN_ITEMS_PRESENT);
+        assertThat(result)
+                .filteredOn(e -> e instanceof ValidationError.ForbiddenItemsPresent)
+                .first()
+                .satisfies(e -> assertThat(e.offendingItems())
+                        .containsExactly(SIE4ItemType.BKOD));
     }
 
     @Test
@@ -56,7 +65,7 @@ class ValidatorTest {
 
         List<ValidationError> result = Validator.validateSie4e(items);
 
-        assertThat(result).contains(ValidationError.MISSING_MANDATORY_ITEMS);
+        assertThat(result).anyMatch(e -> e instanceof ValidationError.MissingMandatoryItems);
     }
 
     @Test
@@ -77,7 +86,32 @@ class ValidatorTest {
 
         List<ValidationError> result = Validator.validateSie4e(items);
 
-        assertThat(result).contains(ValidationError.MISSING_CURRENT_YEAR_ITEMS);
+        assertThat(result).anyMatch(e -> e instanceof ValidationError.MissingCurrentYearItems);
+    }
+
+    @Test
+    void validateSie4e_missingCurrentYearItems_containsOffendingTypes() {
+        List<SIE4Item> items = List.of(
+                SIE4Item.Flagga.UNSET,
+                SIE4Item.Format.pc8(),
+                new SIE4Item.Sietyp(4),
+                new SIE4Item.Program("TestProgram", "1.0"),
+                new SIE4Item.Gen(LocalDate.now(), Optional.empty()),
+                new SIE4Item.Fnamn("TestCompany"),
+                new SIE4Item.Rar(YearNumber.CURRENT_YEAR, LocalDate.MIN, LocalDate.MAX),
+                new SIE4Item.Konto(1930, "konto"),
+                new SIE4Item.Ib(YearNumber.PREV_YEAR, 1930, BigDecimal.ZERO, Optional.empty()),
+                new SIE4Item.Ub(YearNumber.CURRENT_YEAR, 1930, BigDecimal.ZERO, Optional.empty()),
+                new SIE4Item.Res(YearNumber.PREV_YEAR, 1930, BigDecimal.ZERO, Optional.empty())
+        );
+
+        List<ValidationError> result = Validator.validateSie4e(items);
+
+        assertThat(result)
+                .filteredOn(e -> e instanceof ValidationError.MissingCurrentYearItems)
+                .first()
+                .satisfies(e -> assertThat(e.offendingItems())
+                        .containsExactlyInAnyOrder(SIE4ItemType.IB, SIE4ItemType.RES));
     }
 
     @Test

@@ -3,7 +3,7 @@ package se.bufferoverflow.sieport.sie4;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import se.bufferoverflow.sieport.sie4.validator.ValidationError;
+import se.bufferoverflow.sieport.sie4.validator.ValidationError.MissingMandatoryItems;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -67,7 +67,7 @@ class SIE4Test {
         List<SIE4Item> items = List.of(SIE4Item.Flagga.SET);
         assertThatThrownBy(() -> SIE4.write(tempDir.resolve(UUID.randomUUID() + ".se"), items))
                 .isInstanceOf(SIE4Exception.class)
-                .hasMessageContaining(ValidationError.MISSING_MANDATORY_ITEMS.toString());
+                .hasMessageContaining(MissingMandatoryItems.class.getSimpleName());
     }
 
     @Test

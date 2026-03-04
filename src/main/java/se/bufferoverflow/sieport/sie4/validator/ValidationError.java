@@ -1,7 +1,13 @@
 package se.bufferoverflow.sieport.sie4.validator;
 
-public enum ValidationError {
-    MISSING_MANDATORY_ITEMS,
-    MISSING_CURRENT_YEAR_ITEMS,
-    FORBIDDEN_ITEMS_PRESENT
+import se.bufferoverflow.sieport.sie4.SIE4ItemType;
+
+import java.util.Set;
+
+public sealed interface ValidationError {
+    Set<SIE4ItemType> offendingItems();
+
+    record MissingMandatoryItems(Set<SIE4ItemType> offendingItems) implements ValidationError {}
+    record MissingCurrentYearItems(Set<SIE4ItemType> offendingItems) implements ValidationError {}
+    record ForbiddenItemsPresent(Set<SIE4ItemType> offendingItems) implements ValidationError {}
 }
