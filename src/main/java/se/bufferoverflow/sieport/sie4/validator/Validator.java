@@ -2,6 +2,7 @@ package se.bufferoverflow.sieport.sie4.validator;
 
 import se.bufferoverflow.sieport.sie4.SIE4Item;
 import se.bufferoverflow.sieport.sie4.SIE4ItemType;
+import se.bufferoverflow.sieport.sie4.YearNumber;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +65,17 @@ public class Validator {
         if (!checkMandatoryItems(items, MANDATORY_ITEMS_SIE4E).isEmpty()) {
             errors.add(ValidationError.MISSING_MANDATORY_ITEMS);
         }
+        if (!checkCurrentYearBalanceItems(items)) {
+            errors.add(ValidationError.MISSING_CURRENT_YEAR_ITEMS);
+        }
         return errors;
+    }
+
+    private static boolean checkCurrentYearBalanceItems(List<SIE4Item> items) {
+        boolean hasIb = items.stream().anyMatch(i -> i instanceof SIE4Item.Ib ib && ib.yearNumber().equals(YearNumber.CURRENT_YEAR));
+        boolean hasUb = items.stream().anyMatch(i -> i instanceof SIE4Item.Ub ub && ub.yearNumber().equals(YearNumber.CURRENT_YEAR));
+        boolean hasRes = items.stream().anyMatch(i -> i instanceof SIE4Item.Res res && res.yearNumber().equals(YearNumber.CURRENT_YEAR));
+        return hasIb && hasUb && hasRes;
     }
 
     private static List<SIE4ItemType> checkMandatoryItems(List<SIE4Item> items, Set<SIE4ItemType> mandatory) {

@@ -60,6 +60,27 @@ class ValidatorTest {
     }
 
     @Test
+    void validateSie4e_balanceItemsOnlyForPreviousYear_shouldFail() {
+        List<SIE4Item> items = List.of(
+                SIE4Item.Flagga.UNSET,
+                SIE4Item.Format.pc8(),
+                new SIE4Item.Sietyp(4),
+                new SIE4Item.Program("TestProgram", "1.0"),
+                new SIE4Item.Gen(LocalDate.now(), Optional.empty()),
+                new SIE4Item.Fnamn("TestCompany"),
+                new SIE4Item.Rar(YearNumber.CURRENT_YEAR, LocalDate.MIN, LocalDate.MAX),
+                new SIE4Item.Konto(1930, "konto"),
+                new SIE4Item.Ib(YearNumber.PREV_YEAR, 1930, BigDecimal.ZERO, Optional.empty()),
+                new SIE4Item.Ub(YearNumber.PREV_YEAR, 1930, BigDecimal.ZERO, Optional.empty()),
+                new SIE4Item.Res(YearNumber.PREV_YEAR, 1930, BigDecimal.ZERO, Optional.empty())
+        );
+
+        List<ValidationError> result = Validator.validateSie4e(items);
+
+        assertThat(result).contains(ValidationError.MISSING_CURRENT_YEAR_ITEMS);
+    }
+
+    @Test
     void validateSie4e_testWithNoErrors() {
         List<SIE4Item> items = List.of(
                 SIE4Item.Flagga.UNSET,
