@@ -38,5 +38,6 @@ public enum SIE4ItemType {
     VER,
     TRANS,
     RTRANS,
-    BTRANS;
+    BTRANS,
+    KSUMMA;
 }

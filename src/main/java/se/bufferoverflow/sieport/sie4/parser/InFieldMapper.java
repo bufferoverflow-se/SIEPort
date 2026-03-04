@@ -613,6 +613,10 @@ public class InFieldMapper {
             LOG.warning("Skipping unsupported SIE4 label: " + split[0]);
             return null;
         }
+        if (label == SIE4ItemType.KSUMMA) {
+            LOG.info("Skipping #KSUMMA: checksum verification is not supported");
+            return null;
+        }
         if (split.length < 2) {
             throw new SIE4Exception("Label " + split[0] + " has no fields");
         }
