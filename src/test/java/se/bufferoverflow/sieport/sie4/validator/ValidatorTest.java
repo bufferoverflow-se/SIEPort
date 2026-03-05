@@ -115,6 +115,43 @@ class ValidatorTest {
     }
 
     @Test
+    void validateSie4i_flaggaSet_shouldFail() {
+        List<SIE4Item> items = List.of(
+                SIE4Item.Flagga.SET,
+                SIE4Item.Format.pc8(),
+                new SIE4Item.Sietyp(4),
+                new SIE4Item.Program("TestProgram", "1.0"),
+                new SIE4Item.Gen(LocalDate.now(), Optional.empty()),
+                new SIE4Item.Fnamn("TestCompany")
+        );
+
+        List<ValidationError> result = Validator.validateSie4i(items);
+
+        assertThat(result).anyMatch(e -> e instanceof ValidationError.InvalidFlaggaValue);
+    }
+
+    @Test
+    void validateSie4e_flaggaSet_shouldFail() {
+        List<SIE4Item> items = List.of(
+                SIE4Item.Flagga.SET,
+                SIE4Item.Format.pc8(),
+                new SIE4Item.Sietyp(4),
+                new SIE4Item.Program("TestProgram", "1.0"),
+                new SIE4Item.Gen(LocalDate.now(), Optional.empty()),
+                new SIE4Item.Fnamn("TestCompany"),
+                new SIE4Item.Rar(YearNumber.CURRENT_YEAR, LocalDate.MIN, LocalDate.MAX),
+                new SIE4Item.Konto(1930, "konto"),
+                new SIE4Item.Ib(YearNumber.CURRENT_YEAR, 1930, BigDecimal.ZERO, Optional.empty()),
+                new SIE4Item.Ub(YearNumber.CURRENT_YEAR, 1930, BigDecimal.ZERO, Optional.empty()),
+                new SIE4Item.Res(YearNumber.CURRENT_YEAR, 1930, BigDecimal.ZERO, Optional.empty())
+        );
+
+        List<ValidationError> result = Validator.validateSie4e(items);
+
+        assertThat(result).anyMatch(e -> e instanceof ValidationError.InvalidFlaggaValue);
+    }
+
+    @Test
     void validateSie4e_testWithNoErrors() {
         List<SIE4Item> items = List.of(
                 SIE4Item.Flagga.UNSET,

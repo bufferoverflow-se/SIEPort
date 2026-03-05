@@ -60,6 +60,9 @@ public class Validator {
         if (!forbidden.isEmpty()) {
             errors.add(new ValidationError.ForbiddenItemsPresent(Set.copyOf(forbidden)));
         }
+        if (hasFlaggaSet(items)) {
+            errors.add(new ValidationError.InvalidFlaggaValue());
+        }
         return errors;
     }
 
@@ -73,7 +76,14 @@ public class Validator {
         if (!missingCurrentYear.isEmpty()) {
             errors.add(new ValidationError.MissingCurrentYearItems(missingCurrentYear));
         }
+        if (hasFlaggaSet(items)) {
+            errors.add(new ValidationError.InvalidFlaggaValue());
+        }
         return errors;
+    }
+
+    private static boolean hasFlaggaSet(List<SIE4Item> items) {
+        return items.stream().anyMatch(i -> i instanceof SIE4Item.Flagga(int flag) && flag == 1);
     }
 
     private static Set<SIE4ItemType> checkCurrentYearBalanceItems(List<SIE4Item> items) {

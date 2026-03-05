@@ -10,4 +10,10 @@ public sealed interface ValidationError {
     record MissingMandatoryItems(Set<SIE4ItemType> offendingItems) implements ValidationError {}
     record MissingCurrentYearItems(Set<SIE4ItemType> offendingItems) implements ValidationError {}
     record ForbiddenItemsPresent(Set<SIE4ItemType> offendingItems) implements ValidationError {}
+    record InvalidFlaggaValue() implements ValidationError {
+        @Override
+        public Set<SIE4ItemType> offendingItems() {
+            return Set.of(SIE4ItemType.FLAGGA);
+        }
+    }
 }

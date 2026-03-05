@@ -61,7 +61,7 @@ class SIE4DocumentTest {
             new FinancialYear(LocalDate.of(2020,1,1), LocalDate.of(2020, 12, 31))
         );
 
-        assertEquals(SET.flag(), result.flag());
+        assertEquals(UNSET.flag(), result.flag());
         assertEquals("Visma Administration 2000 med Visma Integration, 2022.2", result.programWithVersion());
         assertEquals(LocalDate.of(2023, 8, 22), result.generatedAt());
         assertEquals(4, result.sieType());

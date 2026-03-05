@@ -47,7 +47,7 @@ class SIE4Test {
         assertThat(outputFile)
                 .exists()
                 .content()
-                .startsWith("#FLAGGA 1");
+                .startsWith("#FLAGGA 0");
     }
 
     @Test
