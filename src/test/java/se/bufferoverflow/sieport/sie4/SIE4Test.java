@@ -32,7 +32,7 @@ class SIE4Test {
 
     @Test
     void readSample() {
-        List<SIE4Item> items = SIE4.parse(sie4Sample).items();
+        List<SIE4Item> items = SIE4.parse(sie4Sample).getItems();
 
         assertThat(items).hasSize(2160);
         assertThat(items.stream()).filteredOn(it -> it instanceof SIE4Item.Ver).hasSize(295);
@@ -40,9 +40,9 @@ class SIE4Test {
 
     @Test
     void writeFile() {
-        List<SIE4Item> items = SIE4.parse(sie4SampleFile).items();
+        SIE4Document doc = SIE4.parse(sie4SampleFile);
         Path outputFile = tempDir.resolve(UUID.randomUUID() + ".se");
-        SIE4.write(outputFile, items);
+        SIE4.write(outputFile, doc);
 
         assertThat(outputFile)
                 .exists()
@@ -52,13 +52,13 @@ class SIE4Test {
 
     @Test
     void readAndWriteSample() {
-        List<SIE4Item> parsedItems = SIE4.parse(sie4SampleFile).items();
+        List<SIE4Item> parsedItems = SIE4.parse(sie4SampleFile).getItems();
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         SIE4.write(baos, parsedItems);
 
         // Write sorts items by SIE4ItemType ordinal; re-parse and compare item sets
-        List<SIE4Item> reparsedItems = SIE4.parse(new ByteArrayInputStream(baos.toByteArray())).items();
+        List<SIE4Item> reparsedItems = SIE4.parse(new ByteArrayInputStream(baos.toByteArray())).getItems();
         assertThat(reparsedItems).containsExactlyInAnyOrderElementsOf(parsedItems);
     }
 
@@ -75,7 +75,7 @@ class SIE4Test {
         String input = "#FLAGGA 0\n#KSUMMA\n#FNAMN TestCompany\n#UNKNOWN some data\n";
         InputStream stream = new ByteArrayInputStream(input.getBytes(SIE4.SIE4_CHARSET));
 
-        List<SIE4Item> items = SIE4.parse(stream).items();
+        List<SIE4Item> items = SIE4.parse(stream).getItems();
 
         assertThat(items).hasSize(2);
         assertThat(items.get(0)).isEqualTo(SIE4Item.Flagga.UNSET);
@@ -87,7 +87,7 @@ class SIE4Test {
         String input = "#FLAGGA 0\n#TRANS 1930 {} 100.00\n#RTRANS 1920 {} -100.00\n#FNAMN TestCompany\n";
         InputStream stream = new ByteArrayInputStream(input.getBytes(SIE4.SIE4_CHARSET));
 
-        List<SIE4Item> items = SIE4.parse(stream).items();
+        List<SIE4Item> items = SIE4.parse(stream).getItems();
 
         assertThat(items).hasSize(2);
         assertThat(items).noneMatch(item -> item instanceof SIE4Item.Transaction);

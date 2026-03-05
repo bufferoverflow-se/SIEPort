@@ -3,87 +3,114 @@ package se.bufferoverflow.sieport.sie4;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
  * Class representing a SIE4 document which is used for transferring
  * accounting data. This class encapsulates various elements of the
  * document such as accounts, transactions, and other relevant metadata.
+ * <p>
+ * Use {@link #newDocument()} to start building a new document with standard defaults applied
+ * ({@code FLAGGA 0}, {@code FORMAT PC8}, {@code GEN} set to today, {@code SIETYP 4}).
+ * Use {@link #builder()} for a clean-slate builder with no defaults.
  */
 public class SIE4Document {
 
-    private SIE4Item.Flagga flagga;
-    private SIE4Item.Program program;
-    private SIE4Item.Format format;
-    private SIE4Item.Gen gen;
-    private SIE4Item.Sietyp sietyp;
-    private SIE4Item.Prosa prosa;
-    private SIE4Item.Ftyp ftyp;
-    private SIE4Item.Fnr fnr;
-    private SIE4Item.OrgNr orgnr;
-    private SIE4Item.Bkod bkod;
-    private SIE4Item.Adress adress;
-    private SIE4Item.Fnamn fnamn;
-    private List<SIE4Item.Rar> rar;
-    private SIE4Item.Taxar taxar;
-    private SIE4Item.Omfattn omfattn;
-    private SIE4Item.Kptyp kptyp;
-    private SIE4Item.Valuta valuta;
-    private List<SIE4Item.Konto> konto;
-    private List<SIE4Item.Ktyp> ktyp;
-    private List<SIE4Item.Enhet> enhet;
-    private List<SIE4Item.Sru> sru;
-    private List<SIE4Item.Dim> dim;
-    private List<SIE4Item.Underdim> underdim;
-    private List<SIE4Item.Objekt> objekt;
-    private List<SIE4Item.Ib> ib;
-    private List<SIE4Item.Ub> ub;
-    private List<SIE4Item.Oib> oib;
-    private List<SIE4Item.Oub> oub;
-    private List<SIE4Item.Res> res;
-    private List<SIE4Item.Psaldo> psaldo;
-    private List<SIE4Item.Pbudget> pbudget;
-    private List<SIE4Item.Ver> ver;
+    private final SIE4Item.Flagga flagga;
+    private final SIE4Item.Program program;
+    private final SIE4Item.Format format;
+    private final SIE4Item.Gen gen;
+    private final SIE4Item.Sietyp sietyp;
+    private final SIE4Item.Prosa prosa;
+    private final SIE4Item.Ftyp ftyp;
+    private final SIE4Item.Fnr fnr;
+    private final SIE4Item.OrgNr orgnr;
+    private final SIE4Item.Bkod bkod;
+    private final SIE4Item.Adress adress;
+    private final SIE4Item.Fnamn fnamn;
+    private final List<SIE4Item.Rar> rar;
+    private final SIE4Item.Taxar taxar;
+    private final SIE4Item.Omfattn omfattn;
+    private final SIE4Item.Kptyp kptyp;
+    private final SIE4Item.Valuta valuta;
+    private final List<SIE4Item.Konto> konto;
+    private final List<SIE4Item.Ktyp> ktyp;
+    private final List<SIE4Item.Enhet> enhet;
+    private final List<SIE4Item.Sru> sru;
+    private final List<SIE4Item.Dim> dim;
+    private final List<SIE4Item.Underdim> underdim;
+    private final List<SIE4Item.Objekt> objekt;
+    private final List<SIE4Item.Ib> ib;
+    private final List<SIE4Item.Ub> ub;
+    private final List<SIE4Item.Oib> oib;
+    private final List<SIE4Item.Oub> oub;
+    private final List<SIE4Item.Res> res;
+    private final List<SIE4Item.Psaldo> psaldo;
+    private final List<SIE4Item.Pbudget> pbudget;
+    private final List<SIE4Item.Ver> ver;
 
-    public SIE4Document(List<SIE4Item> items) {
-        this(new SIE4Items(items));
+    /**
+     * Constructs a {@code SIE4Document} from a flat list of parsed items. No defaults are applied;
+     * the document reflects the source items exactly. For internal use by the parser.
+     */
+    static SIE4Document from(List<SIE4Item> items) {
+        return new SIE4Document(
+                findItem(items, SIE4Item.Flagga.class).orElse(null),
+                findItem(items, SIE4Item.Program.class).orElse(null),
+                findItem(items, SIE4Item.Format.class).orElse(null),
+                findItem(items, SIE4Item.Gen.class).orElse(null),
+                findItem(items, SIE4Item.Sietyp.class).orElse(null),
+                findItem(items, SIE4Item.Prosa.class).orElse(null),
+                findItem(items, SIE4Item.Ftyp.class).orElse(null),
+                findItem(items, SIE4Item.Fnr.class).orElse(null),
+                findItem(items, SIE4Item.OrgNr.class).orElse(null),
+                findItem(items, SIE4Item.Bkod.class).orElse(null),
+                findItem(items, SIE4Item.Adress.class).orElse(null),
+                findItem(items, SIE4Item.Fnamn.class).orElse(null),
+                findItems(items, SIE4Item.Rar.class),
+                findItem(items, SIE4Item.Taxar.class).orElse(null),
+                findItem(items, SIE4Item.Omfattn.class).orElse(null),
+                findItem(items, SIE4Item.Kptyp.class).orElse(null),
+                findItem(items, SIE4Item.Valuta.class).orElse(null),
+                findItems(items, SIE4Item.Konto.class),
+                findItems(items, SIE4Item.Ktyp.class),
+                findItems(items, SIE4Item.Enhet.class),
+                findItems(items, SIE4Item.Sru.class),
+                findItems(items, SIE4Item.Dim.class),
+                findItems(items, SIE4Item.Underdim.class),
+                findItems(items, SIE4Item.Objekt.class),
+                findItems(items, SIE4Item.Ib.class),
+                findItems(items, SIE4Item.Ub.class),
+                findItems(items, SIE4Item.Oib.class),
+                findItems(items, SIE4Item.Oub.class),
+                findItems(items, SIE4Item.Res.class),
+                findItems(items, SIE4Item.Psaldo.class),
+                findItems(items, SIE4Item.Pbudget.class),
+                findItems(items, SIE4Item.Ver.class)
+        );
     }
 
-    public SIE4Document(SIE4Items items) {
-        this(
-            items.getItem(SIE4Item.Flagga.class).orElse(null),
-            items.getItem(SIE4Item.Program.class).orElse(null),
-            items.getItem(SIE4Item.Format.class).orElse(null),
-            items.getItem(SIE4Item.Gen.class).orElse(null),
-            items.getItem(SIE4Item.Sietyp.class).orElse(null),
-            items.getItem(SIE4Item.Prosa.class).orElse(null),
-            items.getItem(SIE4Item.Ftyp.class).orElse(null),
-            items.getItem(SIE4Item.Fnr.class).orElse(null),
-            items.getItem(SIE4Item.OrgNr.class).orElse(null),
-            items.getItem(SIE4Item.Bkod.class).orElse(null),
-            items.getItem(SIE4Item.Adress.class).orElse(null),
-            items.getItem(SIE4Item.Fnamn.class).orElse(null),
-            items.getItems(SIE4Item.Rar.class),
-            items.getItem(SIE4Item.Taxar.class).orElse(null),
-            items.getItem(SIE4Item.Omfattn.class).orElse(null),
-            items.getItem(SIE4Item.Kptyp.class).orElse(null),
-            items.getItem(SIE4Item.Valuta.class).orElse(null),
-            items.getItems(SIE4Item.Konto.class),
-            items.getItems(SIE4Item.Ktyp.class),
-            items.getItems(SIE4Item.Enhet.class),
-            items.getItems(SIE4Item.Sru.class),
-            items.getItems(SIE4Item.Dim.class),
-            items.getItems(SIE4Item.Underdim.class),
-            items.getItems(SIE4Item.Objekt.class),
-            items.getItems(SIE4Item.Ib.class),
-            items.getItems(SIE4Item.Ub.class),
-            items.getItems(SIE4Item.Oib.class),
-            items.getItems(SIE4Item.Oub.class),
-            items.getItems(SIE4Item.Res.class),
-            items.getItems(SIE4Item.Psaldo.class),
-            items.getItems(SIE4Item.Pbudget.class),
-            items.getItems(SIE4Item.Ver.class)
-        );
+    /**
+     * Retrieves all items of the specified type.
+     *
+     * @param clazz the type of SIE4Item to be retrieved
+     * @return items requested, or empty list if none found
+     */
+    public <T extends SIE4Item> List<T> getItems(Class<T> clazz) {
+        return findItems(getItems(), clazz);
+    }
+
+    /**
+     * Retrieves an item of the specified type.
+     * Will throw if more than one item of the specified type exists.
+     *
+     * @param clazz the type of SIE4Item to be retrieved
+     * @return the item requested, or {@link Optional#empty()} if not found
+     * @throws SIE4Exception if there is more than one item of the specified class type
+     */
+    public <T extends SIE4Item> Optional<T> getItem(Class<T> clazz) {
+        return findItem(getItems(), clazz);
     }
 
     /**
@@ -159,263 +186,153 @@ public class SIE4Document {
         return mapper.apply(item);
     }
 
-    public SIE4Item.Flagga getFlagga() {
-        return flagga;
+    private static <T extends SIE4Item> Optional<T> findItem(List<SIE4Item> items, Class<T> clazz) {
+        List<T> found = items.stream()
+                .filter(clazz::isInstance)
+                .map(clazz::cast)
+                .toList();
+        if (found.size() > 1) {
+            throw new SIE4Exception("Expected at most one item of type: " + clazz.getName());
+        }
+        return found.stream().findFirst();
     }
 
-    public void setFlagga(SIE4Item.Flagga flagga) {
-        this.flagga = flagga;
+    private static <T extends SIE4Item> List<T> findItems(List<SIE4Item> items, Class<T> clazz) {
+        return items.stream()
+                .filter(clazz::isInstance)
+                .map(clazz::cast)
+                .toList();
+    }
+
+    public SIE4Item.Flagga getFlagga() {
+        return flagga;
     }
 
     public SIE4Item.Program getProgram() {
         return program;
     }
 
-    public void setProgram(SIE4Item.Program program) {
-        this.program = program;
-    }
-
     public SIE4Item.Format getFormat() {
         return format;
-    }
-
-    public void setFormat(SIE4Item.Format format) {
-        this.format = format;
     }
 
     public SIE4Item.Gen getGen() {
         return gen;
     }
 
-    public void setGen(SIE4Item.Gen gen) {
-        this.gen = gen;
-    }
-
     public SIE4Item.Sietyp getSietyp() {
         return sietyp;
-    }
-
-    public void setSietyp(SIE4Item.Sietyp sietyp) {
-        this.sietyp = sietyp;
     }
 
     public SIE4Item.Prosa getProsa() {
         return prosa;
     }
 
-    public void setProsa(SIE4Item.Prosa prosa) {
-        this.prosa = prosa;
-    }
-
     public SIE4Item.Ftyp getFtyp() {
         return ftyp;
-    }
-
-    public void setFtyp(SIE4Item.Ftyp ftyp) {
-        this.ftyp = ftyp;
     }
 
     public SIE4Item.Fnr getFnr() {
         return fnr;
     }
 
-    public void setFnr(SIE4Item.Fnr fnr) {
-        this.fnr = fnr;
-    }
-
     public SIE4Item.OrgNr getOrgnr() {
         return orgnr;
-    }
-
-    public void setOrgnr(SIE4Item.OrgNr orgnr) {
-        this.orgnr = orgnr;
     }
 
     public SIE4Item.Bkod getBkod() {
         return bkod;
     }
 
-    public void setBkod(SIE4Item.Bkod bkod) {
-        this.bkod = bkod;
-    }
-
     public SIE4Item.Adress getAdress() {
         return adress;
-    }
-
-    public void setAdress(SIE4Item.Adress adress) {
-        this.adress = adress;
     }
 
     public SIE4Item.Fnamn getFnamn() {
         return fnamn;
     }
 
-    public void setFnamn(SIE4Item.Fnamn fnamn) {
-        this.fnamn = fnamn;
-    }
-
     public List<SIE4Item.Rar> getRar() {
         return rar;
-    }
-
-    public void setRar(List<SIE4Item.Rar> rar) {
-        this.rar = rar;
     }
 
     public SIE4Item.Taxar getTaxar() {
         return taxar;
     }
 
-    public void setTaxar(SIE4Item.Taxar taxar) {
-        this.taxar = taxar;
-    }
-
     public SIE4Item.Omfattn getOmfattn() {
         return omfattn;
-    }
-
-    public void setOmfattn(SIE4Item.Omfattn omfattn) {
-        this.omfattn = omfattn;
     }
 
     public SIE4Item.Kptyp getKptyp() {
         return kptyp;
     }
 
-    public void setKptyp(SIE4Item.Kptyp kptyp) {
-        this.kptyp = kptyp;
-    }
-
     public SIE4Item.Valuta getValuta() {
         return valuta;
-    }
-
-    public void setValuta(SIE4Item.Valuta valuta) {
-        this.valuta = valuta;
     }
 
     public List<SIE4Item.Konto> getKonto() {
         return konto;
     }
 
-    public void setKonto(List<SIE4Item.Konto> konto) {
-        this.konto = konto;
-    }
-
     public List<SIE4Item.Ktyp> getKtyp() {
         return ktyp;
-    }
-
-    public void setKtyp(List<SIE4Item.Ktyp> ktyp) {
-        this.ktyp = ktyp;
     }
 
     public List<SIE4Item.Enhet> getEnhet() {
         return enhet;
     }
 
-    public void setEnhet(List<SIE4Item.Enhet> enhet) {
-        this.enhet = enhet;
-    }
-
     public List<SIE4Item.Sru> getSru() {
         return sru;
-    }
-
-    public void setSru(List<SIE4Item.Sru> sru) {
-        this.sru = sru;
     }
 
     public List<SIE4Item.Dim> getDim() {
         return dim;
     }
 
-    public void setDim(List<SIE4Item.Dim> dim) {
-        this.dim = dim;
-    }
-
     public List<SIE4Item.Underdim> getUnderdim() {
         return underdim;
-    }
-
-    public void setUnderdim(List<SIE4Item.Underdim> underdim) {
-        this.underdim = underdim;
     }
 
     public List<SIE4Item.Objekt> getObjekt() {
         return objekt;
     }
 
-    public void setObjekt(List<SIE4Item.Objekt> objekt) {
-        this.objekt = objekt;
-    }
-
     public List<SIE4Item.Ib> getIb() {
         return ib;
-    }
-
-    public void setIb(List<SIE4Item.Ib> ib) {
-        this.ib = ib;
     }
 
     public List<SIE4Item.Ub> getUb() {
         return ub;
     }
 
-    public void setUb(List<SIE4Item.Ub> ub) {
-        this.ub = ub;
-    }
-
     public List<SIE4Item.Oib> getOib() {
         return oib;
-    }
-
-    public void setOib(List<SIE4Item.Oib> oib) {
-        this.oib = oib;
     }
 
     public List<SIE4Item.Oub> getOub() {
         return oub;
     }
 
-    public void setOub(List<SIE4Item.Oub> oub) {
-        this.oub = oub;
-    }
-
     public List<SIE4Item.Res> getRes() {
         return res;
-    }
-
-    public void setRes(List<SIE4Item.Res> res) {
-        this.res = res;
     }
 
     public List<SIE4Item.Psaldo> getPsaldo() {
         return psaldo;
     }
 
-    public void setPsaldo(List<SIE4Item.Psaldo> psaldo) {
-        this.psaldo = psaldo;
-    }
-
     public List<SIE4Item.Pbudget> getPbudget() {
         return pbudget;
-    }
-
-    public void setPbudget(List<SIE4Item.Pbudget> pbudget) {
-        this.pbudget = pbudget;
     }
 
     public List<SIE4Item.Ver> getVer() {
         return ver;
     }
 
-    public void setVer(List<SIE4Item.Ver> ver) {
-        this.ver = ver;
-    }
-
-    @SuppressWarnings({"java:S107", "java:S3776"})
+    @SuppressWarnings("java:S107")
     private SIE4Document(SIE4Item.Flagga flagga,
                          SIE4Item.Program program,
                          SIE4Item.Format format,
@@ -448,11 +365,11 @@ public class SIE4Document {
                          List<SIE4Item.Psaldo> psaldo,
                          List<SIE4Item.Pbudget> pbudget,
                          List<SIE4Item.Ver> ver) {
-        this.flagga = flagga == null ? SIE4Item.Flagga.UNSET : flagga;
+        this.flagga = flagga;
         this.program = program;
-        this.format = format == null ? SIE4Item.Format.pc8() : format;
-        this.gen = gen == null ? SIE4Item.Gen.now() : gen;
-        this.sietyp = sietyp == null ? SIE4Item.Sietyp.SIE_4 : sietyp;
+        this.format = format;
+        this.gen = gen;
+        this.sietyp = sietyp;
         this.prosa = prosa;
         this.ftyp = ftyp;
         this.fnr = fnr;
@@ -460,28 +377,44 @@ public class SIE4Document {
         this.bkod = bkod;
         this.adress = adress;
         this.fnamn = fnamn;
-        this.rar = rar == null ? new ArrayList<>() : rar;
+        this.rar = rar == null ? List.of() : List.copyOf(rar);
         this.taxar = taxar;
         this.omfattn = omfattn;
         this.kptyp = kptyp;
         this.valuta = valuta;
-        this.konto = konto == null ? new ArrayList<>() : konto;
-        this.ktyp = ktyp == null ? new ArrayList<>() : ktyp;
-        this.enhet = enhet == null ? new ArrayList<>() : enhet;
-        this.sru = sru == null ? new ArrayList<>() : sru;
-        this.dim = dim == null ? new ArrayList<>() : dim;
-        this.underdim = underdim == null ? new ArrayList<>() : underdim;
-        this.objekt = objekt == null ? new ArrayList<>() : objekt;
-        this.ib = ib == null ? new ArrayList<>() : ib;
-        this.ub = ub == null ? new ArrayList<>() : ub;
-        this.oib = oib == null ? new ArrayList<>() : oib;
-        this.oub = oub == null ? new ArrayList<>() : oub;
-        this.res = res == null ? new ArrayList<>() : res;
-        this.psaldo = psaldo == null ? new ArrayList<>() : psaldo;
-        this.pbudget = pbudget == null ? new ArrayList<>() : pbudget;
-        this.ver = ver == null ? new ArrayList<>() : ver;
+        this.konto = konto == null ? List.of() : List.copyOf(konto);
+        this.ktyp = ktyp == null ? List.of() : List.copyOf(ktyp);
+        this.enhet = enhet == null ? List.of() : List.copyOf(enhet);
+        this.sru = sru == null ? List.of() : List.copyOf(sru);
+        this.dim = dim == null ? List.of() : List.copyOf(dim);
+        this.underdim = underdim == null ? List.of() : List.copyOf(underdim);
+        this.objekt = objekt == null ? List.of() : List.copyOf(objekt);
+        this.ib = ib == null ? List.of() : List.copyOf(ib);
+        this.ub = ub == null ? List.of() : List.copyOf(ub);
+        this.oib = oib == null ? List.of() : List.copyOf(oib);
+        this.oub = oub == null ? List.of() : List.copyOf(oub);
+        this.res = res == null ? List.of() : List.copyOf(res);
+        this.psaldo = psaldo == null ? List.of() : List.copyOf(psaldo);
+        this.pbudget = pbudget == null ? List.of() : List.copyOf(pbudget);
+        this.ver = ver == null ? List.of() : List.copyOf(ver);
     }
 
+    /**
+     * Returns a new {@link Builder} pre-populated with standard defaults for a SIE4 export document:
+     * {@code FLAGGA 0}, {@code FORMAT PC8}, {@code GEN} set to today, {@code SIETYP 4}.
+     * This is the recommended starting point for creating new documents.
+     */
+    public static Builder newDocument() {
+        return builder()
+                .flagga(SIE4Item.Flagga.UNSET)
+                .format(SIE4Item.Format.pc8())
+                .gen(SIE4Item.Gen.now())
+                .sietyp(SIE4Item.Sietyp.SIE_4);
+    }
+
+    /**
+     * Returns an empty {@link Builder} with no defaults set.
+     */
     public static Builder builder() {
         return new Builder();
     }

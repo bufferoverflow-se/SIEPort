@@ -32,11 +32,11 @@ public class SIE4 {
     private SIE4() {
     }
 
-    public static SIE4Items parse(Path path) {
+    public static SIE4Document parse(Path path) {
         return parse(path.toFile());
     }
 
-    public static SIE4Items parse(File file) {
+    public static SIE4Document parse(File file) {
         try (var is = new FileInputStream(file)) {
             return parse(is);
         } catch (IOException e) {
@@ -44,7 +44,7 @@ public class SIE4 {
         }
     }
 
-    public static SIE4Items parse(InputStream inputStream) {
+    public static SIE4Document parse(InputStream inputStream) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, SIE4_CHARSET));
 
         try {
@@ -74,7 +74,7 @@ public class SIE4 {
                 }
             }
 
-            return new SIE4Items(result);
+            return SIE4Document.from(result);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -90,6 +90,18 @@ public class SIE4 {
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
+    }
+
+    public static void write(Path destination, SIE4Document doc, WriteOptions... options) {
+        write(destination, doc.getItems(), options);
+    }
+
+    public static void write(File file, SIE4Document doc, WriteOptions... options) {
+        write(file, doc.getItems(), options);
+    }
+
+    public static void write(OutputStream outputStream, SIE4Document doc, WriteOptions... options) {
+        write(outputStream, doc.getItems(), options);
     }
 
     public static void write(OutputStream outputStream, List<SIE4Item> items, WriteOptions... options) {
