@@ -267,8 +267,12 @@ public class OutFieldMapper {
                     item.series().ifPresentOrElse(s -> sb.append(quoted(s)), () -> sb.append("\"\""));
                     sb.append(' ').append(item.verificationNo().map(AbstractFieldWriter::quoted).orElse("\"\""));
                     sb.append(' ').append(SIE4_DATE_FORMATTER.format(item.date()));
-                    item.text().ifPresent(t -> sb.append(' ').append(quoted(t)));
-                    item.regDate().ifPresent(rd -> sb.append(' ').append(SIE4_DATE_FORMATTER.format(rd)));
+                    if (item.text().isPresent() || item.regDate().isPresent() || item.sign().isPresent()) {
+                        sb.append(' ').append(item.text().map(AbstractFieldWriter::quoted).orElse("\"\""));
+                    }
+                    if (item.regDate().isPresent() || item.sign().isPresent()) {
+                        sb.append(' ').append(item.regDate().map(SIE4_DATE_FORMATTER::format).orElse("\"\""));
+                    }
                     item.sign().ifPresent(s -> sb.append(' ').append(quoted(s)));
                     sb.append("\n{");
                     item.transactions().forEach(tx -> sb.append('\n').append(writeFields(tx)));

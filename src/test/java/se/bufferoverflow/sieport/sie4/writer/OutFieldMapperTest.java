@@ -383,6 +383,74 @@ class OutFieldMapperTest {
     }
 
     @Test
+    void testToFileString_Ver_textAbsent_regDatePresent_roundTrips() {
+        // When text is absent but regDate is present, regDate must not land in the text position
+        SIE4Item.Ver ver = new SIE4Item.Ver(
+                LocalDate.of(2021, 11, 25),
+                Optional.of("A"),
+                Optional.of("1"),
+                Optional.empty(),                        // text absent
+                Optional.of(LocalDate.of(2021, 11, 30)), // regDate present
+                Optional.empty(),
+                List.of(
+                        SIE4Item.Transaction.Trans.of(1930, new BigDecimal("-100.00")),
+                        SIE4Item.Transaction.Trans.of(1920, new BigDecimal("100.00"))
+                )
+        );
+        assertVerRoundTrips(ver);
+    }
+
+    @Test
+    void testToFileString_Ver_textPresent_regDateAbsent_signPresent_roundTrips() {
+        // When text is present and regDate is absent but sign is present, sign must not land in the regDate position
+        SIE4Item.Ver ver = new SIE4Item.Ver(
+                LocalDate.of(2021, 11, 25),
+                Optional.of("A"),
+                Optional.of("1"),
+                Optional.of("Some text"),  // text present
+                Optional.empty(),           // regDate absent
+                Optional.of("AN"),          // sign present
+                List.of(
+                        SIE4Item.Transaction.Trans.of(1930, new BigDecimal("-100.00")),
+                        SIE4Item.Transaction.Trans.of(1920, new BigDecimal("100.00"))
+                )
+        );
+        assertVerRoundTrips(ver);
+    }
+
+    @Test
+    void testToFileString_Ver_textAbsent_regDateAbsent_signPresent_roundTrips() {
+        // When both text and regDate are absent but sign is present
+        SIE4Item.Ver ver = new SIE4Item.Ver(
+                LocalDate.of(2021, 11, 25),
+                Optional.of("A"),
+                Optional.of("1"),
+                Optional.empty(), // text absent
+                Optional.empty(), // regDate absent
+                Optional.of("AN"), // sign present
+                List.of(
+                        SIE4Item.Transaction.Trans.of(1930, new BigDecimal("-100.00")),
+                        SIE4Item.Transaction.Trans.of(1920, new BigDecimal("100.00"))
+                )
+        );
+        assertVerRoundTrips(ver);
+    }
+
+    /**
+     * Simulates the SIE4 parse loop: strips whitespace and removes the { } block delimiters,
+     * then feeds the result to InFieldMapper.toModel(List) as the parser would.
+     */
+    private static void assertVerRoundTrips(SIE4Item.Ver ver) {
+        String written = OutFieldMapper.toFileString(ver);
+        List<String> verBuffer = written.lines()
+                .map(String::strip)
+                .filter(line -> !line.equals("{") && !line.equals("}"))
+                .toList();
+        SIE4Item parsed = InFieldMapper.toModel(verBuffer);
+        assertThat(parsed).isEqualTo(ver);
+    }
+
+    @Test
     void toFileString_embeddedQuote_isEscapedWithBackslash() {
         SIE4Item.Fnamn item = new SIE4Item.Fnamn("Svensson \"Bygg\" AB");
 
