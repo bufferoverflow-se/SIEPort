@@ -118,4 +118,16 @@ class SIE4Test {
 
         assertThat(output).isEqualTo("#FLAGGA 0\n");
     }
+
+    @Test
+    void parse_blankLines_shouldBeSkipped() {
+        String input = "#FLAGGA 0\n\n#FNAMN TestCompany\n\n";
+        InputStream stream = new ByteArrayInputStream(input.getBytes(SIE4.SIE4_CHARSET));
+
+        List<SIE4Item> items = SIE4.parse(stream).getItems();
+
+        assertThat(items).hasSize(2);
+        assertThat(items.get(0)).isEqualTo(SIE4Item.Flagga.UNSET);
+        assertThat(items.get(1)).isEqualTo(new SIE4Item.Fnamn("TestCompany"));
+    }
 }

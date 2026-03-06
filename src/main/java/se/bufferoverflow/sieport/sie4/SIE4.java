@@ -55,6 +55,10 @@ public class SIE4 {
             while ((line = reader.readLine()) != null) {
                 String trimmedLine = line.strip();
 
+                if (trimmedLine.isEmpty()) {
+                    continue;
+                }
+
                 if (trimmedLine.startsWith("#VER")) {
                     verBuffer.add(trimmedLine);
                 } else if (trimmedLine.startsWith("}")) {
