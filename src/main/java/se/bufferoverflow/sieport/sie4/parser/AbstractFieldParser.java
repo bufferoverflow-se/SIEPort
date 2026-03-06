@@ -61,6 +61,8 @@ abstract class AbstractFieldParser<T extends SIE4Item> {
     T parseFields(String fields) {
         try {
             return parseFields(tokenizeFields(fields), List.of());
+        } catch (SIE4Exception e) {
+            throw e;
         } catch (Exception e) {
             throw new SIE4Exception("Could not parse fields " + fields, e);
         }

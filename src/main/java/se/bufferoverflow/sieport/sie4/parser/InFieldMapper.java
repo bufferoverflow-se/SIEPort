@@ -391,8 +391,8 @@ public class InFieldMapper {
             Map.entry(SIE4ItemType.TRANS, new AbstractFieldParser<SIE4Item.Transaction.Trans>() {
                 @Override
                 protected SIE4Item.Transaction.Trans parseFields(List<String> fields, List<SIE4Item> subItems) {
-                    if (fields.size() < 2 || fields.size() > 7) {
-                        throw new SIE4Exception("Label TRANS requires between 2 and 7 fields");
+                    if (fields.size() < 3 || fields.size() > 7) {
+                        throw new SIE4Exception("Label TRANS requires between 3 and 7 fields");
                     }
 
                     int accountNo = Integer.parseInt(fields.get(0));
@@ -426,8 +426,8 @@ public class InFieldMapper {
             Map.entry(SIE4ItemType.RTRANS, new AbstractFieldParser<SIE4Item.Transaction.Rtrans>() {
                 @Override
                 protected SIE4Item.Transaction.Rtrans parseFields(List<String> fields, List<SIE4Item> subItems) {
-                    if (fields.size() < 2 || fields.size() > 7) {
-                        throw new SIE4Exception("Label RTRANS requires between 2 and 7 fields");
+                    if (fields.size() < 3 || fields.size() > 7) {
+                        throw new SIE4Exception("Label RTRANS requires between 3 and 7 fields");
                     }
 
                     int accountNo = Integer.parseInt(fields.get(0));
@@ -461,8 +461,8 @@ public class InFieldMapper {
             Map.entry(SIE4ItemType.BTRANS, new AbstractFieldParser<SIE4Item.Transaction.Btrans>() {
                 @Override
                 protected SIE4Item.Transaction.Btrans parseFields(List<String> fields, List<SIE4Item> subItems) {
-                    if (fields.size() < 2 || fields.size() > 7) {
-                        throw new SIE4Exception("Label BTRANS requires between 2 and 7 fields");
+                    if (fields.size() < 3 || fields.size() > 7) {
+                        throw new SIE4Exception("Label BTRANS requires between 3 and 7 fields");
                     }
 
                     int accountNo = Integer.parseInt(fields.get(0));

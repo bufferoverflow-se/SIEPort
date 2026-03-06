@@ -416,9 +416,6 @@ class InFieldMapperTest {
 
     @Test
     void toModel_ver_tooFewFields_shouldThrowSIE4Exception() {
-        // Guard allows size >= 1, but then unconditionally accesses fields.get(1) and fields.get(2).
-        // A VER with fewer than 3 fields (series, verno, verdate are all required) should throw
-        // SIE4Exception, not IndexOutOfBoundsException.
         List<String> oneField = List.of("#VER F", "#TRANS 1930 {} -10.00", "#TRANS 1920 {} 10.00");
         assertThatThrownBy(() -> InFieldMapper.toModel(oneField))
                 .isInstanceOf(SIE4Exception.class);
@@ -479,6 +476,27 @@ class InFieldMapperTest {
                                 ))
                 )
         );
+    }
+
+    @Test
+    void toModel_trans_missingAmount_shouldThrowDescriptiveSIE4Exception() {
+        assertThatThrownBy(() -> InFieldMapper.toModel("#TRANS 1930 {}"))
+                .isInstanceOf(SIE4Exception.class)
+                .hasMessageContaining("TRANS requires between 3 and 7 fields");
+    }
+
+    @Test
+    void toModel_rtrans_missingAmount_shouldThrowDescriptiveSIE4Exception() {
+        assertThatThrownBy(() -> InFieldMapper.toModel("#RTRANS 1930 {}"))
+                .isInstanceOf(SIE4Exception.class)
+                .hasMessageContaining("RTRANS requires between 3 and 7 fields");
+    }
+
+    @Test
+    void toModel_btrans_missingAmount_shouldThrowDescriptiveSIE4Exception() {
+        assertThatThrownBy(() -> InFieldMapper.toModel("#BTRANS 1930 {}"))
+                .isInstanceOf(SIE4Exception.class)
+                .hasMessageContaining("BTRANS requires between 3 and 7 fields");
     }
 
 }
