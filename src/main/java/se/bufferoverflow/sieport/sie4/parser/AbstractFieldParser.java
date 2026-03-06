@@ -22,8 +22,8 @@ abstract class AbstractFieldParser<T extends SIE4Item> {
 
         while (m.find()) {
             if (m.group(1) != null) {
-                // field is quoted, remove backslashes preceding quotes
-                tokens.add(m.group(1).replace("\\\"", "\""));
+                // field is quoted, unescape \" and \\
+                tokens.add(m.group(1).replace("\\\"", "\"").replace("\\\\", "\\"));
             } else if (m.group(2) != null) {
                 // field is an object surrounded with braces
                 tokens.add(m.group(2));

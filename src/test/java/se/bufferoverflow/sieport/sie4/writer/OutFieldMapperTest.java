@@ -460,4 +460,22 @@ class OutFieldMapperTest {
         // Verify round-trip
         assertThat(InFieldMapper.toModel(result)).isEqualTo(item);
     }
+
+    @Test
+    void toFileString_backslashFollowedByQuote_roundTrips() {
+        SIE4Item.Fnamn item = new SIE4Item.Fnamn("A\\\"B");
+
+        String result = OutFieldMapper.toFileString(item);
+
+        assertThat(InFieldMapper.toModel(result)).isEqualTo(item);
+    }
+
+    @Test
+    void toFileString_backslash_roundTrips() {
+        SIE4Item.Fnamn item = new SIE4Item.Fnamn("A\\B");
+
+        String result = OutFieldMapper.toFileString(item);
+
+        assertThat(InFieldMapper.toModel(result)).isEqualTo(item);
+    }
 }

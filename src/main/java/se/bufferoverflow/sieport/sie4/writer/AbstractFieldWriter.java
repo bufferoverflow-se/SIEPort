@@ -5,8 +5,8 @@ import se.bufferoverflow.sieport.sie4.SIE4Item;
 
 abstract class AbstractFieldWriter<T extends SIE4Item> {
     static String quoted(String s) {
-        String escaped = s.replace("\"", "\\\"");
-        if (s.indexOf(' ') > -1 || s.indexOf('"') > -1) {
+        String escaped = s.replace("\\", "\\\\").replace("\"", "\\\"");
+        if (s.indexOf(' ') > -1 || s.indexOf('"') > -1 || s.indexOf('\\') > -1) {
             return "\"" + escaped + "\"";
         }
         return escaped;
