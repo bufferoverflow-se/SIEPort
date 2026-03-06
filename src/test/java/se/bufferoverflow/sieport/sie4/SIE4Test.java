@@ -120,6 +120,17 @@ class SIE4Test {
     }
 
     @Test
+    void parse_unclosedVerBlock_shouldThrow() {
+        // A VER block without a closing } must not silently drop the voucher
+        String input = "#FLAGGA 0\n#VER A 1 20211125\n{\n   #TRANS 1930 {} -100.00\n   #TRANS 1920 {} 100.00\n";
+        InputStream stream = new ByteArrayInputStream(input.getBytes(SIE4.SIE4_CHARSET));
+
+        assertThatThrownBy(() -> SIE4.parse(stream))
+                .isInstanceOf(SIE4Exception.class)
+                .hasMessageContaining("Unclosed VER block");
+    }
+
+    @Test
     void parse_blankLines_shouldBeSkipped() {
         String input = "#FLAGGA 0\n\n#FNAMN TestCompany\n\n";
         InputStream stream = new ByteArrayInputStream(input.getBytes(SIE4.SIE4_CHARSET));

@@ -78,6 +78,10 @@ public class SIE4 {
                 }
             }
 
+            if (!verBuffer.isEmpty()) {
+                throw new SIE4Exception("Unclosed VER block at end of file: " + verBuffer.getFirst());
+            }
+
             return SIE4Document.from(result);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
