@@ -7,7 +7,9 @@ import se.bufferoverflow.sieport.sie4.validator.ValidationError.MissingMandatory
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.List;
@@ -140,5 +142,19 @@ class SIE4Test {
         assertThat(items).hasSize(2);
         assertThat(items.get(0)).isEqualTo(SIE4Item.Flagga.UNSET);
         assertThat(items.get(1)).isEqualTo(new SIE4Item.Fnamn("TestCompany"));
+    }
+
+    @Test
+    void write_ioErrorDuringWrite_shouldThrow() {
+        OutputStream failingStream = new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                throw new IOException("Simulated disk full");
+            }
+        };
+        List<SIE4Item> items = List.of(new SIE4Item.Flagga(0));
+
+        assertThatThrownBy(() -> SIE4.write(failingStream, items, SIE4.WriteOptions.SKIP_VALIDATION))
+                .isInstanceOf(SIE4Exception.class);
     }
 }

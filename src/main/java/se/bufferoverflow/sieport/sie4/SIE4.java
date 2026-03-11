@@ -129,6 +129,9 @@ public class SIE4 {
         items.stream()
                 .sorted(Comparator.comparingInt(item -> item.itemType().ordinal()))
                 .forEach(item -> writer.println(OutFieldMapper.toFileString(item)));
+        if (writer.checkError()) {
+            throw new SIE4Exception("I/O error occurred while writing SIE4 data");
+        }
     }
 
     public enum WriteOptions {
