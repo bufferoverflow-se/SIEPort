@@ -45,9 +45,7 @@ public class SIE4 {
     }
 
     public static SIE4Document parse(InputStream inputStream) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, SIE4_CHARSET));
-
-        try {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, SIE4_CHARSET))) {
             List<String> verBuffer = new ArrayList<>();
             List<SIE4Item> result = new ArrayList<>();
 

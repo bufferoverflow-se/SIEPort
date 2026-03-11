@@ -146,6 +146,22 @@ class SIE4Test {
     }
 
     @Test
+    void parse_inputStream_shouldCloseStream() {
+        var closed = new boolean[]{false};
+        InputStream trackingStream = new ByteArrayInputStream("#FLAGGA 0\n".getBytes(SIE4.SIE4_CHARSET)) {
+            @Override
+            public void close() throws IOException {
+                closed[0] = true;
+                super.close();
+            }
+        };
+
+        SIE4.parse(trackingStream);
+
+        assertThat(closed[0]).isTrue();
+    }
+
+    @Test
     void write_validationFailure_shouldNotTruncateExistingFile() throws IOException {
         Path existingFile = tempDir.resolve("existing.se");
         Files.writeString(existingFile, "original content");
