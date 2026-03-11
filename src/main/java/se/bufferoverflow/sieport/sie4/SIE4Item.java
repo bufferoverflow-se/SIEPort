@@ -275,6 +275,7 @@ public sealed interface SIE4Item {
             if (sum.compareTo(BigDecimal.ZERO) != 0) {
                 throw new SIE4Exception("VER transaction items must have a zero sum, was: " + sum);
             }
+            transactions = List.copyOf(transactions);
         }
 
         @Override
@@ -301,6 +302,10 @@ public sealed interface SIE4Item {
         Optional<String> sign();
 
         record Trans(int accountNo, BigDecimal amount, List<ObjectReference> objectReferences, Optional<LocalDate> transactionDate, Optional<String> text, Optional<BigDecimal> quantity, Optional<String> sign) implements Transaction {
+            public Trans {
+                objectReferences = List.copyOf(objectReferences);
+            }
+
             @Override
             public SIE4ItemType itemType() {
                 return SIE4ItemType.TRANS;
@@ -312,6 +317,10 @@ public sealed interface SIE4Item {
         }
 
         record Rtrans(int accountNo, BigDecimal amount, List<ObjectReference> objectReferences, Optional<LocalDate> transactionDate, Optional<String> text, Optional<BigDecimal> quantity, Optional<String> sign) implements Transaction {
+            public Rtrans {
+                objectReferences = List.copyOf(objectReferences);
+            }
+
             @Override
             public SIE4ItemType itemType() {
                 return SIE4ItemType.RTRANS;
@@ -319,6 +328,10 @@ public sealed interface SIE4Item {
         }
 
         record Btrans(int accountNo, BigDecimal amount, List<ObjectReference> objectReferences, Optional<LocalDate> transactionDate, Optional<String> text, Optional<BigDecimal> quantity, Optional<String> sign) implements Transaction {
+            public Btrans {
+                objectReferences = List.copyOf(objectReferences);
+            }
+
             @Override
             public SIE4ItemType itemType() {
                 return SIE4ItemType.BTRANS;

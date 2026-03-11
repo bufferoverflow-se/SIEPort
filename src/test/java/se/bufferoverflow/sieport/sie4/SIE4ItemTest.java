@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,6 +94,26 @@ class SIE4ItemTest {
                 new SIE4Item.Transaction.Rtrans(6250, new BigDecimal("800.00"), List.of(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()),
                 SIE4Item.Transaction.Trans.of(6250, new BigDecimal("800.00"))
         ))).isNotNull();
+    }
+
+    @Test
+    void ver_mutatingSourceList_doesNotAffectRecord() {
+        var txList = new ArrayList<>(createValidTransactions());
+        SIE4Item.Ver ver = SIE4Item.Ver.of(LocalDate.EPOCH, "Title", txList);
+        txList.clear();
+
+        assertThat(ver.transactions()).hasSize(2);
+    }
+
+    @Test
+    void trans_mutatingSourceList_doesNotAffectRecord() {
+        var refs = new ArrayList<ObjectReference>();
+        refs.add(ObjectReference.of(1, "A"));
+        SIE4Item.Transaction.Trans trans = new SIE4Item.Transaction.Trans(
+                1930, BigDecimal.TEN, refs, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
+        refs.clear();
+
+        assertThat(trans.objectReferences()).hasSize(1);
     }
 
     private static List<SIE4Item.Transaction> createValidTransactions() {
