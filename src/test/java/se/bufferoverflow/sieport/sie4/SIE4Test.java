@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.List;
@@ -142,6 +143,18 @@ class SIE4Test {
         assertThat(items).hasSize(2);
         assertThat(items.get(0)).isEqualTo(SIE4Item.Flagga.UNSET);
         assertThat(items.get(1)).isEqualTo(new SIE4Item.Fnamn("TestCompany"));
+    }
+
+    @Test
+    void write_validationFailure_shouldNotTruncateExistingFile() throws IOException {
+        Path existingFile = tempDir.resolve("existing.se");
+        Files.writeString(existingFile, "original content");
+
+        List<SIE4Item> invalidItems = List.of(new SIE4Item.Flagga(0)); // missing mandatory items for SIE4E
+
+        assertThatThrownBy(() -> SIE4.write(existingFile.toFile(), invalidItems))
+                .isInstanceOf(SIE4Exception.class);
+        assertThat(Files.readString(existingFile)).isEqualTo("original content");
     }
 
     @Test

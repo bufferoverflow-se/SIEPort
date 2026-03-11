@@ -93,8 +93,11 @@ public class SIE4 {
     }
 
     public static void write(File file, List<SIE4Item> items, WriteOptions... options) {
+        // Validate before creating a FileOutputStream to avoid truncating existing files
+        // if validation fails
+        validateItems(items, options);
         try (var os = new FileOutputStream(file)) {
-            write(os, items, options);
+            write(os, items, WriteOptions.SKIP_VALIDATION);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -113,6 +116,18 @@ public class SIE4 {
     }
 
     public static void write(OutputStream outputStream, List<SIE4Item> items, WriteOptions... options) {
+        validateItems(items, options);
+
+        PrintWriter writer = new PrintWriter(outputStream, true, SIE4_CHARSET);
+        items.stream()
+                .sorted(Comparator.comparingInt(item -> item.itemType().ordinal()))
+                .forEach(item -> writer.println(OutFieldMapper.toFileString(item)));
+        if (writer.checkError()) {
+            throw new SIE4Exception("I/O error occurred while writing SIE4 data");
+        }
+    }
+
+    private static void validateItems(List<SIE4Item> items, WriteOptions... options) {
         List<WriteOptions> opts = Arrays.asList(options);
         if (!opts.contains(WriteOptions.SKIP_VALIDATION)) {
             List<ValidationError> errors = opts.contains(WriteOptions.SIE4I)
@@ -123,14 +138,6 @@ public class SIE4 {
                         .collect(Collectors.joining(", "));
                 throw new SIE4Exception(message);
             }
-        }
-
-        PrintWriter writer = new PrintWriter(outputStream, true, SIE4_CHARSET);
-        items.stream()
-                .sorted(Comparator.comparingInt(item -> item.itemType().ordinal()))
-                .forEach(item -> writer.println(OutFieldMapper.toFileString(item)));
-        if (writer.checkError()) {
-            throw new SIE4Exception("I/O error occurred while writing SIE4 data");
         }
     }
 
