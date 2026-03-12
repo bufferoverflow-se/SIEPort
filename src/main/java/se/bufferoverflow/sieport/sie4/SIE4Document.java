@@ -192,7 +192,8 @@ public class SIE4Document {
                 .map(clazz::cast)
                 .toList();
         if (found.size() > 1) {
-            throw new SIE4Exception("Expected at most one item of type: " + clazz.getName());
+            throw new SIE4Exception("Expected at most one #" + clazz.getSimpleName().toUpperCase()
+                    + " item, found " + found.size());
         }
         return found.stream().findFirst();
     }

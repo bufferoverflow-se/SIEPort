@@ -128,4 +128,11 @@ class SIE4DocumentTest {
 
         assertThrows(SIE4Exception.class, () -> doc.getItem(SIE4Item.Ver.class));
     }
+
+    @Test
+    void getItem_throwsWithFriendlyLabelName() {
+        SIE4Exception ex = assertThrows(SIE4Exception.class,
+                () -> SIE4Document.from(List.of(new SIE4Item.Flagga(0), new SIE4Item.Flagga(1))));
+        assertThat(ex.getMessage()).contains("#FLAGGA").contains("2");
+    }
 }
