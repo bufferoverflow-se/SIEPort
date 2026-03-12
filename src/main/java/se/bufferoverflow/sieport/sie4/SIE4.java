@@ -19,6 +19,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
@@ -64,6 +65,7 @@ public class SIE4 {
      * @throws SIE4Exception if the file is malformed
      */
     public static SIE4Document parse(Path path) {
+        Objects.requireNonNull(path, "path must not be null");
         return parse(path.toFile());
     }
 
@@ -76,6 +78,7 @@ public class SIE4 {
      * @throws SIE4Exception if the file is malformed
      */
     public static SIE4Document parse(File file) {
+        Objects.requireNonNull(file, "file must not be null");
         try (var is = new FileInputStream(file)) {
             return parse(is);
         } catch (IOException e) {
@@ -92,6 +95,7 @@ public class SIE4 {
      * @throws SIE4Exception if the data is malformed
      */
     public static SIE4Document parse(InputStream inputStream) {
+        Objects.requireNonNull(inputStream, "inputStream must not be null");
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, SIE4_CHARSET))) {
             List<String> verBuffer = new ArrayList<>();
             List<SIE4Item> result = new ArrayList<>();
@@ -145,6 +149,8 @@ public class SIE4 {
      * @throws UncheckedIOException if the file cannot be opened
      */
     public static void write(Path destination, List<SIE4Item> items, WriteOptions... options) {
+        Objects.requireNonNull(destination, "destination must not be null");
+        Objects.requireNonNull(items, "items must not be null");
         write(destination.toFile(), items, options);
     }
 
@@ -160,6 +166,8 @@ public class SIE4 {
      * @throws UncheckedIOException if the file cannot be opened
      */
     public static void write(File file, List<SIE4Item> items, WriteOptions... options) {
+        Objects.requireNonNull(file, "file must not be null");
+        Objects.requireNonNull(items, "items must not be null");
         validateItems(items, options);
         try (var os = new FileOutputStream(file)) {
             write(os, items, WriteOptions.SKIP_VALIDATION);
@@ -205,6 +213,8 @@ public class SIE4 {
      * @throws SIE4Exception if validation fails or an I/O error occurs during writing
      */
     public static void write(OutputStream outputStream, List<SIE4Item> items, WriteOptions... options) {
+        Objects.requireNonNull(outputStream, "outputStream must not be null");
+        Objects.requireNonNull(items, "items must not be null");
         validateItems(items, options);
 
         PrintWriter writer = new PrintWriter(outputStream, true, SIE4_CHARSET);

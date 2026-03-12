@@ -130,6 +130,19 @@ class SIE4DocumentTest {
     }
 
     @Test
+    void toBuilder_preservesAllFieldsAndAllowsOverride() {
+        SIE4Document original = SIE4.parse(sie4SampleFile);
+        SIE4Item.Fnamn newFnamn = new SIE4Item.Fnamn("Changed Company");
+
+        SIE4Document copy = original.toBuilder().fnamn(newFnamn).build();
+
+        assertThat(copy.getFnamn()).isEqualTo(newFnamn);
+        assertThat(copy.getFlagga()).isEqualTo(original.getFlagga());
+        assertThat(copy.getVer()).isEqualTo(original.getVer());
+        assertThat(copy.getKonto()).isEqualTo(original.getKonto());
+    }
+
+    @Test
     void getItem_throwsWithFriendlyLabelName() {
         SIE4Exception ex = assertThrows(SIE4Exception.class,
                 () -> SIE4Document.from(List.of(new SIE4Item.Flagga(0), new SIE4Item.Flagga(1))));

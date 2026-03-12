@@ -499,4 +499,16 @@ class InFieldMapperTest {
                 .hasMessageContaining("BTRANS requires between 3 and 7 fields");
     }
 
+    @Test
+    void toModel_ver_unknownSubLabel_shouldBeSkipped() {
+        List<String> verLines = List.of(
+                "#VER A 1 20211223",
+                "#TRANS 1930 {} -10.00",
+                "#UNKNOWN some data",
+                "#TRANS 1920 {} 10.00"
+        );
+        SIE4Item.Ver ver = InFieldMapper.toModel(verLines);
+        assertThat(ver.transactions()).hasSize(2);
+    }
+
 }

@@ -186,4 +186,34 @@ class SIE4Test {
         assertThatThrownBy(() -> SIE4.write(failingStream, items, SIE4.WriteOptions.SKIP_VALIDATION))
                 .isInstanceOf(SIE4Exception.class);
     }
+
+    @Test
+    void parse_nullPath_shouldThrowNullPointerException() {
+        assertThatThrownBy(() -> SIE4.parse((Path) null))
+                .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    void parse_nullFile_shouldThrowNullPointerException() {
+        assertThatThrownBy(() -> SIE4.parse((java.io.File) null))
+                .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    void parse_nullInputStream_shouldThrowNullPointerException() {
+        assertThatThrownBy(() -> SIE4.parse((InputStream) null))
+                .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    void write_nullPath_shouldThrowNullPointerException() {
+        assertThatThrownBy(() -> SIE4.write((Path) null, List.of()))
+                .isInstanceOf(NullPointerException.class);
+    }
+
+    @Test
+    void write_nullOutputStream_shouldThrowNullPointerException() {
+        assertThatThrownBy(() -> SIE4.write((OutputStream) null, List.of()))
+                .isInstanceOf(NullPointerException.class);
+    }
 }

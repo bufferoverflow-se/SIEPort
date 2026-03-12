@@ -1,5 +1,6 @@
 package se.bufferoverflow.sieport.sie4.writer;
 
+import se.bufferoverflow.sieport.sie4.SIE4Exception;
 import se.bufferoverflow.sieport.sie4.SIE4Item;
 
 import java.util.Map;
@@ -326,6 +327,10 @@ public class OutFieldMapper {
     }
 
     public static String toFileString(SIE4Item item) {
-        return WRITER_REGISTRY.get(item.getClass()).writeItem(item);
+        var writer = WRITER_REGISTRY.get(item.getClass());
+        if (writer == null) {
+            throw new SIE4Exception("No writer registered for type: " + item.getClass().getName());
+        }
+        return writer.writeItem(item);
     }
 }

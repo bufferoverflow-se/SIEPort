@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -581,7 +582,11 @@ public class InFieldMapper {
             throw new SIE4Exception("#VER items cannot be parsed by this function");
         }
 
-        return PARSER_REGISTRY.get(labelWithFields.label()).parseFields(labelWithFields.fields());
+        var parser = PARSER_REGISTRY.get(labelWithFields.label());
+        if (parser == null) {
+            throw new SIE4Exception("No parser registered for label: #" + labelWithFields.label());
+        }
+        return parser.parseFields(labelWithFields.fields());
     }
 
     public static SIE4Item.Ver toModel(List<String> itemLines) {
@@ -595,6 +600,7 @@ public class InFieldMapper {
         List<SIE4Item> transactions = itemLines.stream()
                 .skip(1)
                 .map(InFieldMapper::toModel)
+                .filter(Objects::nonNull)
                 .toList();
 
         return (SIE4Item.Ver) PARSER_REGISTRY.get(SIE4ItemType.VER).parseFields(labelWithFields.fields(), transactions);

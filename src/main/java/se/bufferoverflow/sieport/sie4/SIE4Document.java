@@ -420,6 +420,20 @@ public class SIE4Document {
         return new Builder();
     }
 
+    /**
+     * Returns a {@link Builder} pre-populated with all fields from this document.
+     * Useful for creating a modified copy of an existing document.
+     */
+    public Builder toBuilder() {
+        return builder()
+                .flagga(flagga).program(program).format(format).gen(gen).sietyp(sietyp)
+                .prosa(prosa).ftyp(ftyp).fnr(fnr).orgnr(orgnr).bkod(bkod)
+                .adress(adress).fnamn(fnamn).rar(rar).taxar(taxar).omfattn(omfattn)
+                .kptyp(kptyp).valuta(valuta).konto(konto).ktyp(ktyp).enhet(enhet)
+                .sru(sru).dim(dim).underdim(underdim).objekt(objekt).ib(ib).ub(ub)
+                .oib(oib).oub(oub).res(res).psaldo(psaldo).pbudget(pbudget).ver(ver);
+    }
+
     public static class Builder {
         private SIE4Item.Flagga flagga;
         private SIE4Item.Program program;
