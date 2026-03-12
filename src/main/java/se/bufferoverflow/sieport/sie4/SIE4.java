@@ -24,7 +24,30 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ * Static utility class for parsing and writing SIE4 files.
+ *
+ * <p>SIE4 is a standard format used in Swedish accounting software to exchange bookkeeping data.
+ * This library supports both SIE 4E ({@code .se}, full export) and SIE 4I ({@code .si},
+ * transaction import) variants. All SIE4 files are encoded in IBM Code Page 437
+ * ({@link #SIE4_CHARSET}).
+ *
+ * <p>Typical usage:
+ * <pre>{@code
+ * // Parse a file
+ * SIE4Document doc = SIE4.parse(Path.of("company.se"));
+ *
+ * // Build and write a new file
+ * SIE4Document doc = SIE4Document.newDocument()
+ *         .program(new SIE4Item.Program("My App", "1.0"))
+ *         .fnamn(new SIE4Item.Fnamn("Acme AB"))
+ *         ...
+ *         .build();
+ * SIE4.write(Path.of("output.se"), doc);
+ * }</pre>
+ */
 public class SIE4 {
+    /** The character encoding used by SIE4 files (IBM Code Page 437). */
     public static final Charset SIE4_CHARSET = Charset.forName("IBM-437");
 
     private static final Logger LOG = Logger.getLogger(SIE4.class.getName());
@@ -32,10 +55,26 @@ public class SIE4 {
     private SIE4() {
     }
 
+    /**
+     * Parses a SIE4 file at the given path.
+     *
+     * @param path path to the SIE4 file
+     * @return the parsed document
+     * @throws UncheckedIOException if an I/O error occurs
+     * @throws SIE4Exception if the file is malformed
+     */
     public static SIE4Document parse(Path path) {
         return parse(path.toFile());
     }
 
+    /**
+     * Parses a SIE4 file.
+     *
+     * @param file the SIE4 file
+     * @return the parsed document
+     * @throws UncheckedIOException if an I/O error occurs
+     * @throws SIE4Exception if the file is malformed
+     */
     public static SIE4Document parse(File file) {
         try (var is = new FileInputStream(file)) {
             return parse(is);
@@ -44,6 +83,14 @@ public class SIE4 {
         }
     }
 
+    /**
+     * Parses SIE4 data from an input stream. The stream is closed when this method returns.
+     *
+     * @param inputStream the stream to read from; must be encoded in {@link #SIE4_CHARSET}
+     * @return the parsed document
+     * @throws UncheckedIOException if an I/O error occurs
+     * @throws SIE4Exception if the data is malformed
+     */
     public static SIE4Document parse(InputStream inputStream) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, SIE4_CHARSET))) {
             List<String> verBuffer = new ArrayList<>();
@@ -86,13 +133,33 @@ public class SIE4 {
         }
     }
 
+    /**
+     * Writes SIE4 items to a file, sorted in the order required by the SIE4 specification.
+     * Validation is performed before the file is opened, so an existing file is never
+     * truncated if validation fails.
+     *
+     * @param destination the output file
+     * @param items the items to write
+     * @param options optional {@link WriteOptions}
+     * @throws SIE4Exception if validation fails or an I/O error occurs during writing
+     * @throws UncheckedIOException if the file cannot be opened
+     */
     public static void write(Path destination, List<SIE4Item> items, WriteOptions... options) {
         write(destination.toFile(), items, options);
     }
 
+    /**
+     * Writes SIE4 items to a file, sorted in the order required by the SIE4 specification.
+     * Validation is performed before the file is opened, so an existing file is never
+     * truncated if validation fails.
+     *
+     * @param file the output file
+     * @param items the items to write
+     * @param options optional {@link WriteOptions}
+     * @throws SIE4Exception if validation fails or an I/O error occurs during writing
+     * @throws UncheckedIOException if the file cannot be opened
+     */
     public static void write(File file, List<SIE4Item> items, WriteOptions... options) {
-        // Validate before creating a FileOutputStream to avoid truncating existing files
-        // if validation fails
         validateItems(items, options);
         try (var os = new FileOutputStream(file)) {
             write(os, items, WriteOptions.SKIP_VALIDATION);
@@ -101,18 +168,42 @@ public class SIE4 {
         }
     }
 
+    /**
+     * Writes a {@link SIE4Document} to a file.
+     *
+     * @see #write(Path, List, WriteOptions...)
+     */
     public static void write(Path destination, SIE4Document doc, WriteOptions... options) {
         write(destination, doc.getItems(), options);
     }
 
+    /**
+     * Writes a {@link SIE4Document} to a file.
+     *
+     * @see #write(File, List, WriteOptions...)
+     */
     public static void write(File file, SIE4Document doc, WriteOptions... options) {
         write(file, doc.getItems(), options);
     }
 
+    /**
+     * Writes a {@link SIE4Document} to an output stream.
+     *
+     * @see #write(OutputStream, List, WriteOptions...)
+     */
     public static void write(OutputStream outputStream, SIE4Document doc, WriteOptions... options) {
         write(outputStream, doc.getItems(), options);
     }
 
+    /**
+     * Writes SIE4 items to an output stream, sorted in the order required by the SIE4
+     * specification. The caller is responsible for closing the stream.
+     *
+     * @param outputStream the stream to write to; will be written using {@link #SIE4_CHARSET}
+     * @param items the items to write
+     * @param options optional {@link WriteOptions}
+     * @throws SIE4Exception if validation fails or an I/O error occurs during writing
+     */
     public static void write(OutputStream outputStream, List<SIE4Item> items, WriteOptions... options) {
         validateItems(items, options);
 

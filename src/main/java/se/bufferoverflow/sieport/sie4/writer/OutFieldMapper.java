@@ -238,7 +238,7 @@ public class OutFieldMapper {
                 String writeFields(SIE4Item.Ub item) {
                     return "%d %d %s %s".formatted(
                             item.yearNumber().yearNo(),
-                            item.account(),
+                            item.accountNo(),
                             item.balance(),
                             item.quantity().map(Object::toString).orElse("")
                     ).trim();
