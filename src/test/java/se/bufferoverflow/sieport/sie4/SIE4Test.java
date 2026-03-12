@@ -3,6 +3,7 @@ package se.bufferoverflow.sieport.sie4;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import se.bufferoverflow.sieport.sie4.validator.ValidationError;
 import se.bufferoverflow.sieport.sie4.validator.ValidationError.MissingMandatoryItems;
 
 import java.io.ByteArrayInputStream;
@@ -185,6 +186,34 @@ class SIE4Test {
 
         assertThatThrownBy(() -> SIE4.write(failingStream, items, SIE4.WriteOptions.SKIP_VALIDATION))
                 .isInstanceOf(SIE4Exception.class);
+    }
+
+    @Test
+    void validate_invalidItems_returnsErrors() {
+        List<SIE4Item> items = List.of(SIE4Item.Flagga.UNSET);
+
+        List<ValidationError> errors = SIE4.validate(items);
+
+        assertThat(errors).isNotEmpty();
+        assertThat(errors).hasAtLeastOneElementOfType(MissingMandatoryItems.class);
+    }
+
+    @Test
+    void validate_validSie4iItems_returnsNoErrors() {
+        SIE4Document doc = SIE4.parse(sie4SampleFile);
+
+        List<ValidationError> errors = SIE4.validate(doc.getItems());
+
+        assertThat(errors).isEmpty();
+    }
+
+    @Test
+    void validate_sie4iMode_rejectsBalanceItems() {
+        SIE4Document doc = SIE4.parse(sie4SampleFile);
+
+        List<ValidationError> errors = SIE4.validate(doc.getItems(), SIE4.WriteOptions.SIE4I);
+
+        assertThat(errors).isNotEmpty();
     }
 
     @Test

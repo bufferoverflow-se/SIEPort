@@ -226,6 +226,22 @@ public class SIE4 {
         }
     }
 
+    /**
+     * Validates a list of SIE4 items without writing, returning any validation errors found.
+     *
+     * @param items the items to validate
+     * @param options optional {@link WriteOptions}; use {@link WriteOptions#SIE4I} to validate
+     *                against SIE 4I rules instead of the default SIE 4E rules
+     * @return a list of validation errors, or an empty list if the items are valid
+     */
+    public static List<ValidationError> validate(List<SIE4Item> items, WriteOptions... options) {
+        Objects.requireNonNull(items, "items must not be null");
+        List<WriteOptions> opts = Arrays.asList(options);
+        return opts.contains(WriteOptions.SIE4I)
+                ? Validator.validateSie4i(items)
+                : Validator.validateSie4e(items);
+    }
+
     private static void validateItems(List<SIE4Item> items, WriteOptions... options) {
         List<WriteOptions> opts = Arrays.asList(options);
         if (!opts.contains(WriteOptions.SKIP_VALIDATION)) {
