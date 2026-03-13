@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.bufferoverflow.sieport.sie4.SIE4Item.Flagga.UNSET;
 import static se.bufferoverflow.sieport.sie4.SIE4Item.Sietyp.SIE_4;
+import static se.bufferoverflow.sieport.sie4.SIE4.WriteOptions.SIE4I;
 
 class SIE4DocumentTest {
     private Path sie4SampleFile;
@@ -177,5 +178,46 @@ class SIE4DocumentTest {
     void identificationItems_absentMandatoryFieldIsNull() {
         String companyName = SIE4Document.builder().build().getIdentificationItems().companyName();
         assertThat(companyName).isNull();
+    }
+
+    @Test
+    void from_buildsDocumentFromItemList() {
+        List<SIE4Item> items = List.of(new SIE4Item.Flagga(0), new SIE4Item.Fnamn("Acme AB"));
+        SIE4Document doc = SIE4Document.from(items);
+        assertThat(doc.getFlagga()).isNotNull();
+        assertThat(doc.getFnamn().companyName()).isEqualTo("Acme AB");
+    }
+
+    @Test
+    void buildAndValidate_throwsWhenMandatoryItemsMissing() {
+        assertThrows(SIE4Exception.class, () ->
+                SIE4Document.builder().buildAndValidate());
+    }
+
+    @Test
+    void buildAndValidate_returnsDocumentWhenValid() {
+        SIE4Document doc = SIE4Document.builder()
+                .flagga(UNSET)
+                .program(new SIE4Item.Program("Test", "1.0"))
+                .format(SIE4Item.Format.pc8())
+                .gen(SIE4Item.Gen.now())
+                .sietyp(SIE4Item.Sietyp.SIE_4)
+                .fnamn("Test Company")
+                .buildAndValidate(SIE4I);
+        assertThat(doc.getFnamn().companyName()).isEqualTo("Test Company");
+    }
+
+    @Test
+    void buildAndValidate_throwsWhenForbiddenItemsPresent() {
+        assertThrows(SIE4Exception.class, () ->
+                SIE4Document.builder()
+                        .flagga(UNSET)
+                        .program(new SIE4Item.Program("Test", "1.0"))
+                        .format(SIE4Item.Format.pc8())
+                        .gen(SIE4Item.Gen.now())
+                        .sietyp(SIE4Item.Sietyp.SIE_4)
+                        .fnamn("Test Company")
+                        .addIb(new SIE4Item.Ib(YearNumber.CURRENT_YEAR, 1000, java.math.BigDecimal.ZERO, null))
+                        .buildAndValidate(SIE4I));
     }
 }

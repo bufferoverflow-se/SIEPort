@@ -51,9 +51,12 @@ public class SIE4Document {
 
     /**
      * Constructs a {@code SIE4Document} from a flat list of parsed items. No defaults are applied;
-     * the document reflects the source items exactly. For internal use by the parser.
+     * the document reflects the source items exactly.
+     *
+     * @param items the items to build the document from
+     * @throws SIE4Exception if more than one item of any singleton type is present
      */
-    static SIE4Document from(List<SIE4Item> items) {
+    public static SIE4Document from(List<SIE4Item> items) {
         return new SIE4Document(
                 findItem(items, SIE4Item.Flagga.class).orElse(null),
                 findItem(items, SIE4Item.Program.class).orElse(null),
@@ -730,6 +733,24 @@ public class SIE4Document {
 
         private static <T> List<T> mutableCopy(List<T> list) {
             return list == null ? null : new ArrayList<>(list);
+        }
+
+        /**
+         * Builds the document and immediately validates it using the same rules as
+         * {@link SIE4#write}. Defaults to SIE4E rules; pass {@link SIE4.WriteOptions#SIE4I}
+         * to validate as a SIE4I import file instead.
+         *
+         * @param options optional write options; {@link SIE4.WriteOptions#SIE4I} selects SIE4I rules
+         * @return the validated document
+         * @throws SIE4Exception if validation fails
+         */
+        public SIE4Document buildAndValidate(SIE4.WriteOptions... options) {
+            SIE4Document doc = build();
+            var errors = SIE4.validate(doc.getItems(), options);
+            if (!errors.isEmpty()) {
+                throw new SIE4Exception("Validation failed: " + errors);
+            }
+            return doc;
         }
 
         public SIE4Document build() {
