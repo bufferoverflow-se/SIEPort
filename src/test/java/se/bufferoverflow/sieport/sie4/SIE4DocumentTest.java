@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.bufferoverflow.sieport.sie4.SIE4Item.Flagga.UNSET;
@@ -26,37 +24,37 @@ class SIE4DocumentTest {
     }
 
     @Test
-    void newDocument_hasStandardDefaults() {
-        SIE4Document doc = SIE4Document.newDocument().build();
+    void defaultBuilder_hasStandardDefaults() {
+        SIE4Document doc = SIE4Document.defaultBuilder().build();
 
         IdentificationItems result = doc.getIdentificationItems();
 
-        assertEquals(UNSET.flag(), result.flag());
+        assertThat(result.flag()).isEqualTo(UNSET.flag());
         assertThat(result.generatedAt()).isToday();
-        assertEquals(SIE_4.typeNo(), result.sieType());
-        assertNull(result.programWithVersion());
-        assertNull(result.comment());
-        assertNull(result.kptyp());
-        assertNull(result.currencyCode());
-        assertNull(result.taxYear());
+        assertThat(result.sieType()).isEqualTo(SIE_4.typeNo());
+        assertThat(result.programWithVersion()).isNull();
+        assertThat(result.comment()).isEmpty();
+        assertThat(result.kptyp()).isEmpty();
+        assertThat(result.currencyCode()).isEmpty();
+        assertThat(result.taxYear()).isEmpty();
         assertTrue(result.periods().isEmpty());
-        assertNull(result.contactPerson());
-        assertNull(result.address());
-        assertNull(result.phoneNumber());
-        assertNull(result.sniCode());
-        assertNull(result.companyType());
-        assertNull(result.companyName());
-        assertNull(result.organizationNumber());
+        assertThat(result.contactPerson()).isEmpty();
+        assertThat(result.address()).isEmpty();
+        assertThat(result.phoneNumber()).isEmpty();
+        assertThat(result.sniCode()).isEmpty();
+        assertThat(result.companyType()).isEmpty();
+        assertThat(result.companyName()).isNull();
+        assertThat(result.organizationNumber()).isEmpty();
     }
 
     @Test
     void builder_hasNoDefaults() {
         SIE4Document doc = SIE4Document.builder().build();
 
-        assertNull(doc.getFlagga());
-        assertNull(doc.getFormat());
-        assertNull(doc.getGen());
-        assertNull(doc.getSietyp());
+        assertThat(doc.getFlagga()).isNull();
+        assertThat(doc.getFormat()).isNull();
+        assertThat(doc.getGen()).isNull();
+        assertThat(doc.getSietyp()).isNull();
     }
 
     @Test
@@ -70,22 +68,22 @@ class SIE4DocumentTest {
             new FinancialYear(LocalDate.of(2020,1,1), LocalDate.of(2020, 12, 31))
         );
 
-        assertEquals(UNSET.flag(), result.flag());
-        assertEquals("Visma Administration 2000 med Visma Integration, 2022.2", result.programWithVersion());
-        assertEquals(LocalDate.of(2023, 8, 22), result.generatedAt());
-        assertEquals(4, result.sieType());
-        assertNull(result.comment());
-        assertEquals("EUBAS97", result.kptyp());
-        assertEquals("SEK", result.currencyCode());
-        assertEquals(2022, result.taxYear());
-        assertEquals(expectedPeriods, result.periods());
-        assertEquals("Siw Eriksson", result.contactPerson());
-        assertEquals("Box 1 123 45 STORSTAD", result.address());
-        assertEquals("012-34 56 78", result.phoneNumber());
-        assertNull(result.sniCode());
-        assertNull(result.companyType());
-        assertEquals("Övningsbolaget AB", result.companyName());
-        assertEquals("555555-5555", result.organizationNumber());
+        assertThat(result.flag()).isEqualTo(UNSET.flag());
+        assertThat(result.programWithVersion()).isEqualTo("Visma Administration 2000 med Visma Integration, 2022.2");
+        assertThat(result.generatedAt()).isEqualTo(LocalDate.of(2023, 8, 22));
+        assertThat(result.sieType()).isEqualTo(4);
+        assertThat(result.comment()).isEmpty();
+        assertThat(result.kptyp()).hasValue("EUBAS97");
+        assertThat(result.currencyCode()).hasValue("SEK");
+        assertThat(result.taxYear()).hasValue(2022);
+        assertThat(result.periods()).isEqualTo(expectedPeriods);
+        assertThat(result.contactPerson()).hasValue("Siw Eriksson");
+        assertThat(result.address()).hasValue("Box 1 123 45 STORSTAD");
+        assertThat(result.phoneNumber()).hasValue("012-34 56 78");
+        assertThat(result.sniCode()).isEmpty();
+        assertThat(result.companyType()).isEmpty();
+        assertThat(result.companyName()).isEqualTo("Övningsbolaget AB");
+        assertThat(result.organizationNumber()).hasValue("555555-5555");
     }
 
     @Test
@@ -161,5 +159,23 @@ class SIE4DocumentTest {
         SIE4Exception ex = assertThrows(SIE4Exception.class,
                 () -> SIE4Document.from(List.of(new SIE4Item.Flagga(0), new SIE4Item.Flagga(1))));
         assertThat(ex.getMessage()).contains("#FLAGGA").contains("2");
+    }
+
+    @Test
+    void defaultBuilder_hasStandardDefaults_flagIsSet() {
+        SIE4Document doc = SIE4Document.defaultBuilder().build();
+        assertThat(doc.getFlagga()).isNotNull();
+    }
+
+    @Test
+    void getFlagga_returnsNull_whenAbsent() {
+        SIE4Item.Flagga flagga = SIE4Document.builder().build().getFlagga();
+        assertThat(flagga).isNull();
+    }
+
+    @Test
+    void identificationItems_absentMandatoryFieldIsNull() {
+        String companyName = SIE4Document.builder().build().getIdentificationItems().companyName();
+        assertThat(companyName).isNull();
     }
 }

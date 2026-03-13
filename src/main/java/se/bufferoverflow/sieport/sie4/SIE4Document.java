@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * Class representing a SIE4 document which is used for transferring
  * accounting data. This class encapsulates various elements of the
  * document such as accounts, transactions, and other relevant metadata.
  * <p>
- * Use {@link #newDocument()} to start building a new document with standard defaults applied
+ * Use {@link #defaultBuilder()} to start building a new document with standard defaults applied
  * ({@code FLAGGA 0}, {@code FORMAT PC8}, {@code GEN} set to today, {@code SIETYP 4}).
  * Use {@link #builder()} for a clean-slate builder with no defaults.
  */
@@ -115,25 +114,27 @@ public class SIE4Document {
 
     /**
      * Retrieves the basic values from the items composing the "identification part" of the SIE4 document.
+     *
+     * @see IdentificationItems
      */
     public IdentificationItems getIdentificationItems() {
         return new IdentificationItems(
-            mapOrNull(getFlagga(), SIE4Item.Flagga::flag),
-            mapOrNull(getProgram(), p -> "%s, %s".formatted(p.programName(), p.version())),
-            mapOrNull(getGen(), SIE4Item.Gen::date),
-            mapOrNull(getSietyp(), SIE4Item.Sietyp::typeNo),
-            mapOrNull(getProsa(), SIE4Item.Prosa::comment),
-            mapOrNull(getKptyp(), SIE4Item.Kptyp::type),
-            mapOrNull(getValuta(), SIE4Item.Valuta::currencyCode),
-            mapOrNull(getTaxar(), SIE4Item.Taxar::year),
-            getRar().stream().map(r -> new FinancialYear(r.start(), r.end())).toList(),
-            mapOrNull(getAdress(), SIE4Item.Adress::contact),
-            mapOrNull(getAdress(), addr -> "%s %s".formatted(addr.distributionAddress(), addr.postalAddress())),
-            mapOrNull(getAdress(), SIE4Item.Adress::tel),
-            mapOrNull(getBkod(), SIE4Item.Bkod::sniCode),
-            mapOrNull(getFtyp(), SIE4Item.Ftyp::companyType),
-            mapOrNull(getFnamn(), SIE4Item.Fnamn::companyName),
-            mapOrNull(getOrgnr(), SIE4Item.OrgNr::orgNr)
+            flagga != null ? flagga.flag() : null,
+            program != null ? "%s, %s".formatted(program.programName(), program.version()) : null,
+            gen != null ? gen.date() : null,
+            sietyp != null ? sietyp.typeNo() : null,
+            Optional.ofNullable(prosa).map(SIE4Item.Prosa::comment),
+            Optional.ofNullable(kptyp).map(SIE4Item.Kptyp::type),
+            Optional.ofNullable(valuta).map(SIE4Item.Valuta::currencyCode),
+            Optional.ofNullable(taxar).map(SIE4Item.Taxar::year),
+            rar.stream().map(r -> new FinancialYear(r.start(), r.end())).toList(),
+            Optional.ofNullable(adress).map(SIE4Item.Adress::contact),
+            Optional.ofNullable(adress).map(addr -> "%s %s".formatted(addr.distributionAddress(), addr.postalAddress())),
+            Optional.ofNullable(adress).map(SIE4Item.Adress::tel),
+            Optional.ofNullable(bkod).map(SIE4Item.Bkod::sniCode),
+            Optional.ofNullable(ftyp).map(SIE4Item.Ftyp::companyType),
+            fnamn != null ? fnamn.companyName() : null,
+            Optional.ofNullable(orgnr).map(SIE4Item.OrgNr::orgNr)
         );
     }
 
@@ -179,13 +180,6 @@ public class SIE4Document {
         return result.stream().filter(Objects::nonNull).toList();
     }
 
-    private <I, O> O mapOrNull(I item, Function<I, O> mapper) {
-        if (item == null) {
-            return null;
-        }
-        return mapper.apply(item);
-    }
-
     private static <T extends SIE4Item> Optional<T> findItem(List<SIE4Item> items, Class<T> clazz) {
         List<T> found = items.stream()
                 .filter(clazz::isInstance)
@@ -225,28 +219,28 @@ public class SIE4Document {
         return sietyp;
     }
 
-    public SIE4Item.Prosa getProsa() {
-        return prosa;
+    public Optional<SIE4Item.Prosa> getProsa() {
+        return Optional.ofNullable(prosa);
     }
 
-    public SIE4Item.Ftyp getFtyp() {
-        return ftyp;
+    public Optional<SIE4Item.Ftyp> getFtyp() {
+        return Optional.ofNullable(ftyp);
     }
 
-    public SIE4Item.Fnr getFnr() {
-        return fnr;
+    public Optional<SIE4Item.Fnr> getFnr() {
+        return Optional.ofNullable(fnr);
     }
 
-    public SIE4Item.OrgNr getOrgnr() {
-        return orgnr;
+    public Optional<SIE4Item.OrgNr> getOrgnr() {
+        return Optional.ofNullable(orgnr);
     }
 
-    public SIE4Item.Bkod getBkod() {
-        return bkod;
+    public Optional<SIE4Item.Bkod> getBkod() {
+        return Optional.ofNullable(bkod);
     }
 
-    public SIE4Item.Adress getAdress() {
-        return adress;
+    public Optional<SIE4Item.Adress> getAdress() {
+        return Optional.ofNullable(adress);
     }
 
     public SIE4Item.Fnamn getFnamn() {
@@ -257,20 +251,20 @@ public class SIE4Document {
         return rar;
     }
 
-    public SIE4Item.Taxar getTaxar() {
-        return taxar;
+    public Optional<SIE4Item.Taxar> getTaxar() {
+        return Optional.ofNullable(taxar);
     }
 
-    public SIE4Item.Omfattn getOmfattn() {
-        return omfattn;
+    public Optional<SIE4Item.Omfattn> getOmfattn() {
+        return Optional.ofNullable(omfattn);
     }
 
-    public SIE4Item.Kptyp getKptyp() {
-        return kptyp;
+    public Optional<SIE4Item.Kptyp> getKptyp() {
+        return Optional.ofNullable(kptyp);
     }
 
-    public SIE4Item.Valuta getValuta() {
-        return valuta;
+    public Optional<SIE4Item.Valuta> getValuta() {
+        return Optional.ofNullable(valuta);
     }
 
     public List<SIE4Item.Konto> getKonto() {
@@ -405,7 +399,7 @@ public class SIE4Document {
      * {@code FLAGGA 0}, {@code FORMAT PC8}, {@code GEN} set to today, {@code SIETYP 4}.
      * This is the recommended starting point for creating new documents.
      */
-    public static Builder newDocument() {
+    public static Builder defaultBuilder() {
         return builder()
                 .flagga(SIE4Item.Flagga.UNSET)
                 .format(SIE4Item.Format.pc8())
