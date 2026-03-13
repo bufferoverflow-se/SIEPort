@@ -539,7 +539,13 @@ public class SIE4Document {
         }
 
         public Builder rar(List<SIE4Item.Rar> rar) {
-            this.rar = rar;
+            this.rar = mutableCopy(rar);
+            return this;
+        }
+
+        public Builder addRar(SIE4Item.Rar rar) {
+            if (this.rar == null) this.rar = new ArrayList<>();
+            this.rar.add(rar);
             return this;
         }
 
@@ -564,78 +570,172 @@ public class SIE4Document {
         }
 
         public Builder konto(List<SIE4Item.Konto> konto) {
-            this.konto = konto;
+            this.konto = mutableCopy(konto);
+            return this;
+        }
+
+        public Builder addKonto(SIE4Item.Konto konto) {
+            if (this.konto == null) this.konto = new ArrayList<>();
+            this.konto.add(konto);
             return this;
         }
 
         public Builder ktyp(List<SIE4Item.Ktyp> ktyp) {
-            this.ktyp = ktyp;
+            this.ktyp = mutableCopy(ktyp);
+            return this;
+        }
+
+        public Builder addKtyp(SIE4Item.Ktyp ktyp) {
+            if (this.ktyp == null) this.ktyp = new ArrayList<>();
+            this.ktyp.add(ktyp);
             return this;
         }
 
         public Builder enhet(List<SIE4Item.Enhet> enhet) {
-            this.enhet = enhet;
+            this.enhet = mutableCopy(enhet);
+            return this;
+        }
+
+        public Builder addEnhet(SIE4Item.Enhet enhet) {
+            if (this.enhet == null) this.enhet = new ArrayList<>();
+            this.enhet.add(enhet);
             return this;
         }
 
         public Builder sru(List<SIE4Item.Sru> sru) {
-            this.sru = sru;
+            this.sru = mutableCopy(sru);
+            return this;
+        }
+
+        public Builder addSru(SIE4Item.Sru sru) {
+            if (this.sru == null) this.sru = new ArrayList<>();
+            this.sru.add(sru);
             return this;
         }
 
         public Builder dim(List<SIE4Item.Dim> dim) {
-            this.dim = dim;
+            this.dim = mutableCopy(dim);
+            return this;
+        }
+
+        public Builder addDim(SIE4Item.Dim dim) {
+            if (this.dim == null) this.dim = new ArrayList<>();
+            this.dim.add(dim);
             return this;
         }
 
         public Builder underdim(List<SIE4Item.Underdim> underdim) {
-            this.underdim = underdim;
+            this.underdim = mutableCopy(underdim);
+            return this;
+        }
+
+        public Builder addUnderdim(SIE4Item.Underdim underdim) {
+            if (this.underdim == null) this.underdim = new ArrayList<>();
+            this.underdim.add(underdim);
             return this;
         }
 
         public Builder objekt(List<SIE4Item.Objekt> objekt) {
-            this.objekt = objekt;
+            this.objekt = mutableCopy(objekt);
+            return this;
+        }
+
+        public Builder addObjekt(SIE4Item.Objekt objekt) {
+            if (this.objekt == null) this.objekt = new ArrayList<>();
+            this.objekt.add(objekt);
             return this;
         }
 
         public Builder ib(List<SIE4Item.Ib> ib) {
-            this.ib = ib;
+            this.ib = mutableCopy(ib);
+            return this;
+        }
+
+        public Builder addIb(SIE4Item.Ib ib) {
+            if (this.ib == null) this.ib = new ArrayList<>();
+            this.ib.add(ib);
             return this;
         }
 
         public Builder ub(List<SIE4Item.Ub> ub) {
-            this.ub = ub;
+            this.ub = mutableCopy(ub);
+            return this;
+        }
+
+        public Builder addUb(SIE4Item.Ub ub) {
+            if (this.ub == null) this.ub = new ArrayList<>();
+            this.ub.add(ub);
             return this;
         }
 
         public Builder oib(List<SIE4Item.Oib> oib) {
-            this.oib = oib;
+            this.oib = mutableCopy(oib);
+            return this;
+        }
+
+        public Builder addOib(SIE4Item.Oib oib) {
+            if (this.oib == null) this.oib = new ArrayList<>();
+            this.oib.add(oib);
             return this;
         }
 
         public Builder oub(List<SIE4Item.Oub> oub) {
-            this.oub = oub;
+            this.oub = mutableCopy(oub);
+            return this;
+        }
+
+        public Builder addOub(SIE4Item.Oub oub) {
+            if (this.oub == null) this.oub = new ArrayList<>();
+            this.oub.add(oub);
             return this;
         }
 
         public Builder res(List<SIE4Item.Res> res) {
-            this.res = res;
+            this.res = mutableCopy(res);
+            return this;
+        }
+
+        public Builder addRes(SIE4Item.Res res) {
+            if (this.res == null) this.res = new ArrayList<>();
+            this.res.add(res);
             return this;
         }
 
         public Builder psaldo(List<SIE4Item.Psaldo> psaldo) {
-            this.psaldo = psaldo;
+            this.psaldo = mutableCopy(psaldo);
+            return this;
+        }
+
+        public Builder addPsaldo(SIE4Item.Psaldo psaldo) {
+            if (this.psaldo == null) this.psaldo = new ArrayList<>();
+            this.psaldo.add(psaldo);
             return this;
         }
 
         public Builder pbudget(List<SIE4Item.Pbudget> pbudget) {
-            this.pbudget = pbudget;
+            this.pbudget = mutableCopy(pbudget);
+            return this;
+        }
+
+        public Builder addPbudget(SIE4Item.Pbudget pbudget) {
+            if (this.pbudget == null) this.pbudget = new ArrayList<>();
+            this.pbudget.add(pbudget);
             return this;
         }
 
         public Builder ver(List<SIE4Item.Ver> ver) {
-            this.ver = ver;
+            this.ver = mutableCopy(ver);
             return this;
+        }
+
+        public Builder addVer(SIE4Item.Ver ver) {
+            if (this.ver == null) this.ver = new ArrayList<>();
+            this.ver.add(ver);
+            return this;
+        }
+
+        private static <T> List<T> mutableCopy(List<T> list) {
+            return list == null ? null : new ArrayList<>(list);
         }
 
         public SIE4Document build() {

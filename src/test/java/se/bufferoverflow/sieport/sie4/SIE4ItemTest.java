@@ -116,6 +116,20 @@ class SIE4ItemTest {
         assertThat(trans.objectReferences()).hasSize(1);
     }
 
+    @Test
+    void rtrans_of_createsWithAllOptionalsEmpty() {
+        BigDecimal amount = new BigDecimal("500.00");
+        assertThat(SIE4Item.Transaction.Rtrans.of(1520, amount)).isEqualTo(new SIE4Item.Transaction.Rtrans(
+                1520, amount, List.of(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()));
+    }
+
+    @Test
+    void btrans_of_createsWithAllOptionalsEmpty() {
+        BigDecimal amount = new BigDecimal("500.00");
+        assertThat(SIE4Item.Transaction.Btrans.of(1520, amount)).isEqualTo(new SIE4Item.Transaction.Btrans(
+                1520, amount, List.of(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()));
+    }
+
     private static List<SIE4Item.Transaction> createValidTransactions() {
         return List.of(
                 SIE4Item.Transaction.Trans.of(1930, new BigDecimal(-10)),

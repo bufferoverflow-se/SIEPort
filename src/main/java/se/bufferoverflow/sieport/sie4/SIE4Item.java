@@ -600,6 +600,10 @@ public sealed interface SIE4Item {
             public SIE4ItemType itemType() {
                 return SIE4ItemType.RTRANS;
             }
+
+            public static Rtrans of(int accountNo, BigDecimal amount) {
+                return new Rtrans(accountNo, amount, List.of(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
+            }
         }
 
         /**
@@ -622,6 +626,10 @@ public sealed interface SIE4Item {
             @Override
             public SIE4ItemType itemType() {
                 return SIE4ItemType.BTRANS;
+            }
+
+            public static Btrans of(int accountNo, BigDecimal amount) {
+                return new Btrans(accountNo, amount, List.of(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
             }
         }
     }

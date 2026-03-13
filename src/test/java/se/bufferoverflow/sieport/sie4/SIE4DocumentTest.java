@@ -130,6 +130,20 @@ class SIE4DocumentTest {
     }
 
     @Test
+    void builder_addKonto_accumulates() {
+        SIE4Item.Konto k1 = new SIE4Item.Konto(1910, "Cash");
+        SIE4Item.Konto k2 = new SIE4Item.Konto(1920, "Bank");
+        SIE4Item.Konto k3 = new SIE4Item.Konto(1930, "Bank");
+
+        SIE4Document doc = SIE4Document.builder()
+                .konto(List.of(k1, k2))
+                .addKonto(k3)
+                .build();
+
+        assertThat(doc.getKonto()).containsExactly(k1, k2, k3);
+    }
+
+    @Test
     void toBuilder_preservesAllFieldsAndAllowsOverride() {
         SIE4Document original = SIE4.parse(sie4SampleFile);
         SIE4Item.Fnamn newFnamn = new SIE4Item.Fnamn("Changed Company");
