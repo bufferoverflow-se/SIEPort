@@ -1,6 +1,7 @@
 package se.bufferoverflow.sieport.sie4;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -495,6 +496,11 @@ public class SIE4Document {
             return this;
         }
 
+        public Builder prosa(String comment) {
+            this.prosa = new SIE4Item.Prosa(comment);
+            return this;
+        }
+
         public Builder ftyp(SIE4Item.Ftyp ftyp) {
             this.ftyp = ftyp;
             return this;
@@ -502,6 +508,11 @@ public class SIE4Document {
 
         public Builder fnr(SIE4Item.Fnr fnr) {
             this.fnr = fnr;
+            return this;
+        }
+
+        public Builder fnr(String companyId) {
+            this.fnr = new SIE4Item.Fnr(companyId);
             return this;
         }
 
@@ -535,14 +546,15 @@ public class SIE4Document {
             return this;
         }
 
+        /** Replaces the full list; discards any items previously added via {@link #addRar}. */
         public Builder rar(List<SIE4Item.Rar> rar) {
             this.rar = mutableCopy(rar);
             return this;
         }
 
-        public Builder addRar(SIE4Item.Rar rar) {
+        public Builder addRar(SIE4Item.Rar... rar) {
             if (this.rar == null) this.rar = new ArrayList<>();
-            this.rar.add(rar);
+            this.rar.addAll(Arrays.asList(rar));
             return this;
         }
 
@@ -561,173 +573,198 @@ public class SIE4Document {
             return this;
         }
 
+        public Builder kptyp(String type) {
+            this.kptyp = new SIE4Item.Kptyp(type);
+            return this;
+        }
+
         public Builder valuta(SIE4Item.Valuta valuta) {
             this.valuta = valuta;
             return this;
         }
 
+        public Builder valuta(String currencyCode) {
+            this.valuta = new SIE4Item.Valuta(currencyCode);
+            return this;
+        }
+
+        /** Replaces the full list; discards any items previously added via {@link #addKonto}. */
         public Builder konto(List<SIE4Item.Konto> konto) {
             this.konto = mutableCopy(konto);
             return this;
         }
 
-        public Builder addKonto(SIE4Item.Konto konto) {
+        public Builder addKonto(SIE4Item.Konto... konto) {
             if (this.konto == null) this.konto = new ArrayList<>();
-            this.konto.add(konto);
+            this.konto.addAll(Arrays.asList(konto));
             return this;
         }
 
+        /** Replaces the full list; discards any items previously added via {@link #addKtyp}. */
         public Builder ktyp(List<SIE4Item.Ktyp> ktyp) {
             this.ktyp = mutableCopy(ktyp);
             return this;
         }
 
-        public Builder addKtyp(SIE4Item.Ktyp ktyp) {
+        public Builder addKtyp(SIE4Item.Ktyp... ktyp) {
             if (this.ktyp == null) this.ktyp = new ArrayList<>();
-            this.ktyp.add(ktyp);
+            this.ktyp.addAll(Arrays.asList(ktyp));
             return this;
         }
 
+        /** Replaces the full list; discards any items previously added via {@link #addEnhet}. */
         public Builder enhet(List<SIE4Item.Enhet> enhet) {
             this.enhet = mutableCopy(enhet);
             return this;
         }
 
-        public Builder addEnhet(SIE4Item.Enhet enhet) {
+        public Builder addEnhet(SIE4Item.Enhet... enhet) {
             if (this.enhet == null) this.enhet = new ArrayList<>();
-            this.enhet.add(enhet);
+            this.enhet.addAll(Arrays.asList(enhet));
             return this;
         }
 
+        /** Replaces the full list; discards any items previously added via {@link #addSru}. */
         public Builder sru(List<SIE4Item.Sru> sru) {
             this.sru = mutableCopy(sru);
             return this;
         }
 
-        public Builder addSru(SIE4Item.Sru sru) {
+        public Builder addSru(SIE4Item.Sru... sru) {
             if (this.sru == null) this.sru = new ArrayList<>();
-            this.sru.add(sru);
+            this.sru.addAll(Arrays.asList(sru));
             return this;
         }
 
+        /** Replaces the full list; discards any items previously added via {@link #addDim}. */
         public Builder dim(List<SIE4Item.Dim> dim) {
             this.dim = mutableCopy(dim);
             return this;
         }
 
-        public Builder addDim(SIE4Item.Dim dim) {
+        public Builder addDim(SIE4Item.Dim... dim) {
             if (this.dim == null) this.dim = new ArrayList<>();
-            this.dim.add(dim);
+            this.dim.addAll(Arrays.asList(dim));
             return this;
         }
 
+        /** Replaces the full list; discards any items previously added via {@link #addUnderdim}. */
         public Builder underdim(List<SIE4Item.Underdim> underdim) {
             this.underdim = mutableCopy(underdim);
             return this;
         }
 
-        public Builder addUnderdim(SIE4Item.Underdim underdim) {
+        public Builder addUnderdim(SIE4Item.Underdim... underdim) {
             if (this.underdim == null) this.underdim = new ArrayList<>();
-            this.underdim.add(underdim);
+            this.underdim.addAll(Arrays.asList(underdim));
             return this;
         }
 
+        /** Replaces the full list; discards any items previously added via {@link #addObjekt}. */
         public Builder objekt(List<SIE4Item.Objekt> objekt) {
             this.objekt = mutableCopy(objekt);
             return this;
         }
 
-        public Builder addObjekt(SIE4Item.Objekt objekt) {
+        public Builder addObjekt(SIE4Item.Objekt... objekt) {
             if (this.objekt == null) this.objekt = new ArrayList<>();
-            this.objekt.add(objekt);
+            this.objekt.addAll(Arrays.asList(objekt));
             return this;
         }
 
+        /** Replaces the full list; discards any items previously added via {@link #addIb}. */
         public Builder ib(List<SIE4Item.Ib> ib) {
             this.ib = mutableCopy(ib);
             return this;
         }
 
-        public Builder addIb(SIE4Item.Ib ib) {
+        public Builder addIb(SIE4Item.Ib... ib) {
             if (this.ib == null) this.ib = new ArrayList<>();
-            this.ib.add(ib);
+            this.ib.addAll(Arrays.asList(ib));
             return this;
         }
 
+        /** Replaces the full list; discards any items previously added via {@link #addUb}. */
         public Builder ub(List<SIE4Item.Ub> ub) {
             this.ub = mutableCopy(ub);
             return this;
         }
 
-        public Builder addUb(SIE4Item.Ub ub) {
+        public Builder addUb(SIE4Item.Ub... ub) {
             if (this.ub == null) this.ub = new ArrayList<>();
-            this.ub.add(ub);
+            this.ub.addAll(Arrays.asList(ub));
             return this;
         }
 
+        /** Replaces the full list; discards any items previously added via {@link #addOib}. */
         public Builder oib(List<SIE4Item.Oib> oib) {
             this.oib = mutableCopy(oib);
             return this;
         }
 
-        public Builder addOib(SIE4Item.Oib oib) {
+        public Builder addOib(SIE4Item.Oib... oib) {
             if (this.oib == null) this.oib = new ArrayList<>();
-            this.oib.add(oib);
+            this.oib.addAll(Arrays.asList(oib));
             return this;
         }
 
+        /** Replaces the full list; discards any items previously added via {@link #addOub}. */
         public Builder oub(List<SIE4Item.Oub> oub) {
             this.oub = mutableCopy(oub);
             return this;
         }
 
-        public Builder addOub(SIE4Item.Oub oub) {
+        public Builder addOub(SIE4Item.Oub... oub) {
             if (this.oub == null) this.oub = new ArrayList<>();
-            this.oub.add(oub);
+            this.oub.addAll(Arrays.asList(oub));
             return this;
         }
 
+        /** Replaces the full list; discards any items previously added via {@link #addRes}. */
         public Builder res(List<SIE4Item.Res> res) {
             this.res = mutableCopy(res);
             return this;
         }
 
-        public Builder addRes(SIE4Item.Res res) {
+        public Builder addRes(SIE4Item.Res... res) {
             if (this.res == null) this.res = new ArrayList<>();
-            this.res.add(res);
+            this.res.addAll(Arrays.asList(res));
             return this;
         }
 
+        /** Replaces the full list; discards any items previously added via {@link #addPsaldo}. */
         public Builder psaldo(List<SIE4Item.Psaldo> psaldo) {
             this.psaldo = mutableCopy(psaldo);
             return this;
         }
 
-        public Builder addPsaldo(SIE4Item.Psaldo psaldo) {
+        public Builder addPsaldo(SIE4Item.Psaldo... psaldo) {
             if (this.psaldo == null) this.psaldo = new ArrayList<>();
-            this.psaldo.add(psaldo);
+            this.psaldo.addAll(Arrays.asList(psaldo));
             return this;
         }
 
+        /** Replaces the full list; discards any items previously added via {@link #addPbudget}. */
         public Builder pbudget(List<SIE4Item.Pbudget> pbudget) {
             this.pbudget = mutableCopy(pbudget);
             return this;
         }
 
-        public Builder addPbudget(SIE4Item.Pbudget pbudget) {
+        public Builder addPbudget(SIE4Item.Pbudget... pbudget) {
             if (this.pbudget == null) this.pbudget = new ArrayList<>();
-            this.pbudget.add(pbudget);
+            this.pbudget.addAll(Arrays.asList(pbudget));
             return this;
         }
 
+        /** Replaces the full list; discards any items previously added via {@link #addVer}. */
         public Builder ver(List<SIE4Item.Ver> ver) {
             this.ver = mutableCopy(ver);
             return this;
         }
 
-        public Builder addVer(SIE4Item.Ver ver) {
+        public Builder addVer(SIE4Item.Ver... ver) {
             if (this.ver == null) this.ver = new ArrayList<>();
-            this.ver.add(ver);
+            this.ver.addAll(Arrays.asList(ver));
             return this;
         }
 

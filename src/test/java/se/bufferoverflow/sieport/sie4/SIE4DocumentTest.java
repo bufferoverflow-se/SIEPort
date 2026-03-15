@@ -181,6 +181,34 @@ class SIE4DocumentTest {
     }
 
     @Test
+    void builder_stringOverloads_setCorrectFields() {
+        SIE4Document doc = SIE4Document.builder()
+                .prosa("a comment")
+                .valuta("EUR")
+                .fnr("FNR123")
+                .kptyp("BAS2010")
+                .build();
+        assertThat(doc.getProsa().orElseThrow().comment()).isEqualTo("a comment");
+        assertThat(doc.getValuta().orElseThrow().currencyCode()).isEqualTo("EUR");
+        assertThat(doc.getFnr().orElseThrow().companyId()).isEqualTo("FNR123");
+        assertThat(doc.getKptyp().orElseThrow().type()).isEqualTo("BAS2010");
+    }
+
+    @Test
+    void builder_addVer_varargs_accumulates() {
+        var tx = List.<SIE4Item.Transaction>of(
+                SIE4Item.Transaction.Trans.of(1910, java.math.BigDecimal.ONE),
+                SIE4Item.Transaction.Trans.of(1920, java.math.BigDecimal.ONE.negate()));
+        SIE4Item.Ver v1 = SIE4Item.Ver.of(LocalDate.now(), "v1", tx);
+        SIE4Item.Ver v2 = SIE4Item.Ver.of(LocalDate.now(), "v2", tx);
+        SIE4Item.Ver v3 = SIE4Item.Ver.of(LocalDate.now(), "v3", tx);
+
+        SIE4Document doc = SIE4Document.builder().addVer(v1, v2, v3).build();
+
+        assertThat(doc.getVer()).containsExactly(v1, v2, v3);
+    }
+
+    @Test
     void from_buildsDocumentFromItemList() {
         List<SIE4Item> items = List.of(new SIE4Item.Flagga(0), new SIE4Item.Fnamn("Acme AB"));
         SIE4Document doc = SIE4Document.from(items);
