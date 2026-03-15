@@ -11,8 +11,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
+import java.io.UncheckedIOException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
@@ -186,6 +187,22 @@ class SIE4Test {
 
         assertThatThrownBy(() -> SIE4.write(failingStream, items, SIE4.WriteOptions.SKIP_VALIDATION))
                 .isInstanceOf(SIE4Exception.class);
+    }
+
+    @Test
+    void write_atomicWrite_noTempFilesLeftAfterMoveFails(@TempDir Path tempDir) throws IOException {
+        // Destination is a directory — Files.move will fail, temp file must be cleaned up
+        Path destination = tempDir.resolve("subdir");
+        Files.createDirectory(destination);
+
+        List<SIE4Item> items = SIE4.parse(sie4SampleFile).getItems();
+
+        assertThatThrownBy(() -> SIE4.write(destination.toFile(), items, SIE4.WriteOptions.SKIP_VALIDATION))
+                .isInstanceOf(UncheckedIOException.class);
+
+        try (var stream = Files.list(tempDir)) {
+            assertThat(stream.filter(p -> p.getFileName().toString().endsWith(".tmp"))).isEmpty();
+        }
     }
 
     @Test

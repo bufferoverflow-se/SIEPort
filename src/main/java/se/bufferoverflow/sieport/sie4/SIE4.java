@@ -16,7 +16,9 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -173,10 +175,24 @@ public class SIE4 {
         Objects.requireNonNull(file, "file must not be null");
         Objects.requireNonNull(items, "items must not be null");
         validateItems(items, options);
-        try (var os = new FileOutputStream(file)) {
-            write(os, items, WriteOptions.SKIP_VALIDATION);
+        // Write to a temp file in the same directory, then atomically move it to the destination.
+        // This ensures the destination is never left in a partial state if the write fails mid-way.
+        Path destination = file.toPath();
+        Path parent = destination.getParent();
+        Path tmp = null;
+        try {
+            tmp = Files.createTempFile(parent != null ? parent : Path.of("."), ".sie4-", ".tmp");
+            try (var os = new FileOutputStream(tmp.toFile())) {
+                write(os, items, WriteOptions.SKIP_VALIDATION);
+            }
+            Files.move(tmp, destination, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+            tmp = null;
         } catch (IOException e) {
             throw new UncheckedIOException(e);
+        } finally {
+            if (tmp != null) {
+                try { Files.deleteIfExists(tmp); } catch (IOException ignored) {}
+            }
         }
     }
 
