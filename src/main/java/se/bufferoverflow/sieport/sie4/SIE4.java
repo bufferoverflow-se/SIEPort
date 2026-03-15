@@ -17,6 +17,7 @@ import java.io.PrintWriter;
 import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
@@ -50,6 +51,9 @@ import java.util.stream.Collectors;
 public class SIE4 {
     /** The character encoding used by SIE4 files (IBM Code Page 437). */
     public static final Charset SIE4_CHARSET = Charset.forName("IBM-437");
+
+    /** Date formatter for the {@code yyyyMMdd} pattern used throughout the SIE4 format. */
+    public static final DateTimeFormatter SIE4_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     private static final Logger LOG = Logger.getLogger(SIE4.class.getName());
 

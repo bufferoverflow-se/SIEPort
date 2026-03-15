@@ -2,7 +2,6 @@ package se.bufferoverflow.sieport.sie4;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,9 +13,6 @@ import java.util.Optional;
  * {@link SIE4Document} or {@link SIE4#write} to produce them.
  */
 public sealed interface SIE4Item {
-    /** Date formatter for the {@code yyyyMMdd} pattern used throughout the SIE4 format. */
-    DateTimeFormatter SIE4_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
-
     SIE4ItemType itemType();
 
     /**

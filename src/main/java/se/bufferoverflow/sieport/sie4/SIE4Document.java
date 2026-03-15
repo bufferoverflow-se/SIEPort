@@ -143,9 +143,9 @@ public class SIE4Document {
     }
 
     /**
-     * Get all items in this document in a list.
+     * Returns all non-null items in SIE4 specification order. Unset fields are omitted.
      *
-     * @return An immutable list with all items
+     * @return an immutable list of all items present in this document
      */
     public List<SIE4Item> getItems() {
         List<SIE4Item> result = new ArrayList<>();
