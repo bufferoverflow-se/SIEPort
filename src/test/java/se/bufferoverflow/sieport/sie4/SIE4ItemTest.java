@@ -130,6 +130,12 @@ class SIE4ItemTest {
                 1520, amount, List.of(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()));
     }
 
+    @Test
+    void orgNr_actNoWithoutAcqNo_throwsIllegalArgumentException() {
+        assertThatThrownBy(() -> new SIE4Item.OrgNr("556334-3689", Optional.empty(), Optional.of(2)))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
     private static List<SIE4Item.Transaction> createValidTransactions() {
         return List.of(
                 SIE4Item.Transaction.Trans.of(1930, new BigDecimal(-10)),

@@ -291,6 +291,12 @@ public sealed interface SIE4Item {
      * @param actNo optional activity number; only valid when {@code acqNo} is present
      */
     record OrgNr(String orgNr, Optional<Integer> acqNo, Optional<Integer> actNo) implements SIE4Item {
+        public OrgNr {
+            if (actNo.isPresent() && acqNo.isEmpty()) {
+                throw new IllegalArgumentException("actNo requires acqNo to be present");
+            }
+        }
+
         @Override
         public SIE4ItemType itemType() {
             return SIE4ItemType.ORGNR;
