@@ -42,11 +42,11 @@ import java.util.stream.Collectors;
  * SIE4Document doc = SIE4.parse(Path.of("company.se"));
  *
  * // Build and write a new file
- * SIE4Document doc = SIE4Document.newDocument()
+ * SIE4Document doc = SIE4Document.defaultBuilder()
  *         .program(new SIE4Item.Program("My App", "1.0"))
  *         .fnamn(new SIE4Item.Fnamn("Acme AB"))
  *         ...
- *         .build();
+ *         .buildAndValidate();
  * SIE4.write(Path.of("output.se"), doc);
  * }</pre>
  */
@@ -93,7 +93,8 @@ public class SIE4 {
     }
 
     /**
-     * Parses SIE4 data from an input stream. The stream is closed when this method returns.
+     * Parses SIE4 data from an input stream. The stream is <em>not</em> closed by this method;
+     * the caller is responsible for closing it.
      *
      * @param inputStream the stream to read from; must be encoded in {@link #SIE4_CHARSET}
      * @return the parsed document
@@ -102,7 +103,8 @@ public class SIE4 {
      */
     public static SIE4Document parse(InputStream inputStream) {
         Objects.requireNonNull(inputStream, "inputStream must not be null");
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, SIE4_CHARSET))) {
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, SIE4_CHARSET));
             List<String> verBuffer = new ArrayList<>();
             List<SIE4Item> result = new ArrayList<>();
 
@@ -257,6 +259,9 @@ public class SIE4 {
     public static List<ValidationError> validate(List<SIE4Item> items, WriteOptions... options) {
         Objects.requireNonNull(items, "items must not be null");
         List<WriteOptions> opts = Arrays.asList(options);
+        if (opts.contains(WriteOptions.SKIP_VALIDATION)) {
+            return List.of();
+        }
         return opts.contains(WriteOptions.SIE4I)
                 ? Validator.validateSie4i(items)
                 : Validator.validateSie4e(items);

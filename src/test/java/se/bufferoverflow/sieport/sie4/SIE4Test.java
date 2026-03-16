@@ -148,7 +148,7 @@ class SIE4Test {
     }
 
     @Test
-    void parse_inputStream_shouldCloseStream() {
+    void parse_inputStream_shouldNotCloseStream() {
         var closed = new boolean[]{false};
         InputStream trackingStream = new ByteArrayInputStream("#FLAGGA 0\n".getBytes(SIE4.SIE4_CHARSET)) {
             @Override
@@ -160,7 +160,7 @@ class SIE4Test {
 
         SIE4.parse(trackingStream);
 
-        assertThat(closed[0]).isTrue();
+        assertThat(closed[0]).isFalse();
     }
 
     @Test
@@ -203,6 +203,15 @@ class SIE4Test {
         try (var stream = Files.list(tempDir)) {
             assertThat(stream.filter(p -> p.getFileName().toString().endsWith(".tmp"))).isEmpty();
         }
+    }
+
+    @Test
+    void validate_skipValidation_returnsEmptyList() {
+        List<SIE4Item> incompleteItems = List.of(SIE4Item.Flagga.UNSET); // missing mandatory items
+
+        List<ValidationError> errors = SIE4.validate(incompleteItems, SIE4.WriteOptions.SKIP_VALIDATION);
+
+        assertThat(errors).isEmpty();
     }
 
     @Test
