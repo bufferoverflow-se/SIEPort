@@ -153,8 +153,7 @@ public class SIE4 {
      * @param destination the output file
      * @param items the items to write
      * @param options optional {@link WriteOptions}
-     * @throws SIE4Exception if validation fails or an I/O error occurs during writing
-     * @throws UncheckedIOException if the file cannot be opened
+     * @throws SIE4Exception if validation fails or an I/O error occurs
      */
     public static void write(Path destination, List<SIE4Item> items, WriteOptions... options) {
         Objects.requireNonNull(destination, "destination must not be null");
@@ -170,8 +169,7 @@ public class SIE4 {
      * @param file the output file
      * @param items the items to write
      * @param options optional {@link WriteOptions}
-     * @throws SIE4Exception if validation fails or an I/O error occurs during writing
-     * @throws UncheckedIOException if the file cannot be opened
+     * @throws SIE4Exception if validation fails or an I/O error occurs
      */
     public static void write(File file, List<SIE4Item> items, WriteOptions... options) {
         Objects.requireNonNull(file, "file must not be null");
@@ -190,7 +188,7 @@ public class SIE4 {
             Files.move(tmp, destination, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
             tmp = null;
         } catch (IOException e) {
-            throw new UncheckedIOException(e);
+            throw new SIE4Exception("I/O error occurred while writing SIE4 data", e);
         } finally {
             if (tmp != null) {
                 try { Files.deleteIfExists(tmp); } catch (IOException ignored) {}
@@ -246,6 +244,19 @@ public class SIE4 {
         if (writer.checkError()) {
             throw new SIE4Exception("I/O error occurred while writing SIE4 data");
         }
+    }
+
+    /**
+     * Validates a {@link SIE4Document} without writing, returning any validation errors found.
+     *
+     * @param doc the document to validate
+     * @param options optional {@link WriteOptions}; use {@link WriteOptions#SIE4I} to validate
+     *                against SIE 4I rules instead of the default SIE 4E rules
+     * @return a list of validation errors, or an empty list if the document is valid
+     */
+    public static List<ValidationError> validate(SIE4Document doc, WriteOptions... options) {
+        Objects.requireNonNull(doc, "doc must not be null");
+        return validate(doc.getItems(), options);
     }
 
     /**

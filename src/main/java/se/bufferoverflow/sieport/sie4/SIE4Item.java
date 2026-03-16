@@ -289,7 +289,7 @@ public sealed interface SIE4Item {
     record OrgNr(String orgNr, Optional<Integer> acqNo, Optional<Integer> actNo) implements SIE4Item {
         public OrgNr {
             if (actNo.isPresent() && acqNo.isEmpty()) {
-                throw new IllegalArgumentException("actNo requires acqNo to be present");
+                throw new SIE4Exception("actNo requires acqNo to be present");
             }
         }
 
@@ -419,7 +419,13 @@ public sealed interface SIE4Item {
      */
     record Sietyp(int typeNo) implements SIE4Item {
         /** The only SIE type supported by this library. */
-        public static final Sietyp SIE_4 = Sietyp.of(4);
+        public static final Sietyp SIE_4 = new Sietyp(4);
+
+        public Sietyp {
+            if (typeNo != 4) {
+                throw new SIE4Exception("Only SIE type 4 is supported, got: " + typeNo);
+            }
+        }
 
         @Override
         public SIE4ItemType itemType() {

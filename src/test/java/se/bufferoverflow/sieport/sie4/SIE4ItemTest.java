@@ -131,9 +131,15 @@ class SIE4ItemTest {
     }
 
     @Test
-    void orgNr_actNoWithoutAcqNo_throwsIllegalArgumentException() {
+    void orgNr_actNoWithoutAcqNo_throwsSIE4Exception() {
         assertThatThrownBy(() -> new SIE4Item.OrgNr("556334-3689", Optional.empty(), Optional.of(2)))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(SIE4Exception.class);
+    }
+
+    @Test
+    void sietyp_invalidType_throwsSIE4Exception() {
+        assertThatThrownBy(() -> new SIE4Item.Sietyp(3))
+                .isInstanceOf(SIE4Exception.class);
     }
 
     private static List<SIE4Item.Transaction> createValidTransactions() {
