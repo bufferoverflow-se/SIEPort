@@ -38,7 +38,7 @@ class SIE4DocumentTest {
         assertThat(result.kptyp()).isEmpty();
         assertThat(result.currencyCode()).isEmpty();
         assertThat(result.taxYear()).isEmpty();
-        assertTrue(result.periods().isEmpty());
+        assertTrue(result.financialYears().isEmpty());
         assertThat(result.contactPerson()).isEmpty();
         assertThat(result.address()).isEmpty();
         assertThat(result.phoneNumber()).isEmpty();
@@ -77,7 +77,7 @@ class SIE4DocumentTest {
         assertThat(result.kptyp()).hasValue("EUBAS97");
         assertThat(result.currencyCode()).hasValue("SEK");
         assertThat(result.taxYear()).hasValue(2022);
-        assertThat(result.periods()).isEqualTo(expectedPeriods);
+        assertThat(result.financialYears()).isEqualTo(expectedPeriods);
         assertThat(result.contactPerson()).hasValue("Siw Eriksson");
         assertThat(result.address()).hasValue("Box 1 123 45 STORSTAD");
         assertThat(result.phoneNumber()).hasValue("012-34 56 78");

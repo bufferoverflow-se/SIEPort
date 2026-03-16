@@ -23,7 +23,7 @@ import java.util.Optional;
  * @param kptyp             account plan type, e.g. {@code "EUBAS97"}
  * @param currencyCode      ISO 4217 currency code, e.g. {@code "SEK"}
  * @param taxYear           four-digit tax year
- * @param periods           fiscal year date ranges; empty list if none present
+ * @param financialYears    fiscal year date ranges ({@code #RAR}); empty list if none present
  * @param contactPerson     contact person name from the company address
  * @param address           street and postal address concatenated
  * @param phoneNumber       telephone number from the company address
@@ -42,7 +42,7 @@ public record IdentificationItems(
     Optional<String> kptyp,
     Optional<String> currencyCode,
     Optional<Integer> taxYear,
-    List<FinancialYear> periods,
+    List<FinancialYear> financialYears,
     Optional<String> contactPerson,
     Optional<String> address,
     Optional<String> phoneNumber,
