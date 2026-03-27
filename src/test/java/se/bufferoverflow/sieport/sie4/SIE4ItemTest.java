@@ -45,6 +45,20 @@ class SIE4ItemTest {
     }
 
     @Test
+    void ver_of_withoutText() {
+        List<SIE4Item.Transaction> tx = createValidTransactions();
+        assertThat(SIE4Item.Ver.of(LocalDate.EPOCH, tx))
+                .isEqualTo(new SIE4Item.Ver(
+                        LocalDate.EPOCH,
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.empty(),
+                        Optional.empty(),
+                        tx));
+    }
+
+    @Test
     void ver_incorrectTransactions_shouldThrowException() {
         assertThatThrownBy(() -> SIE4Item.Ver.of(LocalDate.EPOCH, "Title", List.of()))
                 .isInstanceOf(SIE4Exception.class)

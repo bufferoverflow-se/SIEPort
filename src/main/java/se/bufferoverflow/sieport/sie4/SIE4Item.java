@@ -544,6 +544,10 @@ public sealed interface SIE4Item {
         public static Ver of(LocalDate date, String text, List<Transaction> transactions) {
             return new Ver(date, Optional.empty(), Optional.empty(), Optional.of(text), Optional.empty(), Optional.empty(), transactions);
         }
+
+        public static Ver of(LocalDate date, List<Transaction> transactions) {
+            return new Ver(date, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), transactions);
+        }
     }
 
     /**
