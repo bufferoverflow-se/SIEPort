@@ -107,7 +107,7 @@ class SIE4Test {
         );
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        SIE4.write(baos, items, SIE4.WriteOptions.SKIP_VALIDATION);
+        SIE4.write(baos, items, SIE4.FileOptions.SKIP_VALIDATION);
         String output = baos.toString(SIE4.SIE4_CHARSET);
 
         assertThat(output).startsWith("#FLAGGA");
@@ -118,7 +118,7 @@ class SIE4Test {
         List<SIE4Item> items = List.of(SIE4Item.Flagga.UNSET);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        SIE4.write(baos, items, SIE4.WriteOptions.SKIP_VALIDATION);
+        SIE4.write(baos, items, SIE4.FileOptions.SKIP_VALIDATION);
         String output = baos.toString(SIE4.SIE4_CHARSET);
 
         assertThat(output).isEqualTo("#FLAGGA 0\n");
@@ -185,7 +185,7 @@ class SIE4Test {
         };
         List<SIE4Item> items = List.of(new SIE4Item.Flagga(0));
 
-        assertThatThrownBy(() -> SIE4.write(failingStream, items, SIE4.WriteOptions.SKIP_VALIDATION))
+        assertThatThrownBy(() -> SIE4.write(failingStream, items, SIE4.FileOptions.SKIP_VALIDATION))
                 .isInstanceOf(UncheckedIOException.class);
     }
 
@@ -197,7 +197,7 @@ class SIE4Test {
 
         List<SIE4Item> items = SIE4.parse(sie4SampleFile).getItems();
 
-        assertThatThrownBy(() -> SIE4.write(destination.toFile(), items, SIE4.WriteOptions.SKIP_VALIDATION))
+        assertThatThrownBy(() -> SIE4.write(destination.toFile(), items, SIE4.FileOptions.SKIP_VALIDATION))
                 .isInstanceOf(UncheckedIOException.class);
 
         try (var stream = Files.list(tempDir)) {
@@ -209,7 +209,7 @@ class SIE4Test {
     void validate_skipValidation_returnsEmptyList() {
         List<SIE4Item> incompleteItems = List.of(SIE4Item.Flagga.UNSET); // missing mandatory items
 
-        List<ValidationError> errors = SIE4.validate(incompleteItems, SIE4.WriteOptions.SKIP_VALIDATION);
+        List<ValidationError> errors = SIE4.validate(incompleteItems, SIE4.FileOptions.SKIP_VALIDATION);
 
         assertThat(errors).isEmpty();
     }
@@ -246,7 +246,7 @@ class SIE4Test {
     void validate_sie4iMode_rejectsBalanceItems() {
         SIE4Document doc = SIE4.parse(sie4SampleFile);
 
-        List<ValidationError> errors = SIE4.validate(doc.getItems(), SIE4.WriteOptions.SIE4I);
+        List<ValidationError> errors = SIE4.validate(doc.getItems(), SIE4.FileOptions.SIE4I);
 
         assertThat(errors).isNotEmpty();
     }

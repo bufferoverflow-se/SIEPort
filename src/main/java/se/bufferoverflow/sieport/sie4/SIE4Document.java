@@ -774,14 +774,14 @@ public class SIE4Document {
 
         /**
          * Builds the document and immediately validates it using the same rules as
-         * {@link SIE4#write}. Defaults to SIE4E rules; pass {@link SIE4.WriteOptions#SIE4I}
+         * {@link SIE4#write}. Defaults to SIE4E rules; pass {@link SIE4.FileOptions#SIE4I}
          * to validate as a SIE4I import file instead.
          *
-         * @param options optional write options; {@link SIE4.WriteOptions#SIE4I} selects SIE4I rules
+         * @param options optional file options; {@link SIE4.FileOptions#SIE4I} selects SIE4I rules
          * @return the validated document
          * @throws SIE4Exception if validation fails
          */
-        public SIE4Document buildAndValidate(SIE4.WriteOptions... options) {
+        public SIE4Document buildAndValidate(SIE4.FileOptions... options) {
             SIE4Document doc = build();
             var errors = SIE4.validate(doc.getItems(), options);
             if (!errors.isEmpty()) {

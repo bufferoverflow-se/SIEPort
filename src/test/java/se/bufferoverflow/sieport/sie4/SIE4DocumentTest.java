@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.bufferoverflow.sieport.sie4.SIE4Item.Flagga.UNSET;
 import static se.bufferoverflow.sieport.sie4.SIE4Item.Sietyp.SIE_4;
-import static se.bufferoverflow.sieport.sie4.SIE4.WriteOptions.SIE4I;
+import static se.bufferoverflow.sieport.sie4.SIE4.FileOptions.SIE4I;
 
 class SIE4DocumentTest {
     private Path sie4SampleFile;

@@ -152,11 +152,11 @@ public class SIE4 {
      *
      * @param destination the output file
      * @param items the items to write
-     * @param options optional {@link WriteOptions}
+     * @param options optional {@link FileOptions}
      * @throws SIE4Exception if validation fails
      * @throws UncheckedIOException if an I/O error occurs
      */
-    public static void write(Path destination, List<SIE4Item> items, WriteOptions... options) {
+    public static void write(Path destination, List<SIE4Item> items, FileOptions... options) {
         Objects.requireNonNull(destination, "destination must not be null");
         Objects.requireNonNull(items, "items must not be null");
         write(destination.toFile(), items, options);
@@ -169,11 +169,11 @@ public class SIE4 {
      *
      * @param file the output file
      * @param items the items to write
-     * @param options optional {@link WriteOptions}
+     * @param options optional {@link FileOptions}
      * @throws SIE4Exception if validation fails
      * @throws UncheckedIOException if an I/O error occurs
      */
-    public static void write(File file, List<SIE4Item> items, WriteOptions... options) {
+    public static void write(File file, List<SIE4Item> items, FileOptions... options) {
         Objects.requireNonNull(file, "file must not be null");
         Objects.requireNonNull(items, "items must not be null");
         validateItems(items, options);
@@ -185,7 +185,7 @@ public class SIE4 {
         try {
             tmp = Files.createTempFile(parent != null ? parent : Path.of("."), ".sie4-", ".tmp");
             try (var os = new FileOutputStream(tmp.toFile())) {
-                write(os, items, WriteOptions.SKIP_VALIDATION);
+                write(os, items, FileOptions.SKIP_VALIDATION);
             }
             Files.move(tmp, destination, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
             tmp = null;
@@ -201,27 +201,27 @@ public class SIE4 {
     /**
      * Writes a {@link SIE4Document} to a file.
      *
-     * @see #write(Path, List, WriteOptions...)
+     * @see #write(Path, List, FileOptions...)
      */
-    public static void write(Path destination, SIE4Document doc, WriteOptions... options) {
+    public static void write(Path destination, SIE4Document doc, FileOptions... options) {
         write(destination, doc.getItems(), options);
     }
 
     /**
      * Writes a {@link SIE4Document} to a file.
      *
-     * @see #write(File, List, WriteOptions...)
+     * @see #write(File, List, FileOptions...)
      */
-    public static void write(File file, SIE4Document doc, WriteOptions... options) {
+    public static void write(File file, SIE4Document doc, FileOptions... options) {
         write(file, doc.getItems(), options);
     }
 
     /**
      * Writes a {@link SIE4Document} to an output stream.
      *
-     * @see #write(OutputStream, List, WriteOptions...)
+     * @see #write(OutputStream, List, FileOptions...)
      */
-    public static void write(OutputStream outputStream, SIE4Document doc, WriteOptions... options) {
+    public static void write(OutputStream outputStream, SIE4Document doc, FileOptions... options) {
         write(outputStream, doc.getItems(), options);
     }
 
@@ -231,11 +231,11 @@ public class SIE4 {
      *
      * @param outputStream the stream to write to; will be written using {@link #SIE4_CHARSET}
      * @param items the items to write
-     * @param options optional {@link WriteOptions}
+     * @param options optional {@link FileOptions}
      * @throws SIE4Exception if validation fails
      * @throws UncheckedIOException if an I/O error occurs during writing
      */
-    public static void write(OutputStream outputStream, List<SIE4Item> items, WriteOptions... options) {
+    public static void write(OutputStream outputStream, List<SIE4Item> items, FileOptions... options) {
         Objects.requireNonNull(outputStream, "outputStream must not be null");
         Objects.requireNonNull(items, "items must not be null");
         validateItems(items, options);
@@ -253,11 +253,11 @@ public class SIE4 {
      * Validates a {@link SIE4Document} without writing, returning any validation errors found.
      *
      * @param doc the document to validate
-     * @param options optional {@link WriteOptions}; use {@link WriteOptions#SIE4I} to validate
+     * @param options optional {@link FileOptions}; use {@link FileOptions#SIE4I} to validate
      *                against SIE 4I rules instead of the default SIE 4E rules
      * @return a list of validation errors, or an empty list if the document is valid
      */
-    public static List<ValidationError> validate(SIE4Document doc, WriteOptions... options) {
+    public static List<ValidationError> validate(SIE4Document doc, FileOptions... options) {
         Objects.requireNonNull(doc, "doc must not be null");
         return validate(doc.getItems(), options);
     }
@@ -266,25 +266,25 @@ public class SIE4 {
      * Validates a list of SIE4 items without writing, returning any validation errors found.
      *
      * @param items the items to validate
-     * @param options optional {@link WriteOptions}; use {@link WriteOptions#SIE4I} to validate
+     * @param options optional {@link FileOptions}; use {@link FileOptions#SIE4I} to validate
      *                against SIE 4I rules instead of the default SIE 4E rules
      * @return a list of validation errors, or an empty list if the items are valid
      */
-    public static List<ValidationError> validate(List<SIE4Item> items, WriteOptions... options) {
+    public static List<ValidationError> validate(List<SIE4Item> items, FileOptions... options) {
         Objects.requireNonNull(items, "items must not be null");
-        List<WriteOptions> opts = Arrays.asList(options);
-        if (opts.contains(WriteOptions.SKIP_VALIDATION)) {
+        List<FileOptions> opts = Arrays.asList(options);
+        if (opts.contains(FileOptions.SKIP_VALIDATION)) {
             return List.of();
         }
-        return opts.contains(WriteOptions.SIE4I)
+        return opts.contains(FileOptions.SIE4I)
                 ? Validator.validateSie4i(items)
                 : Validator.validateSie4e(items);
     }
 
-    private static void validateItems(List<SIE4Item> items, WriteOptions... options) {
-        List<WriteOptions> opts = Arrays.asList(options);
-        if (!opts.contains(WriteOptions.SKIP_VALIDATION)) {
-            List<ValidationError> errors = opts.contains(WriteOptions.SIE4I)
+    private static void validateItems(List<SIE4Item> items, FileOptions... options) {
+        List<FileOptions> opts = Arrays.asList(options);
+        if (!opts.contains(FileOptions.SKIP_VALIDATION)) {
+            List<ValidationError> errors = opts.contains(FileOptions.SIE4I)
                     ? Validator.validateSie4i(items)
                     : Validator.validateSie4e(items);
             if (!errors.isEmpty()) {
@@ -295,14 +295,14 @@ public class SIE4 {
         }
     }
 
-    public enum WriteOptions {
+    public enum FileOptions {
         /**
-         * Write a SIE 4I transaction file (for importing transaction data to a reporting program),
-         * opposed to a 4E export file (for exporting data from a reporting program) which is the default.
+         * Treat the file as SIE 4I (transaction import), rather than the default SIE 4E (full export).
+         * Affects both validation rules and the set of mandatory/forbidden items.
          */
         SIE4I,
         /**
-         * Skip checks performed to ensure the data to write follows the SIE standard.
+         * Skip validation checks against the SIE standard.
          */
         SKIP_VALIDATION
     }
