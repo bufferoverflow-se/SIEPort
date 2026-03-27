@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UncheckedIOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -185,7 +186,7 @@ class SIE4Test {
         List<SIE4Item> items = List.of(new SIE4Item.Flagga(0));
 
         assertThatThrownBy(() -> SIE4.write(failingStream, items, SIE4.WriteOptions.SKIP_VALIDATION))
-                .isInstanceOf(SIE4Exception.class);
+                .isInstanceOf(UncheckedIOException.class);
     }
 
     @Test
@@ -197,7 +198,7 @@ class SIE4Test {
         List<SIE4Item> items = SIE4.parse(sie4SampleFile).getItems();
 
         assertThatThrownBy(() -> SIE4.write(destination.toFile(), items, SIE4.WriteOptions.SKIP_VALIDATION))
-                .isInstanceOf(SIE4Exception.class);
+                .isInstanceOf(UncheckedIOException.class);
 
         try (var stream = Files.list(tempDir)) {
             assertThat(stream.filter(p -> p.getFileName().toString().endsWith(".tmp"))).isEmpty();

@@ -153,7 +153,8 @@ public class SIE4 {
      * @param destination the output file
      * @param items the items to write
      * @param options optional {@link WriteOptions}
-     * @throws SIE4Exception if validation fails or an I/O error occurs
+     * @throws SIE4Exception if validation fails
+     * @throws UncheckedIOException if an I/O error occurs
      */
     public static void write(Path destination, List<SIE4Item> items, WriteOptions... options) {
         Objects.requireNonNull(destination, "destination must not be null");
@@ -169,7 +170,8 @@ public class SIE4 {
      * @param file the output file
      * @param items the items to write
      * @param options optional {@link WriteOptions}
-     * @throws SIE4Exception if validation fails or an I/O error occurs
+     * @throws SIE4Exception if validation fails
+     * @throws UncheckedIOException if an I/O error occurs
      */
     public static void write(File file, List<SIE4Item> items, WriteOptions... options) {
         Objects.requireNonNull(file, "file must not be null");
@@ -188,7 +190,7 @@ public class SIE4 {
             Files.move(tmp, destination, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
             tmp = null;
         } catch (IOException e) {
-            throw new SIE4Exception("I/O error occurred while writing SIE4 data", e);
+            throw new UncheckedIOException(e);
         } finally {
             if (tmp != null) {
                 try { Files.deleteIfExists(tmp); } catch (IOException ignored) {}
@@ -230,7 +232,8 @@ public class SIE4 {
      * @param outputStream the stream to write to; will be written using {@link #SIE4_CHARSET}
      * @param items the items to write
      * @param options optional {@link WriteOptions}
-     * @throws SIE4Exception if validation fails or an I/O error occurs during writing
+     * @throws SIE4Exception if validation fails
+     * @throws UncheckedIOException if an I/O error occurs during writing
      */
     public static void write(OutputStream outputStream, List<SIE4Item> items, WriteOptions... options) {
         Objects.requireNonNull(outputStream, "outputStream must not be null");
@@ -242,7 +245,7 @@ public class SIE4 {
                 .sorted(Comparator.comparingInt(item -> item.itemType().ordinal()))
                 .forEach(item -> writer.println(OutFieldMapper.toFileString(item)));
         if (writer.checkError()) {
-            throw new SIE4Exception("I/O error occurred while writing SIE4 data");
+            throw new UncheckedIOException(new IOException("I/O error occurred while writing SIE4 data"));
         }
     }
 
