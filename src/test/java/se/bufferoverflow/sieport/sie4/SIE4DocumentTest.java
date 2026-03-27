@@ -15,6 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.bufferoverflow.sieport.sie4.SIE4Item.Flagga.UNSET;
 import static se.bufferoverflow.sieport.sie4.SIE4Item.Sietyp.SIE_4;
 import static se.bufferoverflow.sieport.sie4.SIE4.FileOptions.SIE4I;
+import static se.bufferoverflow.sieport.sie4.YearNumber.CURRENT_YEAR;
+import static se.bufferoverflow.sieport.sie4.YearNumber.PREV_YEAR;
 
 class SIE4DocumentTest {
     private Path sie4SampleFile;
@@ -65,8 +67,8 @@ class SIE4DocumentTest {
         IdentificationItems result = doc.getIdentificationItems();
 
         var expectedPeriods = List.of(
-            new FinancialYear(LocalDate.of(2021,1,1), LocalDate.of(2021, 12, 31)),
-            new FinancialYear(LocalDate.of(2020,1,1), LocalDate.of(2020, 12, 31))
+            new FinancialYear(CURRENT_YEAR, LocalDate.of(2021,1,1), LocalDate.of(2021, 12, 31)),
+            new FinancialYear(PREV_YEAR, LocalDate.of(2020,1,1), LocalDate.of(2020, 12, 31))
         );
 
         assertThat(result.flag()).isEqualTo(UNSET.flag());

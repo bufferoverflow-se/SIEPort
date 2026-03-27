@@ -131,7 +131,7 @@ public class SIE4Document {
             Optional.ofNullable(kptyp).map(SIE4Item.Kptyp::type),
             Optional.ofNullable(valuta).map(SIE4Item.Valuta::currencyCode),
             Optional.ofNullable(taxar).map(SIE4Item.Taxar::year),
-            rar.stream().map(r -> new FinancialYear(r.start(), r.end())).toList(),
+            rar.stream().map(r -> new FinancialYear(r.yearNumber(), r.start(), r.end())).toList(),
             Optional.ofNullable(adress).map(SIE4Item.Adress::contact),
             Optional.ofNullable(adress).map(addr -> "%s %s".formatted(addr.distributionAddress(), addr.postalAddress())),
             Optional.ofNullable(adress).map(SIE4Item.Adress::tel),
