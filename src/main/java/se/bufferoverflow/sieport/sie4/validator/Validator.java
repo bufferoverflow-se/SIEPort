@@ -73,6 +73,7 @@ public class Validator {
             errors.add(new ValidationError.MissingMandatoryItems(Set.copyOf(missing)));
         }
         Set<SIE4ItemType> missingCurrentYear = checkCurrentYearBalanceItems(items);
+        missing.forEach(missingCurrentYear::remove);
         if (!missingCurrentYear.isEmpty()) {
             errors.add(new ValidationError.MissingCurrentYearItems(missingCurrentYear));
         }

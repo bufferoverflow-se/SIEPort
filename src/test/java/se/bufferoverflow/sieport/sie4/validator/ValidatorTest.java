@@ -69,6 +69,17 @@ class ValidatorTest {
     }
 
     @Test
+    void validateSie4e_completelyAbsentBalanceItems_reportedOnlyOnceMandatory() {
+        // IB, UB, RES are fully absent — should appear in MissingMandatoryItems only,
+        // not duplicated in MissingCurrentYearItems
+        List<SIE4Item> items = List.of(new SIE4Item.Program("TestProgram", "1.0"));
+
+        List<ValidationError> result = Validator.validateSie4e(items);
+
+        assertThat(result).noneMatch(e -> e instanceof ValidationError.MissingCurrentYearItems);
+    }
+
+    @Test
     void validateSie4e_balanceItemsOnlyForPreviousYear_shouldFail() {
         List<SIE4Item> items = List.of(
                 SIE4Item.Flagga.UNSET,
