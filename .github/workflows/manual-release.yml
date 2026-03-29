@@ -17,5 +17,6 @@ jobs:
           gh release create "${{ inputs.version }}" \
             --title "Release ${{ inputs.version }}" \
             --generate-notes
+            --draft=false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
